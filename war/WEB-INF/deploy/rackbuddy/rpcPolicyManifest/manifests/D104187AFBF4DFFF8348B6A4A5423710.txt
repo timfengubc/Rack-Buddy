@@ -1,0 +1,2 @@
+serviceClass: ubc.cs.cpsc310.rackbuddy.client.GreetingService
+path: E208F88A8643DBF76E84628CB9D430DD.gwt.rpc

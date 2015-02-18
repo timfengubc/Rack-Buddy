@@ -34,14 +34,14 @@ public class BikeRackData implements Serializable {
 		this.streetName = "";
 		this.streetSide = "";
 	}
-	
+	//Don't need user variable yet...
 	public BikeRackData(String streetNumber,
 						String streetName,
 						String streetSide,
 						String skytrainStation,
 						int numRacks,
-						String yearInstalled,
-						User user){
+						String yearInstalled
+						){
 		
 		this.streetNumber = streetNumber;
 		this.streetName = streetName;
@@ -49,7 +49,7 @@ public class BikeRackData implements Serializable {
 		this.skytrainStation = skytrainStation;
 		this.numRacks = numRacks;
 		this.yearInstalled = yearInstalled;
-		this.user = user;
+//		this.user = user;
 		
 	}
 	
@@ -57,10 +57,6 @@ public class BikeRackData implements Serializable {
 
 	public User getUser() {
 		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	public Long getId() {

@@ -123,7 +123,7 @@ public class BikeRackData implements Serializable {
 		hash = hash * 13 + streetSide.hashCode();
 		hash = hash * 31 + (skytrainStation == null ? 0 : skytrainStation.hashCode());
 		hash = hash * 37 + numRacks;
-		hash = hash * 31 + (yearInstalled == null ? 0 : yearInstalled.hashCode());
+		hash = hash * 41 + (yearInstalled == null ? 0 : yearInstalled.hashCode());
 		
 		return hash;
 	}

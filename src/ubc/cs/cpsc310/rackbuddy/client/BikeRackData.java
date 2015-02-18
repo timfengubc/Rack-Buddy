@@ -2,9 +2,13 @@ package ubc.cs.cpsc310.rackbuddy.client;
 
 import java.io.Serializable;
 
+import com.google.appengine.api.users.User;
+
 public class BikeRackData implements Serializable {
 	
 	private Long id;
+	
+	private User user;
 	
 	//can't be null
 	private String streetNumber;
@@ -36,7 +40,8 @@ public class BikeRackData implements Serializable {
 						String streetSide,
 						String skytrainStation,
 						int numRacks,
-						String yearInstalled){
+						String yearInstalled,
+						User user){
 		
 		this.streetNumber = streetNumber;
 		this.streetName = streetName;
@@ -44,7 +49,18 @@ public class BikeRackData implements Serializable {
 		this.skytrainStation = skytrainStation;
 		this.numRacks = numRacks;
 		this.yearInstalled = yearInstalled;
+		this.user = user;
 		
+	}
+	
+	
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public Long getId() {

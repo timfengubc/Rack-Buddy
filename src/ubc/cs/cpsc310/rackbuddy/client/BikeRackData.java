@@ -2,30 +2,46 @@ package ubc.cs.cpsc310.rackbuddy.client;
 
 import java.io.Serializable;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
 import com.google.appengine.api.users.User;
 
+@PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class BikeRackData implements Serializable {
 	
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
 	
-	private User user;
+//	@Persistent
+//	private User user;
 	
 	//can't be null
+	@Persistent
 	private String streetNumber;
 	
 	//cam't be null
+	@Persistent
 	private String streetName;
 	
 	//can't be null
+	@Persistent
 	private String streetSide;
 	
 	//can be null
+	@Persistent
 	private String skytrainStation;
 	
 	// can be null, if null, set it equal to 0
+	@Persistent
 	private int numRacks; //might change to string
 	
 	//can be null
+	@Persistent
 	private String yearInstalled;
 	
 	//default constructor
@@ -55,9 +71,9 @@ public class BikeRackData implements Serializable {
 	
 	
 
-	public User getUser() {
-		return user;
-	}
+//	public User getUser() {
+//		return user;
+//	}
 
 	public Long getId() {
 		return id;

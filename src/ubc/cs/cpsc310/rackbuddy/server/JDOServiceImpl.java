@@ -16,36 +16,60 @@ import java.util.logging.Logger;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.Query;
 
 
 public class JDOServiceImpl extends RemoteServiceServlet implements JDOService {
 	
 	private static final Logger LOG = Logger.getLogger(JDOServiceImpl.class.getName());
 	private static final PersistenceManagerFactory PMF = JDOHelper.getPersistenceManagerFactory("transactions-optional");
+	private static final String SQL = "javax.jdo.query.SQL";
 
 	@Override
 	public void addBikeRackData(BikeRackData data) throws NotLoggedInException {
-		// TODO Auto-generated method stub
+		PersistenceManager pm = getPersistenceManager();
 		
+		try{
+			pm.makePersistent(data);
+		}finally{
+			pm.close();
+		}
 	}
 
 	@Override
 	public void removeBikeRackData(BikeRackData data)
 			throws NotLoggedInException {
-		// TODO Auto-generated method stub
+		
+		PersistenceManager pm = getPersistenceManager();
+		
+		
+		
 		
 	}
 
 	@Override
 	public List<BikeRackData> getData() throws NotLoggedInException {
-		// TODO Auto-generated method stub
-		return null;
+		PersistenceManager pm = getPersistenceManager();
+		
+		Query query = pm.newQuery(SQL,"SELECT * FROM " + BikeRackData.class.getName());
+		query.setClass(BikeRackData.class);
+		List<BikeRackData> results = (List<BikeRackData>)query.execute();
+		
+		//TODO this impl might not work
+		return results;
 	}
 
 	@Override
 	public void updateBikeRackData(BikeRackData updatedData)
 			throws NotLoggedInException {
-		// TODO Auto-generated method stub
+		//TODO same impl as add.... might remove in the future
+		PersistenceManager pm = getPersistenceManager();
+		
+		try{
+			pm.makePersistent(updatedData);
+		}finally{
+			pm.close();
+		}
 	}
 	
 	private PersistenceManager getPersistenceManager(){

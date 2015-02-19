@@ -10,7 +10,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.users.User;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable="true")
 public class BikeRackData implements Serializable {
 	
 	@PrimaryKey
@@ -132,11 +132,10 @@ public class BikeRackData implements Serializable {
 	@Override
 	public int hashCode() {
 		int hash = 1;
-		
-		hash = hash * 3 + id.hashCode();
-		hash = hash * 11 + streetNumber.hashCode();
-		hash = hash * 17 + streetName.hashCode();
-		hash = hash * 13 + streetSide.hashCode();
+		//TODO hashcode ID?
+		hash = hash * 11 + (streetNumber == null ? 0 : streetNumber.hashCode());
+		hash = hash * 17 + (streetName == null ? 0 : streetName.hashCode());
+		hash = hash * 13 + (streetSide == null ? 0 : streetSide.hashCode());
 		hash = hash * 31 + (skytrainStation == null ? 0 : skytrainStation.hashCode());
 		hash = hash * 37 + numRacks;
 		hash = hash * 41 + (yearInstalled == null ? 0 : yearInstalled.hashCode());
@@ -156,8 +155,7 @@ public class BikeRackData implements Serializable {
 		}
 		
 		BikeRackData other = (BikeRackData) obj;
-		
-		boolean sameID = this.id.equals(other.id);
+		//TODO compare ID?
 		boolean sameStreetNum = this.streetNumber.equals(other.streetNumber);
 		boolean sameStreetName = this.streetName.equals(other.streetName);
 		boolean sameStreetSide = this.streetSide.equals(other.streetSide);
@@ -166,7 +164,24 @@ public class BikeRackData implements Serializable {
 		
 		boolean sameYearInstalled = this.yearInstalled.equals(other.yearInstalled);
 		
-		return sameID && sameStreetNum && sameStreetName && sameStreetSide && sameNumRacks && sameYearInstalled;
+		return  sameStreetNum && sameStreetName && sameStreetSide && sameNumRacks && sameYearInstalled;
+	}
+	
+	@Override
+	public String toString() {
+		
+		String id = (this.id == null? "null" : Long.toString(this.id));
+		String streetNum = (this.streetNumber==null? "null" : this.streetNumber);
+		String streetName = (this.streetName==null? "null" : this.streetName);
+		String streetSide = (this.streetSide==null? "null" : this.streetSide);
+		String yearInstalled = (this.yearInstalled==null? "null" : this.yearInstalled);
+		
+		return "id: " + id + ", "+
+				" steetNum: " + streetNum+ ", "+
+				" streetName: " + streetName+ ", "+
+				" streetSide: " + streetSide+ ", "+
+				" numRacks: " + this.numRacks+ ", "+
+				" yearInstalled: " + yearInstalled;
 	}
 	
 	

@@ -8,12 +8,16 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("jdoService")
 public interface JDOService extends RemoteService {
 	
-	public void addBikeRackData(BikeRackData data) throws NotLoggedInException;
+	//don't throw log in exception for now
 	
-	public void removeBikeRackData(BikeRackData data) throws NotLoggedInException;
+	public void addBikeRackData(BikeRackData data);
 	
-	public List<BikeRackData> getData() throws NotLoggedInException;
+	public void removeBikeRackData(BikeRackData data);
 	
-	public void updateBikeRackData(BikeRackData updatedData) throws NotLoggedInException;
+	public List<BikeRackData> getData();
+	
+	public void updateBikeRackData(BikeRackData updatedData);
+	
+	public BikeRackData findByKey(Long key);
 	
 }

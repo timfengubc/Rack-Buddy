@@ -1,3 +1,3 @@
 # Module rackbuddy
 # RPC service class, partial path of RPC policy file
-ubc.cs.cpsc310.rackbuddy.client.JDOService, CC69DCF62EF235D24795C133A8F67CD7.gwt.rpc
+ubc.cs.cpsc310.rackbuddy.client.JDOService, 828D30D5C58937CD3BECA2E47DD6523C.gwt.rpc

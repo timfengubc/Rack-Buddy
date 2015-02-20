@@ -101,7 +101,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		//TODO same impl as add.... might remove in the future
 		PersistenceManager pm = getPersistenceManager();
 		
-		String streetNumber = updatedData.getStreetName();
+		String streetNumber = updatedData.getStreetNumber();
 		
 		String streetName = updatedData.getStreetName();
 		

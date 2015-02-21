@@ -42,34 +42,30 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 			pm.close();
 		}
 	}
-
+	/**
+	 * Can't remove null data
+	 * http://stackoverflow.com/questions/8868449/how-to-check-the-text-is-null-or-not-using-jdo
+	 */
 	@Override
 	public void removeBikeRackData(BikeRackData data) {
 		
 		PersistenceManager pm = getPersistenceManager();
-		List<BikeRackData> results = null;
-		List<BikeRackData> detachedList = null;
-		
+	
 		try{
-			Query q = pm.newQuery(BikeRackData.class, "id == u");
-			q.declareParameters("Long u");
 			
-			detachedList = new ArrayList<BikeRackData>();
-			results = (List<BikeRackData>)q.execute(data.getId());
-
-			for (BikeRackData brd : results) {
-				detachedList.add(pm.detachCopy(brd));
-			}
+			BikeRackData result = getBikeRackObject(data);
 			
-			if( (results.size() > 0) && (results.get(0).getId().equals(data.getId())) ){
-				pm.deletePersistent(data);
+			List<BikeRackData> datas = getData();
+			
+			for(BikeRackData brd : datas){
+				if(brd.equals(result)){
+					pm.deletePersistent(result);
+				}
 			}
 			
 		}finally{
 			pm.close();
 		}
-		
-		
 	}
 	@Transactional
 	@Override
@@ -95,10 +91,22 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 
 		return detachedList;
 	}
+	
+	@Override
+	public void removeAll() {
+		PersistenceManager pm = getPersistenceManager();
+		try{
+			List<BikeRackData> removedDatas = getData();
+			pm.deletePersistentAll(removedDatas);
+			
+		}finally{
+			pm.close();
+		}
+	}
 
 	@Override
 	public void updateBikeRackData(BikeRackData updatedData) {
-		//TODO same impl as add.... might remove in the future
+		
 		PersistenceManager pm = getPersistenceManager();
 		
 		String streetNumber = updatedData.getStreetNumber();
@@ -145,19 +153,44 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 
 
 	@Override
-	public BikeRackData findByKey(Long key) {
-		BikeRackData detachedCopy=null;
-				BikeRackData	object=null;
+	public BikeRackData getBikeRackObject(BikeRackData data) {
+
 		PersistenceManager pm= getPersistenceManager();
+		List<BikeRackData> results = null;
+
+		List<BikeRackData> detachedList = null;
 	    try{
+	    	Query q = pm.newQuery(BikeRackData.class,
+	    			"streetNumber == '"+data.getStreetNumber()+"'"+
+	    			" && streetName == '"+data.getStreetName()+"'"+
+	    			" && streetSide == '"+data.getStreetSide()+"'"+	
+	    			 " && skytrainStation == '"+data.getSkytrainStation()+"'"+
+                    " && numRacks == "+ data.getNumRacks() +
+                    " && yearInstalled == '"+ data.getYearInstalled() + "'" 
+                   
+                    		 );
 	    	
-	        object = pm.getObjectById(BikeRackData.class,key);
-	        detachedCopy = pm.detachCopy(object);
+	    	results = (List<BikeRackData>) q.execute();
+	    	
+	    	detachedList = new ArrayList<BikeRackData>();
+
+			for (BikeRackData brd : results) {
+				detachedList.add(pm.detachCopy(brd));
+			}
+	       
 	    }
 	    finally {
 	        pm.close(); // close here
 	    }
-	    return detachedCopy;
+	    
+	    if(!detachedList.isEmpty() && detachedList !=null){
+	    	return detachedList.get(0);	
+	    }
+	    
+	    return null;
 	}
+
+
+
 
 }

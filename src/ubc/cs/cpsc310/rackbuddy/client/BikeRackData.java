@@ -133,6 +133,7 @@ public class BikeRackData implements Serializable {
 	public int hashCode() {
 		int hash = 1;
 		//TODO hashcode ID?
+		hash = hash * 5 + (id == null? 0 : id.hashCode());
 		hash = hash * 11 + (streetNumber == null ? 0 : streetNumber.hashCode());
 		hash = hash * 17 + (streetName == null ? 0 : streetName.hashCode());
 		hash = hash * 13 + (streetSide == null ? 0 : streetSide.hashCode());
@@ -156,15 +157,27 @@ public class BikeRackData implements Serializable {
 		
 		BikeRackData other = (BikeRackData) obj;
 		//TODO compare ID?
-		boolean sameStreetNum = this.streetNumber.equals(other.streetNumber);
-		boolean sameStreetName = this.streetName.equals(other.streetName);
-		boolean sameStreetSide = this.streetSide.equals(other.streetSide);
+		boolean sameID = true;
+		if(this.id != null){
+			if(this.id.equals(other.id)){
+				sameID = true;
+			}
+			else{
+				sameID = false;
+			}
+		}
+
+		boolean sameStreetNum = (this.streetNumber == null? this.streetNumber == other.streetNumber : this.streetNumber.equals(other.streetNumber));
+		boolean sameStreetName = (this.streetName == null? this.streetName == other.streetName : this.streetName.equals(other.streetName));
+		boolean sameStreetSide = (this.streetSide == null? this.streetSide == other.streetSide : this.streetSide.equals(other.streetSide));
 
 		boolean sameNumRacks = this.numRacks == other.numRacks;
 		
-		boolean sameYearInstalled = this.yearInstalled.equals(other.yearInstalled);
+		boolean sameYearInstalled = (this.yearInstalled == null? this.yearInstalled == other.yearInstalled : this.yearInstalled.equals(other.yearInstalled));
 		
-		return  sameStreetNum && sameStreetName && sameStreetSide && sameNumRacks && sameYearInstalled;
+		boolean sameSkytrainStn = (this.skytrainStation == null? this.skytrainStation == other.skytrainStation : this.skytrainStation.equals(other.skytrainStation));
+		
+		return  sameStreetNum && sameStreetName && sameStreetSide && sameNumRacks && sameYearInstalled && sameSkytrainStn;
 	}
 	
 	@Override

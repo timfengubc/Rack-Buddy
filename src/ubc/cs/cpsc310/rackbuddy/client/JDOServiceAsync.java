@@ -15,5 +15,7 @@ public interface JDOServiceAsync {
 	void updateBikeRackData(BikeRackData updatedData,
 			AsyncCallback<Void> callback);
 
-	void findByKey(Long key, AsyncCallback<BikeRackData> callback);
+	void getBikeRackObject(BikeRackData data, AsyncCallback<BikeRackData> callback);
+
+	void removeAll(AsyncCallback<Void> callback);
 }

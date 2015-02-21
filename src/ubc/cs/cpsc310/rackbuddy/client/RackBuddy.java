@@ -32,7 +32,7 @@ public class RackBuddy implements EntryPoint {
 		
 		List<BikeRackData> datas = new ArrayList<BikeRackData>();
 		
-		BikeRackData newData = new BikeRackData("somestreetNum", "some street name", " some street side", "some skytrain stn",
+		final BikeRackData newData = new BikeRackData("somestreetNum", "some street name", " some street side", "some skytrain stn",
 												100, "year installed somewhere...");
 		
 		
@@ -45,15 +45,57 @@ public class RackBuddy implements EntryPoint {
 		BikeRackData nullData = new BikeRackData(null, null, null, null,
 				3, null);
 		
-//		datas.add(newData);
-//		datas.add(newData2);
-//		datas.add(newData3);
-//		datas.add(nullData);
-		
+		datas.add(newData);
+		datas.add(newData2);
+		datas.add(newData3);
+		datas.add(nullData);
 
+//		add(datas);
+
+//		BikeRackData dne = new BikeRackData();
+//		jdoRPC.removeBikeRackData(dne, new AsyncCallback<Void>(){
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				
+//			}
+//
+//			@Override
+//			public void onSuccess(Void result) {
+//				Window.alert("successfully removed dne");
+//			}
+//			
+//		});
+//		datas.add(new BikeRackData());
+		//removeData(datas);
 		
-	
+		removeAll();
 		
+		
+		}
+
+	private void get() {
+		jdoRPC.getData(new AsyncCallback<List<BikeRackData>>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				
+			}
+
+			@Override
+			public void onSuccess(List<BikeRackData> result) {
+				
+				//Window.alert(Integer.toString(result.size()));
+				
+//				removeData(result);
+				//updateData(result);
+				
+			}
+			
+		});
+	}
+
+	private void add(List<BikeRackData> datas) {
 		for(BikeRackData data : datas){
 			jdoRPC.addBikeRackData(data, new AsyncCallback<Void>(){
 
@@ -70,42 +112,6 @@ public class RackBuddy implements EntryPoint {
 			});
 			
 		}
-
-		jdoRPC.getData(new AsyncCallback<List<BikeRackData>>(){
-
-			@Override
-			public void onFailure(Throwable caught) {
-				
-			}
-
-			@Override
-			public void onSuccess(List<BikeRackData> result) {
-				
-				//Window.alert(Integer.toString(result.size()));
-				
-				//removeData(result);
-				updateData(result);
-				
-			}
-			
-		});
-		
-//		BikeRackData dne = new BikeRackData();
-//		jdoRPC.removeBikeRackData(dne, new AsyncCallback<Void>(){
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				
-//			}
-//
-//			@Override
-//			public void onSuccess(Void result) {
-//				Window.alert("successfully removed dne");
-//			}
-//			
-//		});
-		
-		
 	}
 	
 	private void updateData(List<BikeRackData> result){
@@ -115,17 +121,28 @@ public class RackBuddy implements EntryPoint {
 			Window.alert("street name is " + updated.getStreetName() + "        " + "steet number is " + updated.getStreetNumber());
 			
 		
-		updated.setNumRacks(updated.getNumRacks() + 20);
-		
-		updated.setSkytrainStation(updated.getSkytrainStation() + " modified skytrain station");
-		
-		updated.setStreetName(updated.getStreetName()+ " modified street name");
-		
-		updated.setStreetNumber(updated.getStreetNumber() + " updated street number");
-		
-		updated.setStreetSide(updated.getStreetSide() + " updated street side");
-		
-		updated.setYearInstalled(updated.getYearInstalled() + " modified year installed");
+//		updated.setNumRacks(updated.getNumRacks() + 20);
+//		
+//		updated.setSkytrainStation(updated.getSkytrainStation() + " modified skytrain station");
+//		
+//		updated.setStreetName(updated.getStreetName()+ " modified street name");
+//		
+//		updated.setStreetNumber(updated.getStreetNumber() + " updated street number");
+//		
+//		updated.setStreetSide(updated.getStreetSide() + " updated street side");
+//		
+//		updated.setYearInstalled(updated.getYearInstalled() + " modified year installed");
+			updated.setNumRacks(0);
+			
+			updated.setSkytrainStation(null);
+			
+			updated.setStreetName(null);
+			
+			updated.setStreetNumber(null);
+			
+			updated.setStreetSide(null);
+			
+			updated.setYearInstalled(null);
 		
 		
 		
@@ -150,6 +167,7 @@ public class RackBuddy implements EntryPoint {
 	private void removeData(List<BikeRackData> toBeRemoved){
 		
 		for(BikeRackData data : toBeRemoved){
+			
 			jdoRPC.removeBikeRackData(data, new AsyncCallback<Void>(){
 
 				@Override
@@ -164,5 +182,22 @@ public class RackBuddy implements EntryPoint {
 				
 			});
 		}
+	}
+	
+	private void removeAll(){
+		jdoRPC.removeAll(new AsyncCallback<Void>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				Window.alert("successfully removed all");
+			}
+			
+		});
 	}
 }

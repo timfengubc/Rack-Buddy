@@ -50,12 +50,12 @@ public class RackBuddy implements EntryPoint {
 //		datas.add(newData3);
 		datas.add(nullData);
 
-//		add(datas);
+		//add(datas);
 
 //		BikeRackData dne = new BikeRackData();
 
-		//datas.add(new BikeRackData());
-		//removeData(datas);
+//		datas.add(new BikeRackData());
+//		removeData(datas);
 		
 		//removeAll();
 		
@@ -65,7 +65,7 @@ public class RackBuddy implements EntryPoint {
 		}
 
 	private void get() {
-		jdoRPC.getData(new AsyncCallback<List<BikeRackData>>(){
+		jdoRPC.getAllData(new AsyncCallback<List<BikeRackData>>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -108,35 +108,21 @@ public class RackBuddy implements EntryPoint {
 			
 		for(BikeRackData data : result){
 			
-			//Window.alert("street name is " + updated.getStreetName() + "        " + "steet number is " + updated.getStreetNumber());
 		BikeRackData temp = new BikeRackData(data);
 			
-		temp.setBia(temp.getBia() + "modified bia");
+		temp.setBia( "modified bia");
 		temp.setNumRacks(temp.getNumRacks() + 20);
 		
-		temp.setSkytrainStation(temp.getSkytrainStation() + " modified skytrain station");
+		temp.setSkytrainStation( " modified skytrain station");
 		
-		temp.setStreetName(temp.getStreetName()+ " modified street name");
+		temp.setStreetName( " modified street name");
 		
-		temp.setStreetNumber(temp.getStreetNumber() + " updated street number");
+		temp.setStreetNumber( " updated street number");
 		
-		temp.setStreetSide(temp.getStreetSide() + " updated street side");
+		temp.setStreetSide(" updated street side");
 		
-		temp.setYearInstalled(temp.getYearInstalled() + " modified year installed");
-		
-			
-//			updated.setSkytrainStation(null);
-//			
-//			updated.setStreetName(null);
-//			
-//			updated.setStreetNumber(null);
-//			
-//			updated.setStreetSide(null);
-//			
-//			updated.setYearInstalled(null);
-		
-		
-		
+		temp.setYearInstalled( " modified year installed");
+
 		jdoRPC.updateBikeRackData(data,temp, new AsyncCallback<Void>(){
 
 			@Override
@@ -180,7 +166,6 @@ public class RackBuddy implements EntryPoint {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
 				
 			}
 

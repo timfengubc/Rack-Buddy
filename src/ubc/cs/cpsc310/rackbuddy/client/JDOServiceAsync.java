@@ -10,7 +10,7 @@ public interface JDOServiceAsync {
 
 	void removeBikeRackData(BikeRackData data, AsyncCallback<Void> callback);
 
-	void getData(AsyncCallback<List<BikeRackData>> callback);
+	void getAllData(AsyncCallback<List<BikeRackData>> callback);
 
 	void updateBikeRackData(BikeRackData oldData, BikeRackData updatedData,
 			AsyncCallback<Void> callback);

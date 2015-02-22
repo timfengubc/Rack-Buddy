@@ -1,6 +1,5 @@
 package ubc.cs.cpsc310.rackbuddy.server;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,21 +18,22 @@ import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
-import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.Transactional;
 
 
 public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
-	
-	
+		
 	private static final Logger LOG = Logger.getLogger(JDOServiceImpl.class.getName());
 	private static final PersistenceManagerFactory PMF = JDOHelper.getPersistenceManagerFactory("transactions-optional");
 	
 	public JDOServiceImpl() {
 	}
 	
-
+	
 	@Override
+	/**
+	 * Adds the BikeRackData object into the datastore
+	 */
 	public void addBikeRackData(BikeRackData data) {
 		PersistenceManager pm = getPersistenceManager();
 		try{
@@ -45,31 +45,37 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	/**
 	 * Can't remove null data
 	 * http://stackoverflow.com/questions/8868449/how-to-check-the-text-is-null-or-not-using-jdo
+	 * 
+	 * Removes the specified BikeRackData object from the datastore
 	 */
 	@Override
 	public void removeBikeRackData(BikeRackData data) {
-		
+
 		PersistenceManager pm = getPersistenceManager();
-	
-		try{
-			
+
+		try {
+
 			BikeRackData result = getBikeRackObject(data);
-			
-			List<BikeRackData> datas = getData();
-			
-			for(BikeRackData brd : datas){
-				if(brd.equals(result)){
+
+			List<BikeRackData> datas = getAllData();
+
+			for (BikeRackData brd : datas) {
+				if (brd.equals(result)) {
 					pm.deletePersistent(result);
 				}
 			}
-			
-		}finally{
+
+		} finally {
 			pm.close();
 		}
 	}
+	
+	/**
+	 * Retreives all the BikeRackData objects currently in the datasore.
+	 */
 	@Transactional
 	@Override
-	public List<BikeRackData> getData() {
+	public List<BikeRackData> getAllData() {
 		// http://stackoverflow.com/questions/3242217/how-do-you-make-query-results-available-after-closing-the-persistence-manager
 		PersistenceManager pm = getPersistenceManager();
 		List<BikeRackData> results = null;
@@ -92,42 +98,45 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		return detachedList;
 	}
 	
+	/**
+	 * Removes all the BikeRackData objects currently in the datastore.
+	 */
 	@Override
 	public void removeAll() {
 		PersistenceManager pm = getPersistenceManager();
 		try{
-			List<BikeRackData> removedDatas = getData();
+			List<BikeRackData> removedDatas = getAllData();
 			pm.deletePersistentAll(removedDatas);
 			
 		}finally{
 			pm.close();
 		}
 	}
-
+	
+	/**
+	 * Updates the oldData with the updatedData
+	 * 
+	 * oldData: the original BikeRackData object
+	 * updatedData: the updated BikeRackData object
+	 */
 	@Override
 	public void updateBikeRackData(BikeRackData oldData, BikeRackData updatedData) {
 		
 		PersistenceManager pm = getPersistenceManager();
 		
-		String streetNumber = updatedData.getStreetNumber();
-		
+		String streetNumber = updatedData.getStreetNumber();	
 		String streetName = updatedData.getStreetName();
-		
 		String streetSide = updatedData.getStreetSide();
-		
 		String skytrainStation = updatedData.getSkytrainStation();
-		
 		String bia = updatedData.getBia();
-		
 		int numRacks = updatedData.getNumRacks();
-		
 		String yearInstalled = updatedData.getYearInstalled();
 		
 		try{
 			
 			BikeRackData result = getBikeRackObject(oldData);
 			
-			List<BikeRackData> datas = getData();
+			List<BikeRackData> datas = getAllData();
 			
 			for(BikeRackData brd : datas){
 				if(brd.equals(result)){
@@ -143,9 +152,6 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 					pm.makePersistent(oldData);
 				}
 			}
-			
-			
-			
 		}finally{
 			pm.close();
 		}
@@ -167,7 +173,11 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		}
 	}
 
-
+	/**
+	 * Retrieves the specified BikeRackData object from the datastore.
+	 * 
+	 * Returns null if unable to find it.
+	 */
 	@Override
 	public BikeRackData getBikeRackObject(BikeRackData data) {
 
@@ -203,7 +213,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	    	return detachedList.get(0);	
 	    }
 	    
-	    return new BikeRackData();
+	    return null;
 	}
 
 

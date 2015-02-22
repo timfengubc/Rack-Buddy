@@ -20,7 +20,6 @@ public class BikeRackData implements Serializable {
 //	@Persistent
 //	private User user;
 	
-
 	@Persistent
 	private String streetNumber;
 	
@@ -69,7 +68,11 @@ public class BikeRackData implements Serializable {
 		
 	}
 	
-	//Copy constructor for cloning
+	/**
+	 * Copy constructor for cloning
+	 * so that the object can be updated
+	 * @param other
+	 */
 	public BikeRackData(BikeRackData other){
 		this.streetNumber = other.streetNumber;
 		this.bia = other.bia;
@@ -79,9 +82,6 @@ public class BikeRackData implements Serializable {
 		this.numRacks = other.numRacks;
 		this.yearInstalled = other.yearInstalled;
 	}
-	
-	
-
 //	public User getUser() {
 //		return user;
 //	}
@@ -144,8 +144,6 @@ public class BikeRackData implements Serializable {
 		this.yearInstalled = yearInstalled;
 	}
 
-
-	
 	@Override
 	public int hashCode() {
 		int hash = 1;
@@ -189,11 +187,8 @@ public class BikeRackData implements Serializable {
 		boolean sameBia = (this.bia == null? this.bia == other.bia : this.bia.equals(other.bia));
 		boolean sameStreetName = (this.streetName == null? this.streetName == other.streetName : this.streetName.equals(other.streetName));
 		boolean sameStreetSide = (this.streetSide == null? this.streetSide == other.streetSide : this.streetSide.equals(other.streetSide));
-
 		boolean sameNumRacks = this.numRacks == other.numRacks;
-		
 		boolean sameYearInstalled = (this.yearInstalled == null? this.yearInstalled == other.yearInstalled : this.yearInstalled.equals(other.yearInstalled));
-		
 		boolean sameSkytrainStn = (this.skytrainStation == null? this.skytrainStation == other.skytrainStation : this.skytrainStation.equals(other.skytrainStation));
 		
 		return  sameStreetNum && sameStreetName && sameStreetSide && sameNumRacks && sameYearInstalled && sameSkytrainStn && sameID && sameBia;
@@ -217,6 +212,4 @@ public class BikeRackData implements Serializable {
 				" numRacks: " + this.numRacks+ ", "+
 				" yearInstalled: " + yearInstalled;
 	}
-	
-	
 }

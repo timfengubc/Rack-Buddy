@@ -20,31 +20,29 @@ public class BikeRackData implements Serializable {
 //	@Persistent
 //	private User user;
 	
-	//can't be null
+
 	@Persistent
 	private String streetNumber;
 	
-	//cam't be null
+	@Persistent
+	private String bia;
+	
 	@Persistent
 	private String streetName;
-	
-	//can't be null
+
 	@Persistent
 	private String streetSide;
-	
-	//can be null
+
 	@Persistent
 	private String skytrainStation;
 	
-	// can be null, if null, set it equal to 0
 	@Persistent
-	private int numRacks; //might change to string
-	
-	//can be null
+	private int numRacks; 
+
 	@Persistent
 	private String yearInstalled;
 	
-	//default constructor
+	
 	public BikeRackData() {
 		this.streetNumber = "";
 		this.streetName = "";
@@ -52,6 +50,7 @@ public class BikeRackData implements Serializable {
 	}
 	//Don't need user variable yet...
 	public BikeRackData(String streetNumber,
+						String bia,
 						String streetName,
 						String streetSide,
 						String skytrainStation,
@@ -60,6 +59,7 @@ public class BikeRackData implements Serializable {
 						){
 		
 		this.streetNumber = streetNumber;
+		this.bia = bia;
 		this.streetName = streetName;
 		this.streetSide = streetSide;
 		this.skytrainStation = skytrainStation;
@@ -75,6 +75,12 @@ public class BikeRackData implements Serializable {
 //		return user;
 //	}
 
+	public String getBia() {
+		return bia;
+	}
+	public void setBia(String bia) {
+		this.bia = bia;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -127,14 +133,15 @@ public class BikeRackData implements Serializable {
 		this.yearInstalled = yearInstalled;
 	}
 
-	//Don't know if I'm doing this right....
+
 	
 	@Override
 	public int hashCode() {
 		int hash = 1;
-		//TODO hashcode ID?
+
 		hash = hash * 5 + (id == null? 0 : id.hashCode());
 		hash = hash * 11 + (streetNumber == null ? 0 : streetNumber.hashCode());
+		hash = hash * 17 + (bia == null ? 0 : bia.hashCode());
 		hash = hash * 17 + (streetName == null ? 0 : streetName.hashCode());
 		hash = hash * 13 + (streetSide == null ? 0 : streetSide.hashCode());
 		hash = hash * 31 + (skytrainStation == null ? 0 : skytrainStation.hashCode());
@@ -156,7 +163,7 @@ public class BikeRackData implements Serializable {
 		}
 		
 		BikeRackData other = (BikeRackData) obj;
-		//TODO compare ID?
+
 		boolean sameID = true;
 		if(this.id != null){
 			if(this.id.equals(other.id)){
@@ -168,6 +175,7 @@ public class BikeRackData implements Serializable {
 		}
 
 		boolean sameStreetNum = (this.streetNumber == null? this.streetNumber == other.streetNumber : this.streetNumber.equals(other.streetNumber));
+		boolean sameBia = (this.bia == null? this.bia == other.bia : this.bia.equals(other.bia));
 		boolean sameStreetName = (this.streetName == null? this.streetName == other.streetName : this.streetName.equals(other.streetName));
 		boolean sameStreetSide = (this.streetSide == null? this.streetSide == other.streetSide : this.streetSide.equals(other.streetSide));
 
@@ -177,7 +185,7 @@ public class BikeRackData implements Serializable {
 		
 		boolean sameSkytrainStn = (this.skytrainStation == null? this.skytrainStation == other.skytrainStation : this.skytrainStation.equals(other.skytrainStation));
 		
-		return  sameStreetNum && sameStreetName && sameStreetSide && sameNumRacks && sameYearInstalled && sameSkytrainStn;
+		return  sameStreetNum && sameStreetName && sameStreetSide && sameNumRacks && sameYearInstalled && sameSkytrainStn && sameID && sameBia;
 	}
 	
 	@Override
@@ -185,12 +193,14 @@ public class BikeRackData implements Serializable {
 		
 		String id = (this.id == null? "null" : Long.toString(this.id));
 		String streetNum = (this.streetNumber==null? "null" : this.streetNumber);
+		String bia = (this.bia==null? "null" : this.bia);
 		String streetName = (this.streetName==null? "null" : this.streetName);
 		String streetSide = (this.streetSide==null? "null" : this.streetSide);
 		String yearInstalled = (this.yearInstalled==null? "null" : this.yearInstalled);
 		
 		return "id: " + id + ", "+
 				" steetNum: " + streetNum+ ", "+
+				" bia: " + bia + ", " +
 				" streetName: " + streetName+ ", "+
 				" streetSide: " + streetSide+ ", "+
 				" numRacks: " + this.numRacks+ ", "+

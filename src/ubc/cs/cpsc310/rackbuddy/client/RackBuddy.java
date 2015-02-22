@@ -32,17 +32,17 @@ public class RackBuddy implements EntryPoint {
 		
 		List<BikeRackData> datas = new ArrayList<BikeRackData>();
 		
-		final BikeRackData newData = new BikeRackData("somestreetNum", "some street name", " some street side", "some skytrain stn",
+		final BikeRackData newData = new BikeRackData("somestreetNum", "some bia", "some street name", " some street side", "some skytrain stn",
 												100, "year installed somewhere...");
 		
 		
-		BikeRackData newData2 = new BikeRackData("somestreetNum2", "some street name2", " some street side2", "some skytrain stn2",
+		BikeRackData newData2 = new BikeRackData("somestreetNum2", "some bia 2", "some street name2", " some street side2", "some skytrain stn2",
 				900, "year installed somewhere...2");
 		
-		BikeRackData newData3 = new BikeRackData("somestreetNum3", "some street name3", " some street side3", "some skytrain stn3",
+		BikeRackData newData3 = new BikeRackData("somestreetNum3", "some bia 3", "some street name3", " some street side3", "some skytrain stn3",
 				900, "year installed somewhere...3");
 		
-		BikeRackData nullData = new BikeRackData(null, null, null, null,
+		BikeRackData nullData = new BikeRackData(null,null, null, null, null,
 				3, null);
 		
 		datas.add(newData);
@@ -50,7 +50,7 @@ public class RackBuddy implements EntryPoint {
 		datas.add(newData3);
 		datas.add(nullData);
 
-//		add(datas);
+		add(datas);
 
 //		BikeRackData dne = new BikeRackData();
 //		jdoRPC.removeBikeRackData(dne, new AsyncCallback<Void>(){
@@ -69,7 +69,7 @@ public class RackBuddy implements EntryPoint {
 //		datas.add(new BikeRackData());
 		//removeData(datas);
 		
-		removeAll();
+		//removeAll();
 		
 		
 		}

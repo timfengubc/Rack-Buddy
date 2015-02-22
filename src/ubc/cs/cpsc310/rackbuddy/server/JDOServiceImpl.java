@@ -105,7 +105,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	}
 
 	@Override
-	public void updateBikeRackData(BikeRackData updatedData) {
+	public void updateBikeRackData(BikeRackData oldData, BikeRackData updatedData) {
 		
 		PersistenceManager pm = getPersistenceManager();
 		
@@ -117,19 +117,35 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		
 		String skytrainStation = updatedData.getSkytrainStation();
 		
+		String bia = updatedData.getBia();
+		
 		int numRacks = updatedData.getNumRacks();
 		
 		String yearInstalled = updatedData.getYearInstalled();
 		
 		try{
-			updatedData = pm.getObjectById(BikeRackData.class, updatedData.getId());
-			updatedData.setStreetName(streetName);
-			updatedData.setStreetNumber(streetNumber);
-			updatedData.setStreetSide(streetSide);
-			updatedData.setSkytrainStation(skytrainStation);
-			updatedData.setNumRacks(numRacks);
-			updatedData.setYearInstalled(yearInstalled);
-			pm.makePersistent(updatedData);
+			
+			BikeRackData result = getBikeRackObject(oldData);
+			
+			List<BikeRackData> datas = getData();
+			
+			for(BikeRackData brd : datas){
+				if(brd.equals(result)){
+					oldData = pm.getObjectById(BikeRackData.class, brd.getId());
+					oldData.setStreetName(streetName);
+					oldData.setBia(bia);
+					oldData.setStreetNumber(streetNumber);
+					oldData.setStreetSide(streetSide);
+					oldData.setSkytrainStation(skytrainStation);
+					oldData.setNumRacks(numRacks);
+					oldData.setYearInstalled(yearInstalled);
+					
+					pm.makePersistent(oldData);
+				}
+			}
+			
+			
+			
 		}finally{
 			pm.close();
 		}
@@ -187,7 +203,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	    	return detachedList.get(0);	
 	    }
 	    
-	    return null;
+	    return new BikeRackData();
 	}
 
 

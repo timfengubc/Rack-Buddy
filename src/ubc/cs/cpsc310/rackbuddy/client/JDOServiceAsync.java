@@ -12,7 +12,7 @@ public interface JDOServiceAsync {
 
 	void getData(AsyncCallback<List<BikeRackData>> callback);
 
-	void updateBikeRackData(BikeRackData updatedData,
+	void updateBikeRackData(BikeRackData oldData, BikeRackData updatedData,
 			AsyncCallback<Void> callback);
 
 	void getBikeRackObject(BikeRackData data, AsyncCallback<BikeRackData> callback);

@@ -69,6 +69,17 @@ public class BikeRackData implements Serializable {
 		
 	}
 	
+	//Copy constructor for cloning
+	public BikeRackData(BikeRackData other){
+		this.streetNumber = other.streetNumber;
+		this.bia = other.bia;
+		this.streetName = other.streetName;
+		this.streetSide = other.streetSide;
+		this.skytrainStation = other.skytrainStation;
+		this.numRacks = other.numRacks;
+		this.yearInstalled = other.yearInstalled;
+	}
+	
 	
 
 //	public User getUser() {

@@ -45,32 +45,22 @@ public class RackBuddy implements EntryPoint {
 		BikeRackData nullData = new BikeRackData(null,null, null, null, null,
 				3, null);
 		
-		datas.add(newData);
-		datas.add(newData2);
-		datas.add(newData3);
+//		datas.add(newData);
+//		datas.add(newData2);
+//		datas.add(newData3);
 		datas.add(nullData);
 
-		add(datas);
+//		add(datas);
 
 //		BikeRackData dne = new BikeRackData();
-//		jdoRPC.removeBikeRackData(dne, new AsyncCallback<Void>(){
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				
-//			}
-//
-//			@Override
-//			public void onSuccess(Void result) {
-//				Window.alert("successfully removed dne");
-//			}
-//			
-//		});
-//		datas.add(new BikeRackData());
+
+		//datas.add(new BikeRackData());
 		//removeData(datas);
 		
 		//removeAll();
 		
+		
+		updateData(datas);
 		
 		}
 
@@ -116,37 +106,38 @@ public class RackBuddy implements EntryPoint {
 	
 	private void updateData(List<BikeRackData> result){
 			
-		for(BikeRackData updated : result){
+		for(BikeRackData data : result){
 			
-			Window.alert("street name is " + updated.getStreetName() + "        " + "steet number is " + updated.getStreetNumber());
+			//Window.alert("street name is " + updated.getStreetName() + "        " + "steet number is " + updated.getStreetNumber());
+		BikeRackData temp = new BikeRackData(data);
 			
+		temp.setBia(temp.getBia() + "modified bia");
+		temp.setNumRacks(temp.getNumRacks() + 20);
 		
-//		updated.setNumRacks(updated.getNumRacks() + 20);
-//		
-//		updated.setSkytrainStation(updated.getSkytrainStation() + " modified skytrain station");
-//		
-//		updated.setStreetName(updated.getStreetName()+ " modified street name");
-//		
-//		updated.setStreetNumber(updated.getStreetNumber() + " updated street number");
-//		
-//		updated.setStreetSide(updated.getStreetSide() + " updated street side");
-//		
-//		updated.setYearInstalled(updated.getYearInstalled() + " modified year installed");
-			updated.setNumRacks(0);
+		temp.setSkytrainStation(temp.getSkytrainStation() + " modified skytrain station");
+		
+		temp.setStreetName(temp.getStreetName()+ " modified street name");
+		
+		temp.setStreetNumber(temp.getStreetNumber() + " updated street number");
+		
+		temp.setStreetSide(temp.getStreetSide() + " updated street side");
+		
+		temp.setYearInstalled(temp.getYearInstalled() + " modified year installed");
+		
 			
-			updated.setSkytrainStation(null);
-			
-			updated.setStreetName(null);
-			
-			updated.setStreetNumber(null);
-			
-			updated.setStreetSide(null);
-			
-			updated.setYearInstalled(null);
+//			updated.setSkytrainStation(null);
+//			
+//			updated.setStreetName(null);
+//			
+//			updated.setStreetNumber(null);
+//			
+//			updated.setStreetSide(null);
+//			
+//			updated.setYearInstalled(null);
 		
 		
 		
-		jdoRPC.updateBikeRackData(updated, new AsyncCallback<Void>(){
+		jdoRPC.updateBikeRackData(data,temp, new AsyncCallback<Void>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -155,7 +146,7 @@ public class RackBuddy implements EntryPoint {
 
 			@Override
 			public void onSuccess(Void result) {
-				//Window.alert("updated");
+				Window.alert("updated");
 			}
 			
 		});

@@ -16,7 +16,8 @@ public interface JDOService extends RemoteService {
 	
 	public List<BikeRackData> getData();
 	
-	public void updateBikeRackData(BikeRackData updatedData);
+	//try using 2 param:oldData, updatedData
+	public void updateBikeRackData(BikeRackData oldData, BikeRackData updatedData);
 	
 	public  BikeRackData getBikeRackObject(BikeRackData data);
 	

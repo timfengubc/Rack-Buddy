@@ -1,6 +1,5 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -16,117 +15,89 @@ public class RackBuddy implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 		
-		List<BikeRackData> datas = new ArrayList<BikeRackData>();
 		
-		final BikeRackData newData = new BikeRackData("somestreetNum", "some bia", "some street name", " some street side", "some skytrain stn",
-												100, "year installed somewhere...");
-		
-		
-		BikeRackData newData2 = new BikeRackData("somestreetNum2", "some bia 2", "some street name2", " some street side2", "some skytrain stn2",
-				900, "year installed somewhere...2");
-		
-		BikeRackData newData3 = new BikeRackData("somestreetNum3", "some bia 3", "some street name3", " some street side3", "some skytrain stn3",
-				900, "year installed somewhere...3");
-		
-		BikeRackData nullData = new BikeRackData(null,null, null, null, null,
-				3, null);
-		
-//		datas.add(newData);
-//		datas.add(newData2);
-//		datas.add(newData3);
-		datas.add(nullData);
-
-		//add(datas);
-
-//		BikeRackData dne = new BikeRackData();
-
-//		datas.add(new BikeRackData());
-//		removeData(datas);
-		
-		//removeAll();
-		
-		
-		updateData(datas);
-		
-		}
-
+	}
+	/**
+	 * Function to test get method
+	 * Feel free to remove it
+	 */
 	private void get() {
-		jdoRPC.getAllData(new AsyncCallback<List<BikeRackData>>(){
+		jdoRPC.getAllData(new AsyncCallback<List<BikeRackData>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				
+
 			}
 
 			@Override
 			public void onSuccess(List<BikeRackData> result) {
-				
-				//Window.alert(Integer.toString(result.size()));
-				
-//				removeData(result);
-				//updateData(result);
-				
+
 			}
-			
+
 		});
 	}
-
+	
+	/**
+	 * Function to test add method
+	 * Feel free to remove it
+	 */
 	private void add(List<BikeRackData> datas) {
-		for(BikeRackData data : datas){
-			jdoRPC.addBikeRackData(data, new AsyncCallback<Void>(){
+		for (BikeRackData data : datas) {
+			jdoRPC.addBikeRackData(data, new AsyncCallback<Void>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
-					
+
 				}
 
 				@Override
 				public void onSuccess(Void result) {
-					//Window.alert("successfully added");
+					// Window.alert("successfully added");
 				}
-				
+
 			});
-			
+
 		}
 	}
-	
-	private void updateData(List<BikeRackData> result){
-			
-		for(BikeRackData data : result){
-			
-		BikeRackData temp = new BikeRackData(data);
-			
-		temp.setBia( "modified bia");
-		temp.setNumRacks(temp.getNumRacks() + 20);
-		
-		temp.setSkytrainStation( " modified skytrain station");
-		
-		temp.setStreetName( " modified street name");
-		
-		temp.setStreetNumber( " updated street number");
-		
-		temp.setStreetSide(" updated street side");
-		
-		temp.setYearInstalled( " modified year installed");
+	/**
+	 * Function to test update method
+	 * Feel free to remove it
+	 */
+	private void updateData(List<BikeRackData> result) {
 
-		jdoRPC.updateBikeRackData(data,temp, new AsyncCallback<Void>(){
+		for (BikeRackData data : result) {
 
-			@Override
-			public void onFailure(Throwable caught) {
-				
-			}
+			BikeRackData temp = new BikeRackData(data);
 
-			@Override
-			public void onSuccess(Void result) {
-				Window.alert("updated");
-			}
-			
-		});
-		
+			temp.setBia("modified bia");
+			temp.setNumRacks(temp.getNumRacks() + 20);
+			temp.setSkytrainStation(" modified skytrain station");
+			temp.setStreetName(" modified street name");
+			temp.setStreetNumber(" updated street number");
+			temp.setStreetSide(" updated street side");
+			temp.setYearInstalled(" modified year installed");
+
+			jdoRPC.updateBikeRackData(data, temp, new AsyncCallback<Void>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+
+				}
+
+				@Override
+				public void onSuccess(Void result) {
+					Window.alert("updated");
+				}
+
+			});
+
 		}
-		
+
 	}
-	
+	/**
+	 * Function to test remove method
+	 * Feel free to remove
+	 */
 	private void removeData(List<BikeRackData> toBeRemoved){
 		
 		for(BikeRackData data : toBeRemoved){
@@ -146,7 +117,10 @@ public class RackBuddy implements EntryPoint {
 			});
 		}
 	}
-	
+	/**
+	 * Function to test remove all method
+	 * Feel free to remove
+	 */
 	private void removeAll(){
 		jdoRPC.removeAll(new AsyncCallback<Void>(){
 

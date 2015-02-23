@@ -15,7 +15,7 @@ public class RackBuddy implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 		
-		
+		//Window.alert("loaded");
 	}
 	/**
 	 * Function to test get method

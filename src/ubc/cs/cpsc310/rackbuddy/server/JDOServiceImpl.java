@@ -193,7 +193,6 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	    			 " && skytrainStation == '"+data.getSkytrainStation()+"'"+
                     " && numRacks == "+ data.getNumRacks() +
                     " && yearInstalled == '"+ data.getYearInstalled() + "'" 
-                   
                     		 );
 	    	
 	    	results = (List<BikeRackData>) q.execute();
@@ -206,7 +205,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	       
 	    }
 	    finally {
-	        pm.close(); // close here
+	        pm.close(); 
 	    }
 	    
 	    if(!detachedList.isEmpty() && detachedList !=null){
@@ -215,8 +214,5 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	    
 	    return null;
 	}
-
-
-
 
 }

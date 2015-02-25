@@ -44,8 +44,12 @@ public class BikeRackData implements Serializable {
 	
 	public BikeRackData() {
 		this.streetNumber = "";
+		this.bia = "";
 		this.streetName = "";
 		this.streetSide = "";
+		this.skytrainStation = "";
+		this.numRacks = 0;
+		this.yearInstalled = "";
 	}
 	//Don't need user variable yet...
 	public BikeRackData(String streetNumber,

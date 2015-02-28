@@ -257,4 +257,41 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		
 	}
 
+	/**
+	 * Updates the BikeRackData object from the datastore with the associated id
+	 */
+	@Override
+	public void updateDataById(BikeRackData data) {
+		
+		String streetNumber = data.getStreetNumber();	
+		String streetName = data.getStreetName();
+		String streetSide = data.getStreetSide();
+		String skytrainStation = data.getSkytrainStation();
+		String bia = data.getBia();
+		int numRacks = data.getNumRacks();
+		String yearInstalled = data.getYearInstalled();
+		
+		BikeRackData result = findDataById(data.getId());
+		
+		if(result != null){
+			PersistenceManager pm= getPersistenceManager();
+			
+			try{
+				
+				result.setStreetNumber(streetNumber);
+				result.setStreetName(streetName);
+				result.setStreetSide(streetSide);
+				result.setSkytrainStation(skytrainStation);
+				result.setBia(bia);
+				result.setNumRacks(numRacks);
+				result.setYearInstalled(yearInstalled);
+				
+				pm.makePersistent(result);
+			}finally{
+				pm.close();
+			}
+		}
+		
+	}
+
 }

@@ -19,30 +19,31 @@ public class RackBuddy implements EntryPoint {
 		 * Testing code here
 		 * Feel free to remove
 		 */
-		BikeRackData b1 = new BikeRackData("street num 1", "bia 1", "street name 1", "streetside 1", "skytrain stn 1", 1, "year installed 1");
-		BikeRackData b2 = new BikeRackData("street num 2", "bia 2", "street name 2", "streetside 2", "skytrain stn 2", 2, "year installed 2");
-		BikeRackData b3 = new BikeRackData("street num 3", "bia 3", "street name 3", "streetside 3", "skytrain stn 3", 3, "year installed 3");
-		List<BikeRackData> racks = new ArrayList<BikeRackData>();;
-		racks.add(b1);
-		racks.add(b2);
-		racks.add(b3);
+//		BikeRackData b1 = new BikeRackData("street num 1", "bia 1", "street name 1", "streetside 1", "skytrain stn 1", 1, "year installed 1");
+//		BikeRackData b2 = new BikeRackData("street num 2", "bia 2", "street name 2", "streetside 2", "skytrain stn 2", 2, "year installed 2");
+//		BikeRackData b3 = new BikeRackData("street num 3", "bia 3", "street name 3", "streetside 3", "skytrain stn 3", 3, "year installed 3");
+//		List<BikeRackData> racks = new ArrayList<BikeRackData>();;
+//		racks.add(b1);
+//		racks.add(b2);
+//		racks.add(b3);
 		
 		//add(racks);
 		//removeById(racks);
+		//updateById(racks);
 		
-		jdoRPC.getAllData(new AsyncCallback<List<BikeRackData>>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-
-			}
-
-			@Override
-			public void onSuccess(List<BikeRackData> result) {
-				removeById(result);
-			}
-
-		});
+//		jdoRPC.getAllData(new AsyncCallback<List<BikeRackData>>() {
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//
+//			}
+//
+//			@Override
+//			public void onSuccess(List<BikeRackData> result) {
+//				updateById(result);
+//			}
+//
+//		});
 	}
 	/**
 	 * Function to test get method
@@ -196,6 +197,37 @@ public class RackBuddy implements EntryPoint {
 	private void removeById(List<BikeRackData> datas){
 		for(BikeRackData brd : datas){
 			jdoRPC.removeDataById(brd.getId(), new AsyncCallback<Void>(){
+
+				@Override
+				public void onFailure(Throwable caught) {
+					
+				}
+
+				@Override
+				public void onSuccess(Void result) {
+					Window.alert("ssadads");
+				}
+				
+			});
+		}
+	}
+	
+	/**
+	 * Function to test update by id method
+	 * Feel free to remove
+	 */
+	private void updateById(List<BikeRackData> datas){
+		for(BikeRackData brd : datas){
+			
+			brd.setBia(brd.getBia() + " modified bia");
+			brd.setNumRacks(brd.getNumRacks() + 20);
+			brd.setSkytrainStation(brd.getSkytrainStation() +" modified skytrain station");
+			brd.setStreetName(brd.getStreetName() + " modified street name");
+			brd.setStreetNumber(brd.getStreetNumber() + " updated street number");
+			brd.setStreetSide(brd.getStreetSide()+ " updated street side");
+			brd.setYearInstalled(brd.getYearInstalled() + " modified year installed");
+			
+			jdoRPC.updateDataById(brd, new AsyncCallback<Void>(){
 
 				@Override
 				public void onFailure(Throwable caught) {

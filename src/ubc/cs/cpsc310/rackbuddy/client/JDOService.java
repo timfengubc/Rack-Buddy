@@ -22,4 +22,6 @@ public interface JDOService extends RemoteService {
 	
 	public BikeRackData findDataById(Long id);
 	
+	public void removeDataById(Long id);
+	
 }

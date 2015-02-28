@@ -20,4 +20,6 @@ public interface JDOServiceAsync {
 	void removeAll(AsyncCallback<Void> callback);
 
 	void findDataById(Long id, AsyncCallback<BikeRackData> callback);
+
+	void removeDataById(Long id, AsyncCallback<Void> callback);
 }

@@ -218,7 +218,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	}
 	
 	/**
-	 * Returns BikeRackData object from datastore given its ID
+	 * Returns BikeRackData object from datastore with the associated id
 	 */
 	public BikeRackData findDataById(Long id) {
 		BikeRackData detachedCopy=null, object=null;
@@ -236,6 +236,25 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	        pm.close(); 
 	    }
 	    return detachedCopy;
+	}
+
+	/**
+	 * Removes BikeRackData object from datastore with the associated id
+	 */
+	@Override
+	public void removeDataById(Long id) {
+		
+		BikeRackData result = findDataById(id);
+		
+		if(result != null){
+			PersistenceManager pm= getPersistenceManager();
+			try{
+				pm.deletePersistent(result);
+			}finally{
+				pm.close();
+			}
+		}
+		
 	}
 
 }

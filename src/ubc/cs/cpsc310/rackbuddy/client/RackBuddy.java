@@ -27,7 +27,8 @@ public class RackBuddy implements EntryPoint {
 		racks.add(b2);
 		racks.add(b3);
 		
-		add(racks);
+		//add(racks);
+		//removeById(racks);
 		
 		jdoRPC.getAllData(new AsyncCallback<List<BikeRackData>>() {
 
@@ -38,7 +39,7 @@ public class RackBuddy implements EntryPoint {
 
 			@Override
 			public void onSuccess(List<BikeRackData> result) {
-				findById(result);
+				removeById(result);
 			}
 
 		});
@@ -163,7 +164,7 @@ public class RackBuddy implements EntryPoint {
 		});
 	}
 	/**
-	 * Function to test remove all method
+	 * Function to test find by id  method
 	 * Feel free to remove
 	 */
 	private void findById(List<BikeRackData> datas){
@@ -182,6 +183,28 @@ public class RackBuddy implements EntryPoint {
 					}else{
 						Window.alert(result.toString());
 					}
+				}
+				
+			});
+		}
+	}
+	
+	/**
+	 * Function to test remove by id method
+	 * Feel free to remove
+	 */
+	private void removeById(List<BikeRackData> datas){
+		for(BikeRackData brd : datas){
+			jdoRPC.removeDataById(brd.getId(), new AsyncCallback<Void>(){
+
+				@Override
+				public void onFailure(Throwable caught) {
+					
+				}
+
+				@Override
+				public void onSuccess(Void result) {
+					Window.alert("ssadads");
 				}
 				
 			});

@@ -1,5 +1,6 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -14,8 +15,33 @@ public class RackBuddy implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+		/**
+		 * Testing code here
+		 * Feel free to remove
+		 */
+		BikeRackData b1 = new BikeRackData("street num 1", "bia 1", "street name 1", "streetside 1", "skytrain stn 1", 1, "year installed 1");
+		BikeRackData b2 = new BikeRackData("street num 2", "bia 2", "street name 2", "streetside 2", "skytrain stn 2", 2, "year installed 2");
+		BikeRackData b3 = new BikeRackData("street num 3", "bia 3", "street name 3", "streetside 3", "skytrain stn 3", 3, "year installed 3");
+		List<BikeRackData> racks = new ArrayList<BikeRackData>();;
+		racks.add(b1);
+		racks.add(b2);
+		racks.add(b3);
 		
-		//Window.alert("loaded");
+		add(racks);
+		
+		jdoRPC.getAllData(new AsyncCallback<List<BikeRackData>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+
+			}
+
+			@Override
+			public void onSuccess(List<BikeRackData> result) {
+				findById(result);
+			}
+
+		});
 	}
 	/**
 	 * Function to test get method
@@ -135,5 +161,30 @@ public class RackBuddy implements EntryPoint {
 			}
 			
 		});
+	}
+	/**
+	 * Function to test remove all method
+	 * Feel free to remove
+	 */
+	private void findById(List<BikeRackData> datas){
+		for(BikeRackData brd : datas){
+			jdoRPC.findDataById(brd.getId(), new AsyncCallback<BikeRackData>(){
+
+				@Override
+				public void onFailure(Throwable caught) {
+					
+				}
+
+				@Override
+				public void onSuccess(BikeRackData result) {
+					if(result == null){
+						Window.alert("null was found");
+					}else{
+						Window.alert(result.toString());
+					}
+				}
+				
+			});
+		}
 	}
 }

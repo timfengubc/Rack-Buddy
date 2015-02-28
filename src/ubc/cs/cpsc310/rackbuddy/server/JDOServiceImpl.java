@@ -14,7 +14,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import java.util.logging.Logger;
 
+import javax.jdo.JDOFatalInternalException;
 import javax.jdo.JDOHelper;
+import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
@@ -213,6 +215,27 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	    }
 	    
 	    return null;
+	}
+	
+	/**
+	 * Returns BikeRackData object from datastore given its ID
+	 */
+	public BikeRackData findDataById(Long id) {
+		BikeRackData detachedCopy=null, object=null;
+		PersistenceManager pm= getPersistenceManager();
+	    try{
+	        object = pm.getObjectById(BikeRackData.class,id);
+	        detachedCopy = pm.detachCopy(object);
+	    }catch (JDOObjectNotFoundException e) {
+	        return null; 
+	    }
+	    catch(JDOFatalInternalException e){
+	    	return null;
+	    }
+	    finally {
+	        pm.close(); 
+	    }
+	    return detachedCopy;
 	}
 
 }

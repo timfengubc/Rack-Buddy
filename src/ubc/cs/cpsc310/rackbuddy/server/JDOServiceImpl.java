@@ -14,7 +14,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import java.util.logging.Logger;
 
+import javax.jdo.JDOFatalInternalException;
 import javax.jdo.JDOHelper;
+import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
@@ -193,7 +195,6 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	    			 " && skytrainStation == '"+data.getSkytrainStation()+"'"+
                     " && numRacks == "+ data.getNumRacks() +
                     " && yearInstalled == '"+ data.getYearInstalled() + "'" 
-                   
                     		 );
 	    	
 	    	results = (List<BikeRackData>) q.execute();
@@ -206,7 +207,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	       
 	    }
 	    finally {
-	        pm.close(); // close here
+	        pm.close(); 
 	    }
 	    
 	    if(!detachedList.isEmpty() && detachedList !=null){
@@ -215,8 +216,82 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	    
 	    return null;
 	}
+	
+	/**
+	 * Returns BikeRackData object from datastore with the associated id
+	 */
+	public BikeRackData findDataById(Long id) {
+		BikeRackData detachedCopy=null, object=null;
+		PersistenceManager pm= getPersistenceManager();
+	    try{
+	        object = pm.getObjectById(BikeRackData.class,id);
+	        detachedCopy = pm.detachCopy(object);
+	    }catch (JDOObjectNotFoundException e) {
+	        return null; 
+	    }
+	    catch(JDOFatalInternalException e){
+	    	return null;
+	    }
+	    finally {
+	        pm.close(); 
+	    }
+	    return detachedCopy;
+	}
 
+	/**
+	 * Removes BikeRackData object from datastore with the associated id
+	 */
+	@Override
+	public void removeDataById(Long id) {
+		
+		BikeRackData result = findDataById(id);
+		
+		if(result != null){
+			PersistenceManager pm= getPersistenceManager();
+			try{
+				pm.deletePersistent(result);
+			}finally{
+				pm.close();
+			}
+		}
+		
+	}
 
-
+	/**
+	 * Updates the BikeRackData object from the datastore with the associated id
+	 */
+	@Override
+	public void updateDataById(BikeRackData data) {
+		
+		String streetNumber = data.getStreetNumber();	
+		String streetName = data.getStreetName();
+		String streetSide = data.getStreetSide();
+		String skytrainStation = data.getSkytrainStation();
+		String bia = data.getBia();
+		int numRacks = data.getNumRacks();
+		String yearInstalled = data.getYearInstalled();
+		
+		BikeRackData result = findDataById(data.getId());
+		
+		if(result != null){
+			PersistenceManager pm= getPersistenceManager();
+			
+			try{
+				
+				result.setStreetNumber(streetNumber);
+				result.setStreetName(streetName);
+				result.setStreetSide(streetSide);
+				result.setSkytrainStation(skytrainStation);
+				result.setBia(bia);
+				result.setNumRacks(numRacks);
+				result.setYearInstalled(yearInstalled);
+				
+				pm.makePersistent(result);
+			}finally{
+				pm.close();
+			}
+		}
+		
+	}
 
 }

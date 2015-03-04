@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Anchor;
 
 public class RackBuddy implements EntryPoint {
-
+	
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private LoginInfo loginInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
@@ -18,7 +18,6 @@ public class RackBuddy implements EntryPoint {
 			"Please sign in to your Google Account to access the RackBuddy application.");
 	private Anchor signInLink = new Anchor("Sign In");
 	private Anchor signOutLink = new Anchor("Sign Out");
-
 	/**
 	 * This is the entry point method.
 	 */

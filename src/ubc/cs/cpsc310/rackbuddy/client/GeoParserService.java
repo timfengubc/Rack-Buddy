@@ -15,5 +15,5 @@ public interface GeoParserService extends RemoteService{
 	public void getGeoCodeJSON(String address);
 	
 	public JSONObject getLocationJSONObject(JSONObject jsonObject);
-
+// asdf
 }

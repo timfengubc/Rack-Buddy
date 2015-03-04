@@ -29,5 +29,6 @@
   <!-- allow Super Dev Mode -->
   <add-linker name="xsiframe"/>
   
-  
+    <inherits name='com.google.gwt.maps.GoogleMaps' />
+    
 </module>

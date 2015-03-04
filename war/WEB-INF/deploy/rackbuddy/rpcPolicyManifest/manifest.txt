@@ -1,2 +1,3 @@
 # Module rackbuddy
 # RPC service class, partial path of RPC policy file
+ubc.cs.cpsc310.rackbuddy.client.LoginService, A528EDED2ED7E8ED02330BE79BB68271.gwt.rpc

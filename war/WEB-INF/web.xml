@@ -1,24 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
               http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-         version="2.5"
-         xmlns="http://java.sun.com/xml/ns/javaee">
+	version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
+
+
+<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>RackBuddy.html</welcome-file>
+	</welcome-file-list>
 
 <!-- Servlets -->
-  <servlet>
-    <servlet-name>JDOServiceImpl</servlet-name>
-    <servlet-class>ubc.cs.cpsc310.rackbuddy.server.JDOServiceImpl</servlet-class>
-  </servlet>
+	<servlet>
+		<servlet-name>JDOServiceImpl</servlet-name>
+		<servlet-class>ubc.cs.cpsc310.rackbuddy.server.JDOServiceImpl
+		</servlet-class>
+	</servlet>
 
-  <servlet-mapping>
-    <servlet-name>JDOServiceImpl</servlet-name>
-    <url-pattern>/rackbuddy/jdoService</url-pattern>
-  </servlet-mapping>
-  
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>RackBuddy.html</welcome-file>
-  </welcome-file-list>
+	<servlet>
+		<servlet-name>loginService</servlet-name>
+		<servlet-class>ubc.cs.cpsc310.rackbuddy.server.LoginServiceImpl
+		</servlet-class>
+	</servlet>
 
+	<servlet-mapping>
+		<servlet-name>JDOServiceImpl</servlet-name>
+		<url-pattern>/rackbuddy/jdoService</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>loginService</servlet-name>
+		<url-pattern>/rackbuddy/login</url-pattern>
+	</servlet-mapping>
+
+<!-- Security Constraints -->
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>admin</web-resource-name>
+			<url-pattern>/admin/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
 </web-app>

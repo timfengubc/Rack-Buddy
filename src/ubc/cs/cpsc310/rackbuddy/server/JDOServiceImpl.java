@@ -22,9 +22,6 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.annotations.Transactional;
 
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-
 
 public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		

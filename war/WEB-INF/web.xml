@@ -16,9 +16,21 @@
     <url-pattern>/rackbuddy/jdoService</url-pattern>
   </servlet-mapping>
   
+   <servlet>
+    <servlet-name>GeoParserServiceImpl</servlet-name>
+    <servlet-class>ubc.cs.cpsc310.rackbuddy.server.GeoParserServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GeoParserServiceImpl</servlet-name>
+    <url-pattern>/rackbuddy/GeoParserService</url-pattern>
+  </servlet-mapping>
+  
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>RackBuddy.html</welcome-file>
   </welcome-file-list>
+
 
 </web-app>

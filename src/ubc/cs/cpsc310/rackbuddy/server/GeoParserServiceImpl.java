@@ -8,7 +8,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class GeoParserServiceImpl extends RemoteServiceServlet implements GeoParserService {
 	
 	private GeoParser myGeoParser;
-	private static final String myAPIKey = "AIzaSyAZBl91RODmzzhXZOLSzKSkmhab0Yw5MkQ";
+	private static final String myAPIKey = "";
 	
 	public GeoParserServiceImpl() {
 		this.myGeoParser = new GeoParser(myAPIKey);

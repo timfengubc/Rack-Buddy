@@ -35,7 +35,7 @@ public class RackBuddy implements EntryPoint {
   public void onModuleLoad() {
 	  
 	  	GeoRPC = GWT.create(GeoParserService.class);
-	  	GeoRPC.getLatLng("2150 Cambie, Canada", new AsyncCallback<MarkerLocation>(){
+	  	GeoRPC.getLatLng("55 Alexander St, Vancouver, BC", new AsyncCallback<MarkerLocation>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -69,7 +69,7 @@ public class RackBuddy implements EntryPoint {
 
   private void buildUi() {
 	LatLng vancouver = LatLng.newInstance(49.261226, -123.1139268);
-	LatLng cambie = LatLng.newInstance(coords.get(0), coords.get(1));
+	LatLng ponderosa = LatLng.newInstance(coords.get(0), coords.get(1));
    final MapWidget map = new MapWidget(vancouver, 2);
     map.setSize("60%", "100%");
     map.setZoomLevel(12);
@@ -77,14 +77,15 @@ public class RackBuddy implements EntryPoint {
     map.addControl(new LargeMapControl());
     // Add a marker
    // map.addOverlay(new Marker(vancouver));
-    map.addOverlay(new Marker(cambie));
+    map.addOverlay(new Marker(ponderosa));
+    map.addOverlay(new Marker(vancouver));
 
-
-    
+ 
     // Add an info window to highlight a point of interest
-    map.getInfoWindow().open(map.getCenter(),
-        new InfoWindowContent("Bike Rack"));
-
+    map.getInfoWindow().open(ponderosa,
+        new InfoWindowContent("Bike racks"));
+  
+    
     final DockLayoutPanel dock = new DockLayoutPanel(Unit.PX);
     dock.addNorth(map, 500);
 

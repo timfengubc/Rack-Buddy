@@ -32,6 +32,17 @@
 		<servlet-name>loginService</servlet-name>
 		<url-pattern>/rackbuddy/login</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>GeoParserServiceImpl</servlet-name>
+		<servlet-class>ubc.cs.cpsc310.rackbuddy.server.GeoParserServiceImpl
+		</servlet-class>
+	</servlet>
+	
+		<servlet-mapping>
+		<servlet-name>GeoParserServiceImpl</servlet-name>
+		<url-pattern>/rackbuddy/GeoParserService</url-pattern>
+	</servlet-mapping>
 
 <!-- Security Constraints -->
 	<security-constraint>

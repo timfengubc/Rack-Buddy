@@ -1,5 +1,8 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ubc.cs.cpsc310.rackbuddy.server.GeoParser;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -31,7 +34,7 @@ public class RackBuddy implements EntryPoint {
 	private Anchor signOutLink = new Anchor("Sign Out");
 	
 	private GeoParserServiceAsync service = GWT.create(GeoParserService.class);
-
+	List<Double> coords = new ArrayList<Double>();
 	/**
 	 * This is the entry point method.
 	 */
@@ -55,7 +58,7 @@ public class RackBuddy implements EntryPoint {
 //				});
 		// Window.alert("loaded");
 		
-		service.getMarkerLocation("19 Brick Hill Road, Denmark", new AsyncCallback<MarkerLocation>(){
+		service.getMarkerLocation("6488 University Blvd, Vancouver, BC", new AsyncCallback<MarkerLocation>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -66,9 +69,12 @@ public class RackBuddy implements EntryPoint {
 			@Override
 			public void onSuccess(final MarkerLocation result) {
 				
+				 coords.add(result.getLat());
+				 coords.add(result.getLng());
+				
 				 Maps.loadMapsApi("", "2", false, new Runnable() {
 				      public void run() {
-				        buildUi(result);
+				        buildUi();
 				      }
 				    });
 			}
@@ -99,21 +105,24 @@ public class RackBuddy implements EntryPoint {
 		RootPanel.get("rackMap").add(mainPanel);
 	}
 	
-	  private void buildUi(final MarkerLocation result) {
+	  private void buildUi() {
 		    // Open a map centered on Cawker City, KS USA
-		    LatLng cawkerCity = LatLng.newInstance(result.getLat(), result.getLng());
-
-		    final MapWidget map = new MapWidget(cawkerCity, 2);
-		    map.setSize("100%", "100%");
+		    LatLng vancouver = LatLng.newInstance(49.261226,-123.1139268);
+		    LatLng ponderosa = LatLng.newInstance(coords.get(0), coords.get(1));
+		    
+		    final MapWidget map = new MapWidget(vancouver, 2);
+		    map.setSize("60%", "100%");
+		    map.setZoomLevel(12);
 		    // Add some controls for the zoom level
 		    map.addControl(new LargeMapControl());
 
 		    // Add a marker
-		    map.addOverlay(new Marker(cawkerCity));
-
+		    map.addOverlay(new Marker(vancouver));
+		   map.addOverlay(new Marker(ponderosa));
+		    
 		    // Add an info window to highlight a point of interest
-		    map.getInfoWindow().open(map.getCenter(),
-		        new InfoWindowContent("RackBuddy"));
+		    map.getInfoWindow().open(vancouver,
+		        new InfoWindowContent("Ponderosa"));
 
 		    final DockLayoutPanel dock = new DockLayoutPanel(Unit.PX);
 		    dock.addNorth(map, 500);

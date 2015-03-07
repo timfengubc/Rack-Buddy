@@ -8,7 +8,7 @@ import ubc.cs.cpsc310.rackbuddy.client.MarkerLocation;
 public class GeoParserServiceImpl extends RemoteServiceServlet implements GeoParserService {
 	
 	private GeoParser myGeoParser;
-	private static final String MY_API_KEY = "AIzaSyAZBl91RODmzzhXZOLSzKSkmhab0Yw5MkQ";
+	private static final String MY_API_KEY = "";
 	
 	public GeoParserServiceImpl() {
 		this.myGeoParser = new GeoParser(MY_API_KEY);

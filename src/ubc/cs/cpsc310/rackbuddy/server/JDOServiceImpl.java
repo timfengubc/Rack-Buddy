@@ -294,4 +294,6 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		
 	}
 
+	
+
 }

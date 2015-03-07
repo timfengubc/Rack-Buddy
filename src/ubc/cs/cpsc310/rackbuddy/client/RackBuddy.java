@@ -107,21 +107,21 @@ public class RackBuddy implements EntryPoint {
 	
 	  private void buildUi() {
 		    // Open a map centered on Cawker City, KS USA
-		    LatLng vancouver = LatLng.newInstance(49.261226,-123.1139268);
+		    //LatLng vancouver = LatLng.newInstance(49.261226,-123.1139268);
 		    LatLng ponderosa = LatLng.newInstance(coords.get(0), coords.get(1));
 		    
-		    final MapWidget map = new MapWidget(vancouver, 2);
+		    final MapWidget map = new MapWidget(ponderosa, 2);
 		    map.setSize("60%", "100%");
 		    map.setZoomLevel(12);
 		    // Add some controls for the zoom level
 		    map.addControl(new LargeMapControl());
 
 		    // Add a marker
-		    map.addOverlay(new Marker(vancouver));
+		    //map.addOverlay(new Marker(vancouver));
 		   map.addOverlay(new Marker(ponderosa));
 		    
 		    // Add an info window to highlight a point of interest
-		    map.getInfoWindow().open(vancouver,
+		    map.getInfoWindow().open(ponderosa,
 		        new InfoWindowContent("Ponderosa"));
 
 		    final DockLayoutPanel dock = new DockLayoutPanel(Unit.PX);

@@ -21,32 +21,35 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Anchor;
-
+import com.google.gwt.user.client.ui.Widget;
 
 public class RackBuddy implements EntryPoint {
-
+	
 	private LoginInfo loginInfo = null;
-	private VerticalPanel loginPanel = new VerticalPanel();
-	private FlowPanel signoutPanel = new FlowPanel();
+	private FlowPanel loginPanel = new FlowPanel();
 	private Button loadData = new Button("Load Data");
 	private Label loginLabel = new Label(
 			"Please sign in to your Google Account to access the RackBuddy application.");
 	private Anchor signInLink = new Anchor("Sign In");
 	private String signOutLink = new String();
 	private Button signOutButton = new Button("Sign Out");
-	
+
 	private GeoParserServiceAsync service = GWT.create(GeoParserService.class);
 	List<Double> coords = new ArrayList<Double>();
+
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-//		 Check login status using login service.
+		// Check login status using login service.
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(),
 				new AsyncCallback<LoginInfo>() {
@@ -62,28 +65,6 @@ public class RackBuddy implements EntryPoint {
 						}
 					}
 				});
-		
-		service.getMarkerLocation("6488 University Blvd, Vancouver, BC", new AsyncCallback<MarkerLocation>(){
-
-			@Override
-			public void onFailure(Throwable caught) {
-			}
-
-			@Override
-			public void onSuccess(final MarkerLocation result) {
-				
-				 coords.add(result.getLat());
-				 coords.add(result.getLng());
-				
-				 Maps.loadMapsApi("", "2", false, new Runnable() {
-				      public void run() {
-				        buildUi();
-				      }
-				    });
-			}
-			
-		});
-		
 
 	}
 
@@ -93,58 +74,62 @@ public class RackBuddy implements EntryPoint {
 		loginPanel.add(loginLabel);
 		loginPanel.add(signInLink);
 		RootPanel.get("rackMap").add(loginPanel);
-
 	}
 
 	private void loadRackBuddy() {
+		
+		Maps.loadMapsApi("", "2", false, new Runnable(){
+			public void run() {
+				buildUi();
+			}
+		});
+		
 		signOutLink = loginInfo.getLogoutUrl();
 		/**
 		 * To be implemented
 		 */
 
 		// Associate the panels with the HTML host page.
-		RootPanel.get("signout").add(signOutButton);
-		
-		signOutButton.addClickHandler(new ClickHandler(){
+		RootPanel.get("signOut").add(signOutButton);
+
+		signOutButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				Window.Location.assign(signOutLink);
 			}
-			
+
 		});
-		
+
 		RootPanel.get("loadData").add(loadData);
 		if (loginInfo.getAdmin() == false) {
 			loadData.setVisible(false);
-		}
-		else {
+		} else {
 			loadData.setVisible(true);
 		}
 	}
-	
-	  private void buildUi() {
-		    // Open a map centered on Cawker City, KS USA
-		    //LatLng vancouver = LatLng.newInstance(49.261226,-123.1139268);
-		    LatLng ponderosa = LatLng.newInstance(coords.get(0), coords.get(1));
-		    
-		    final MapWidget map = new MapWidget(ponderosa, 2);
-		    map.setSize("60%", "100%");
-		    map.setZoomLevel(12);
-		    // Add some controls for the zoom level
-		    map.addControl(new LargeMapControl());
 
-		    // Add a marker
-		    //map.addOverlay(new Marker(vancouver));
-		   map.addOverlay(new Marker(ponderosa));
-		    
-		    // Add an info window to highlight a point of interest
-		    map.getInfoWindow().open(ponderosa,
-		        new InfoWindowContent("Ponderosa"));
+	private void buildUi() {
+		// Open a map centered on Cawker City, KS USA
+		 LatLng vancouver = LatLng.newInstance(49.261226,-123.1139268);
+		// LatLng ponderosa = LatLng.newInstance(coords.get(0), coords.get(1));
 
-		    final DockLayoutPanel dock = new DockLayoutPanel(Unit.PX);
-		    dock.addNorth(map, 500);
+		final MapWidget map = new MapWidget(vancouver, 2);
+		map.setSize("60%", "100%");
+		map.setZoomLevel(12);
+		// Add some controls for the zoom level
+		map.addControl(new LargeMapControl());
 
-		    // Add the map to the HTML host page
-		    RootLayoutPanel.get().add(dock);
-		  }
+		// Add a marker
+		 map.addOverlay(new Marker(vancouver));
+		// map.addOverlay(new Marker(ponderosa));
+
+		// Add an info window to highlight a point of interest
+		map.getInfoWindow().open(vancouver, new InfoWindowContent("Vancouver"));
+
+		LayoutPanel rackMapPanel = new LayoutPanel();
+		rackMapPanel.setSize("100em", "40em");
+		rackMapPanel.setStyleName("rackMap");
+		rackMapPanel.add(map);
+		RootPanel.get().add(rackMapPanel);
+	}
 }

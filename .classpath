@@ -10,5 +10,9 @@
 	<classpathentry kind="lib" path="C:/Users/Sanghyeok/Downloads/gwt-maps-1.1.1/gwt-maps-1.1.1/gwt-maps-javadoc.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Sanghyeok/Downloads/gwt-maps-1.1.1/gwt-maps-1.1.1/gwt-maps-noredist.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Sanghyeok/Downloads/json-20140107.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-maps-javadoc.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-maps-noredist.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-maps.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jsr107cache-1.1.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

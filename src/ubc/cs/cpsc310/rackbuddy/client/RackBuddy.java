@@ -7,6 +7,9 @@ import ubc.cs.cpsc310.rackbuddy.server.GeoParser;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
@@ -15,6 +18,8 @@ import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -24,14 +29,16 @@ import com.google.gwt.user.client.ui.Anchor;
 
 
 public class RackBuddy implements EntryPoint {
-	
-	private VerticalPanel mainPanel = new VerticalPanel();
+
 	private LoginInfo loginInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
+	private FlowPanel signoutPanel = new FlowPanel();
+	private Button loadData = new Button("Load Data");
 	private Label loginLabel = new Label(
 			"Please sign in to your Google Account to access the RackBuddy application.");
 	private Anchor signInLink = new Anchor("Sign In");
-	private Anchor signOutLink = new Anchor("Sign Out");
+	private String signOutLink = new String();
+	private Button signOutButton = new Button("Sign Out");
 	
 	private GeoParserServiceAsync service = GWT.create(GeoParserService.class);
 	List<Double> coords = new ArrayList<Double>();
@@ -39,31 +46,27 @@ public class RackBuddy implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+//		 Check login status using login service.
+		LoginServiceAsync loginService = GWT.create(LoginService.class);
+		loginService.login(GWT.getHostPageBaseURL(),
+				new AsyncCallback<LoginInfo>() {
+					public void onFailure(Throwable error) {
+					}
 
-		// Check login status using login service.
-//		LoginServiceAsync loginService = GWT.create(LoginService.class);
-//		loginService.login(GWT.getHostPageBaseURL(),
-//				new AsyncCallback<LoginInfo>() {
-//					public void onFailure(Throwable error) {
-//					}
-//
-//					public void onSuccess(LoginInfo result) {
-//						loginInfo = result;
-//						if (loginInfo.isLoggedIn()) {
-//							loadRackBuddy();
-//						} else {
-//							loadLogin();
-//						}
-//					}
-//				});
-		// Window.alert("loaded");
+					public void onSuccess(LoginInfo result) {
+						loginInfo = result;
+						if (loginInfo.isLoggedIn()) {
+							loadRackBuddy();
+						} else {
+							loadLogin();
+						}
+					}
+				});
 		
 		service.getMarkerLocation("6488 University Blvd, Vancouver, BC", new AsyncCallback<MarkerLocation>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
 			}
 
 			@Override
@@ -84,7 +87,7 @@ public class RackBuddy implements EntryPoint {
 		
 
 	}
-	
+
 	private void loadLogin() {
 		// Assemble login panel.
 		signInLink.setHref(loginInfo.getLoginUrl());
@@ -95,15 +98,29 @@ public class RackBuddy implements EntryPoint {
 	}
 
 	private void loadRackBuddy() {
-		signOutLink.setHref(loginInfo.getLogoutUrl());
+		signOutLink = loginInfo.getLogoutUrl();
+		/**
+		 * To be implemented
+		 */
 
+		// Associate the panels with the HTML host page.
+		RootPanel.get("signout").add(signOutButton);
 		
-		mainPanel.add(signOutLink);
+		signOutButton.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				Window.Location.assign(signOutLink);
+			}
+			
+		});
 		
-
-		
-		// Associate the Main panel with the HTML host page.
-		RootPanel.get("rackMap").add(mainPanel);
+		RootPanel.get("loadData").add(loadData);
+		if (loginInfo.getAdmin() == false) {
+			loadData.setVisible(false);
+		}
+		else {
+			loadData.setVisible(true);
+		}
 	}
 	
 	  private void buildUi() {

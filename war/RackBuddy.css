@@ -3,11 +3,13 @@
 
 /** Example rules used by the template application (remove for your app) */
 h1 {
-  font-family: TimesNewRoman, 'Times New Roman', Times, Baskerville, Georgia, serif;
+  font-family: Impact, Charcoal, serif;
   font-size: 3em;
   font-weight: bold;
-  color: #0000000;
-  margin: 5px 0px 70px;
+  color: #1975D1;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2;
   text-align: center;
 }
 
@@ -32,4 +34,15 @@ h1 {
 /** Set ids using widget.getElement().setId("idOfElement") */
 #closeButton {
   margin: 15px 6px 6px;
+}
+
+#signout {
+	position:absolute;
+	right:3em;
+}
+
+#loadData {
+	position:absolute;
+	right:3em;
+	top:5em;
 }

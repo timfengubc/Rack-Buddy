@@ -76,6 +76,7 @@ public class RackBuddy implements EntryPoint {
 				      public void run() {
 				        buildUi();
 				      }
+				      
 				    });
 			}
 			
@@ -113,6 +114,7 @@ public class RackBuddy implements EntryPoint {
 		    final MapWidget map = new MapWidget(ponderosa, 2);
 		    map.setSize("60%", "100%");
 		    map.setZoomLevel(12);
+		    
 		    // Add some controls for the zoom level
 		    map.addControl(new LargeMapControl());
 
@@ -129,5 +131,7 @@ public class RackBuddy implements EntryPoint {
 
 		    // Add the map to the HTML host page
 		    RootLayoutPanel.get().add(dock);
+		    		    
+		    
 		  }
 }

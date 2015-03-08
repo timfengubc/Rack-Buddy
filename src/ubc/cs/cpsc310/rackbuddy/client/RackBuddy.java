@@ -15,6 +15,11 @@ import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
 import com.google.gwt.maps.client.control.LargeMapControl;
+import com.google.gwt.maps.client.geocode.DirectionQueryOptions;
+import com.google.gwt.maps.client.geocode.DirectionResults;
+import com.google.gwt.maps.client.geocode.Directions;
+import com.google.gwt.maps.client.geocode.DirectionsCallback;
+import com.google.gwt.maps.client.geocode.DirectionsPanel;
 import com.google.gwt.maps.client.geom.LatLng;
 import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -26,6 +31,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.maps.gwt.client.geometry.Spherical;
 
 
 public class RackBuddy implements EntryPoint {
@@ -124,9 +130,10 @@ public class RackBuddy implements EntryPoint {
 	}
 	
 	  private void buildUi() {
-		    // Open a map centered on Cawker City, KS USA
-		    //LatLng vancouver = LatLng.newInstance(49.261226,-123.1139268);
+		    // Open a map centered on Vancouver, BC, Canada
+		    LatLng vancouver = LatLng.newInstance(49.261226,-123.1139268);
 		    LatLng ponderosa = LatLng.newInstance(coords.get(0), coords.get(1));
+		    
 		    
 		    final MapWidget map = new MapWidget(ponderosa, 2);
 		    map.setSize("60%", "100%");
@@ -136,12 +143,17 @@ public class RackBuddy implements EntryPoint {
 		    map.addControl(new LargeMapControl());
 
 		    // Add a marker
-		    //map.addOverlay(new Marker(vancouver));
+		    map.addOverlay(new Marker(vancouver));
 		   map.addOverlay(new Marker(ponderosa));
+		     	 
+		   
+		   // Get distance between the two point
+		   double distance = vancouver.distanceFrom(ponderosa);
+		
 		    
 		    // Add an info window to highlight a point of interest
 		    map.getInfoWindow().open(ponderosa,
-		        new InfoWindowContent("Ponderosa"));
+		        new InfoWindowContent(String.valueOf(distance)));
 
 		    final DockLayoutPanel dock = new DockLayoutPanel(Unit.PX);
 		    dock.addNorth(map, 500);

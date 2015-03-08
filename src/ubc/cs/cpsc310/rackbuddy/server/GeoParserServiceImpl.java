@@ -21,5 +21,6 @@ public class GeoParserServiceImpl extends RemoteServiceServlet implements GeoPar
 		MarkerLocation result = new MarkerLocation(lat,lng);
 		return result;
 	}
-
+	
+	
 }

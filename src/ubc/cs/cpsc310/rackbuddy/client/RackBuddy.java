@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class RackBuddy implements EntryPoint {
 	
+	public static final String INVALID_ADDRESS = "Please input a valid address.";
 	private LoginInfo loginInfo = null;
 	private FlowPanel loginPanel = new FlowPanel();
 	private Button loadData = new Button("Load Data");
@@ -133,6 +134,8 @@ public class RackBuddy implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				if(isTextValid(address.getValue()) == true){
 					//TODO retrieve results
+				}else{
+					Window.alert(INVALID_ADDRESS);
 				}
 				
 			}

@@ -2,15 +2,11 @@ package ubc.cs.cpsc310.rackbuddy.client;
 
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.maps.client.InfoWindowContent;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
 import com.google.gwt.maps.client.control.LargeMapControl;
@@ -33,10 +29,16 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class RackBuddy implements EntryPoint {
 	
+	private static final String SEARCH_RADIUS = "Search radius: ";
+	private static final String ADDRESS_TO_SEARCH_FROM = "Address to search from:";
+	private static final String _1_KM = "1 km";
+	private static final String _500_M = "500 m";
+	private static final String _100_M = "100 m";
+	private static final String SEARCH = "Search...";
 	public static final String INVALID_ADDRESS = "Please input a valid address.";
 	protected static final String UNABLE_TO_DISPLAY_POI_ON_MAP = "Unable to display POI on map...";
 	protected static final int ZOOM_LEVEL = 12;
-	protected static final String POI_ICON = "http://www.google.com/mapfiles/markerZ.png";
+	protected static final String POI_ICON = "http://www.google.com/mapfiles/markerP.png";
 	private LoginInfo loginInfo = null;
 	private FlowPanel loginPanel = new FlowPanel();
 	private Button loadData = new Button("Load Data");
@@ -120,9 +122,6 @@ public class RackBuddy implements EntryPoint {
 	  private void buildUi() {
 		    // Open a map centered on Vancouver, BC, Canada
 		    LatLng vancouver = LatLng.newInstance(49.261226,-123.1139268);
-
-		    
-		    
 		    map = new MapWidget(vancouver, 2);
 		    map.setSize("60%", "100%");
 		    map.setZoomLevel(ZOOM_LEVEL);
@@ -156,7 +155,7 @@ public class RackBuddy implements EntryPoint {
 	private void initSearchPanel() {
 		searchPanel = new VerticalPanel();
 		
-		searchButton = new Button("Search...");
+		searchButton = new Button(SEARCH);
 		searchButton.addStyleName("marginTop");
 		
 		searchButton.addClickHandler(new ClickHandler(){
@@ -181,9 +180,9 @@ public class RackBuddy implements EntryPoint {
 
 		searchRadius = new ListBox();
 		searchRadius.setVisibleItemCount(1);
-		searchRadius.addItem("100 m");
-		searchRadius.addItem("500 m");
-		searchRadius.addItem("1 km");
+		searchRadius.addItem(_100_M);
+		searchRadius.addItem(_500_M);
+		searchRadius.addItem(_1_KM);
 		
 		HorizontalPanel h1 = new HorizontalPanel();
 		h1.setStyleName("marginTop");
@@ -191,10 +190,10 @@ public class RackBuddy implements EntryPoint {
 		HorizontalPanel h2 = new HorizontalPanel();
 		h2.setStyleName("marginTop");
 		
-		h1.add(new Label("Address to search from:"));
+		h1.add(new Label(ADDRESS_TO_SEARCH_FROM));
 		h1.add(address);
 		
-		h2.add(new Label("Search radius: "));
+		h2.add(new Label(SEARCH_RADIUS));
 		h2.add(searchRadius);
 		
 		searchPanel.add(h1);

@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class RackBuddy implements EntryPoint {
 	
+	private static final String UNABLE_TO_DISPLAY_BIKE_RACK_LOCATION_ON_MAP = "Unable to display bike rack location on map...";
 	private static final String SEARCH_RADIUS = "Search radius: ";
 	private static final String ADDRESS_TO_SEARCH_FROM = "Address to search from:";
 	private static final String _1_KM = "1 km";
@@ -64,6 +65,27 @@ public class RackBuddy implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 		// Check login status using login service.
+		
+//		BikeRackData first = new BikeRackData("134", 
+//								"GT", "Abbot St", "East", "", 
+//								1, "Prior 2010");
+//		
+//		jdoService.addBikeRackData(first, new AsyncCallback<Void>(){
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//
+//			@Override
+//			public void onSuccess(Void result) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//			
+//		});
+		
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(),
 				new AsyncCallback<LoginInfo>() {
@@ -173,8 +195,8 @@ public class RackBuddy implements EntryPoint {
 					
 					displayPOI(address.getValue().trim());
 					
-					
 					displayBikeRacks(searchRadius.getValue(searchRadius.getSelectedIndex()));
+					
 				}else{
 					Window.alert(INVALID_ADDRESS);
 				}
@@ -230,6 +252,7 @@ public class RackBuddy implements EntryPoint {
 	}
 	
 	private void displayPOI(String trim) {
+		map.clearOverlays();
 		
 		if(geoParserService == null){
 			geoParserService = GWT.create(GeoParserService.class);
@@ -244,6 +267,7 @@ public class RackBuddy implements EntryPoint {
 
 			@Override
 			public void onSuccess(MarkerLocation result) {
+				map.clearOverlays();
 				
 				LatLng poi = LatLng.newInstance(result.getLat()	,result.getLng());
 
@@ -269,14 +293,26 @@ public class RackBuddy implements EntryPoint {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				
+				Window.alert(UNABLE_TO_DISPLAY_BIKE_RACK_LOCATION_ON_MAP);
 			}
 
 			@Override
 			public void onSuccess(List<MarkerLocation> result) {
-				List<MarkerLocation> markerToDisplay = new ArrayList<MarkerLocation>();
+				
+				double radius = getSearchRadius(seachRadius);
+				
+				LatLng center = map.getCenter();
 				
 				
+				for(MarkerLocation markerLocation : result){
+					LatLng poi = LatLng.newInstance(markerLocation.getLat()	,markerLocation.getLng());
+					
+					
+					if(center.distanceFrom(poi) <= radius){
+						Marker marker = new Marker(poi);
+						map.addOverlay(marker);
+					}
+				}
 			}
 			
 		});
@@ -304,6 +340,12 @@ public class RackBuddy implements EntryPoint {
 		return meter;
 	}
 	
+	private void primeDisplayBikeRacks(String prime){
 
+		map.clearOverlays();
+		displayBikeRacks(prime);
+		map.clearOverlays();
+		
+	}
 
 }

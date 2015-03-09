@@ -2,6 +2,9 @@ package ubc.cs.cpsc310.rackbuddy.client;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -53,7 +56,8 @@ public class RackBuddy implements EntryPoint {
 	private Button searchButton;
 	private TextBox address;
 	private ListBox searchRadius;
-	private GeoParserServiceAsync service = GWT.create(GeoParserService.class);
+	private GeoParserServiceAsync geoParserService = GWT.create(GeoParserService.class);
+	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 
 	/**
 	 * This is the entry point method.
@@ -164,13 +168,18 @@ public class RackBuddy implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				if(isTextValid(address.getValue()) == true){
+					
+					map.clearOverlays();
+					
 					displayPOI(address.getValue().trim());
+					
+					
+					displayBikeRacks(searchRadius.getValue(searchRadius.getSelectedIndex()));
 				}else{
 					Window.alert(INVALID_ADDRESS);
 				}
 				
-			}
-			
+			}			
 		});
 		
 		address = new TextBox();
@@ -221,7 +230,12 @@ public class RackBuddy implements EntryPoint {
 	}
 	
 	private void displayPOI(String trim) {
-		service.getMarkerLocation(trim, new AsyncCallback<MarkerLocation>(){
+		
+		if(geoParserService == null){
+			geoParserService = GWT.create(GeoParserService.class);
+		}
+		
+		geoParserService.getMarkerLocation(trim, new AsyncCallback<MarkerLocation>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -230,8 +244,9 @@ public class RackBuddy implements EntryPoint {
 
 			@Override
 			public void onSuccess(MarkerLocation result) {
-				map.clearOverlays();
+				
 				LatLng poi = LatLng.newInstance(result.getLat()	,result.getLng());
+
 				Icon icon = Icon.newInstance(POI_ICON);
 				MarkerOptions ops = MarkerOptions.newInstance(icon);
 				Marker marker = new Marker(poi, ops);
@@ -244,4 +259,51 @@ public class RackBuddy implements EntryPoint {
 		});
 	}
 	
+	private void displayBikeRacks(final String seachRadius) {
+		//use map set center
+		if(geoParserService == null){
+			geoParserService = GWT.create(GeoParserService.class);
+		}
+		
+		geoParserService.getAllMarkerLocation(new AsyncCallback<List<MarkerLocation>>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				
+			}
+
+			@Override
+			public void onSuccess(List<MarkerLocation> result) {
+				List<MarkerLocation> markerToDisplay = new ArrayList<MarkerLocation>();
+				
+				
+			}
+			
+		});
+		
+	}
+	
+	private double getSearchRadius(String searchRadius){
+		double meter = 0.0;
+		
+		if(searchRadius.equals(_100_M)){
+			meter = 100.0;
+			return meter;
+		}
+		
+		if(searchRadius.equals(_500_M)){
+			meter = 500.0;
+			return meter;
+		}
+		
+		if(searchRadius.equals(_1_KM)){
+			meter = 1000.0;
+			return meter;
+		}
+		
+		return meter;
+	}
+	
+
+
 }

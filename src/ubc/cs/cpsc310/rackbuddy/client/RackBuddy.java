@@ -15,7 +15,9 @@ import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
 import com.google.gwt.maps.client.control.LargeMapControl;
 import com.google.gwt.maps.client.geom.LatLng;
+import com.google.gwt.maps.client.overlay.Icon;
 import com.google.gwt.maps.client.overlay.Marker;
+import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -32,6 +34,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class RackBuddy implements EntryPoint {
 	
 	public static final String INVALID_ADDRESS = "Please input a valid address.";
+	protected static final String UNABLE_TO_DISPLAY_POI_ON_MAP = "Unable to display POI on map...";
+	protected static final int ZOOM_LEVEL = 12;
+	protected static final String POI_ICON = "http://www.google.com/mapfiles/markerZ.png";
 	private LoginInfo loginInfo = null;
 	private FlowPanel loginPanel = new FlowPanel();
 	private Button loadData = new Button("Load Data");
@@ -46,7 +51,6 @@ public class RackBuddy implements EntryPoint {
 	private Button searchButton;
 	private TextBox address;
 	private ListBox searchRadius;
-	private List<Double> coords = new ArrayList<Double>();
 	private GeoParserServiceAsync service = GWT.create(GeoParserService.class);
 
 	/**
@@ -70,24 +74,6 @@ public class RackBuddy implements EntryPoint {
 					}
 				});
 		
-		service.getMarkerLocation("6488 University Blvd, Vancouver, BC", new AsyncCallback<MarkerLocation>(){
-
-			@Override
-			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onSuccess(final MarkerLocation result) {
-				
-				 coords.add(result.getLat());
-				 coords.add(result.getLng());
-				
-				
-			}
-			
-		});
 	}
 	/**
 	 * Assemble login panel
@@ -134,12 +120,12 @@ public class RackBuddy implements EntryPoint {
 	  private void buildUi() {
 		    // Open a map centered on Vancouver, BC, Canada
 		    LatLng vancouver = LatLng.newInstance(49.261226,-123.1139268);
-		    LatLng ponderosa = LatLng.newInstance(coords.get(0), coords.get(1));
+
 		    
 		    
-		    map = new MapWidget(ponderosa, 2);
+		    map = new MapWidget(vancouver, 2);
 		    map.setSize("60%", "100%");
-		    map.setZoomLevel(12);
+		    map.setZoomLevel(ZOOM_LEVEL);
 		    
 		    // Add some controls for the zoom level
 		    map.addControl(new LargeMapControl());
@@ -154,17 +140,17 @@ public class RackBuddy implements EntryPoint {
 		initSearchPanel();
 	
 		    // Add a marker
-		    map.addOverlay(new Marker(vancouver));
-		   map.addOverlay(new Marker(ponderosa));
-		     	 
-		   
-		   // Get distance between the two point
-		   double distance = vancouver.distanceFrom(ponderosa);
-		
-		    
-		    // Add an info window to highlight a point of interest
-		    map.getInfoWindow().open(ponderosa,
-		        new InfoWindowContent(String.valueOf(distance)));
+//		    map.addOverlay(new Marker(vancouver));
+//	
+//		     	 
+//		   
+//		   // Get distance between the two point
+//		   double distance = vancouver.distanceFrom(ponderosa);
+//		
+//		    
+//		    // Add an info window to highlight a point of interest
+//		    map.getInfoWindow().open(ponderosa,
+//		        new InfoWindowContent(String.valueOf(distance)));
 	  }
 	  
 	private void initSearchPanel() {
@@ -179,7 +165,7 @@ public class RackBuddy implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				if(isTextValid(address.getValue()) == true){
-					//TODO retrieve results
+					displayPOI(address.getValue().trim());
 				}else{
 					Window.alert(INVALID_ADDRESS);
 				}
@@ -233,6 +219,30 @@ public class RackBuddy implements EntryPoint {
 		}
 		
 		return true;
+	}
+	
+	private void displayPOI(String trim) {
+		service.getMarkerLocation(trim, new AsyncCallback<MarkerLocation>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(UNABLE_TO_DISPLAY_POI_ON_MAP);
+			}
+
+			@Override
+			public void onSuccess(MarkerLocation result) {
+				map.clearOverlays();
+				LatLng poi = LatLng.newInstance(result.getLat()	,result.getLng());
+				Icon icon = Icon.newInstance(POI_ICON);
+				MarkerOptions ops = MarkerOptions.newInstance(icon);
+				Marker marker = new Marker(poi, ops);
+				map.addOverlay(marker);
+				
+				map.setCenter(poi);
+				map.setZoomLevel(ZOOM_LEVEL);
+			}
+			
+		});
 	}
 	
 }

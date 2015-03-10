@@ -53,7 +53,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		ArrayList<BikeRackData> racks = new ArrayList<BikeRackData>();
 		try {
 			//open inputstream from url
-			input = new URL("ftp://webftp.vancouver.ca/opendata/bike_rack/BikeRackData.csv").openStream();
+			input = new URL("http://m.uploadedit.com/ba3a/1426016101419.txt").openStream();
 				try {
 					// feed inputstream to reader
 					Reader reader = new InputStreamReader(input, "UTF-8");

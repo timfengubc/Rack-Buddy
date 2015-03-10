@@ -40,7 +40,7 @@ public class RackBuddy implements EntryPoint {
 	public static final String INVALID_ADDRESS = "Please input a valid address.";
 	protected static final String UNABLE_TO_DISPLAY_POI_ON_MAP = "Unable to display POI on map...";
 	protected static final int ZOOM_LEVEL = 12;
-	protected static final String POI_ICON = "http://www.google.com/mapfiles/markerP.png";
+	protected static final String POI_ICON = "http://maps.google.com/mapfiles/arrow.png";
 	private LoginInfo loginInfo = null;
 	private FlowPanel loginPanel = new FlowPanel();
 	private Button loadData = new Button("Load Data");

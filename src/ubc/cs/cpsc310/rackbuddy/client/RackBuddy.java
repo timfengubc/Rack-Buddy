@@ -2,7 +2,7 @@ package ubc.cs.cpsc310.rackbuddy.client;
 
 
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -57,57 +57,12 @@ public class RackBuddy implements EntryPoint {
 	private TextBox address;
 	private ListBox searchRadius;
 	private GeoParserServiceAsync geoParserService = GWT.create(GeoParserService.class);
-	private JDOServiceAsync JDOService = GWT.create(JDOService.class);
+
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-//		BikeRackData myData = new BikeRackData("134",
-//				"",
-//				"Abbot St",
-//				"",
-//				"",
-//				0,
-//				""
-//				);
-//		BikeRackData myData1 = new BikeRackData("6488",
-//				"",
-//				"University Blvd",
-//				"",
-//				"",
-//				0,
-//				""
-//				);
-//		BikeRackData myData2 = new BikeRackData("475",
-//				"",
-//				"Alexander St",
-//				"",
-//				"",
-//				0,
-//				""
-//				);
-//		List<BikeRackData> myList = new ArrayList<BikeRackData>();
-//		myList.add(myData);
-//		myList.add(myData1);
-//		myList.add(myData2);
-//		
-//		for (BikeRackData brd : myList) {
-//			JDOService.addBikeRackData(brd, new AsyncCallback<Void>() {
-//
-//				@Override
-//				public void onFailure(Throwable caught) {
-//					// TODO Auto-generated method stub
-//					
-//				}
-//
-//				@Override
-//				public void onSuccess(Void result) {
-//					Window.alert("bike rack data successfully loaded");
-//					
-//				}
-//				
-//			});
-//		}
+
 		// Check login status using login service.
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(),
@@ -185,8 +140,9 @@ public class RackBuddy implements EntryPoint {
 		RootPanel.get().add(rackMapPanel);
 
 		initSearchPanel();
-	}
+	}	
 	
+	// displaying all bike rack data from the data store as markers on the map.
 	private void displayAllMarkers() {
 		if (geoParserService == null) {
 			geoParserService = GWT.create(GeoParserService.class);
@@ -209,11 +165,7 @@ public class RackBuddy implements EntryPoint {
 							map.addOverlay(new Marker(poi));
 						}
 					}
-
-				});
-
-	
-		
+				});		
 	}
 	/**
 	 * Creates widgets to allow searching of bike racks from specified POI  

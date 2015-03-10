@@ -2,6 +2,7 @@ package ubc.cs.cpsc310.rackbuddy.client;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -56,10 +57,57 @@ public class RackBuddy implements EntryPoint {
 	private TextBox address;
 	private ListBox searchRadius;
 	private GeoParserServiceAsync geoParserService = GWT.create(GeoParserService.class);
+	private JDOServiceAsync JDOService = GWT.create(JDOService.class);
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+//		BikeRackData myData = new BikeRackData("134",
+//				"",
+//				"Abbot St",
+//				"",
+//				"",
+//				0,
+//				""
+//				);
+//		BikeRackData myData1 = new BikeRackData("6488",
+//				"",
+//				"University Blvd",
+//				"",
+//				"",
+//				0,
+//				""
+//				);
+//		BikeRackData myData2 = new BikeRackData("475",
+//				"",
+//				"Alexander St",
+//				"",
+//				"",
+//				0,
+//				""
+//				);
+//		List<BikeRackData> myList = new ArrayList<BikeRackData>();
+//		myList.add(myData);
+//		myList.add(myData1);
+//		myList.add(myData2);
+//		
+//		for (BikeRackData brd : myList) {
+//			JDOService.addBikeRackData(brd, new AsyncCallback<Void>() {
+//
+//				@Override
+//				public void onFailure(Throwable caught) {
+//					// TODO Auto-generated method stub
+//					
+//				}
+//
+//				@Override
+//				public void onSuccess(Void result) {
+//					Window.alert("bike rack data successfully loaded");
+//					
+//				}
+//				
+//			});
+//		}
 		// Check login status using login service.
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(),
@@ -122,7 +170,10 @@ public class RackBuddy implements EntryPoint {
 		map = new MapWidget(vancouver, 2);
 		map.setSize("60%", "100%");
 		map.setZoomLevel(ZOOM_LEVEL);
-
+		
+		// Add bike rack markers
+		displayAllMarkers();
+		
 		// Add some controls for the zoom level
 		map.addControl(new LargeMapControl());
 
@@ -134,6 +185,35 @@ public class RackBuddy implements EntryPoint {
 		RootPanel.get().add(rackMapPanel);
 
 		initSearchPanel();
+	}
+	
+	private void displayAllMarkers() {
+		if (geoParserService == null) {
+			geoParserService = GWT.create(GeoParserService.class);
+		}
+
+		geoParserService.getAllMarkerLocation(new AsyncCallback<List<MarkerLocation>>() {
+			
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert(UNABLE_TO_DISPLAY_BIKE_RACK_LOCATION_ON_MAP);
+					}
+
+					@Override
+					public void onSuccess(List<MarkerLocation> result) {
+						map.clearOverlays();
+						for (MarkerLocation markerLocation : result) {
+							LatLng poi = LatLng.newInstance(
+									markerLocation.getLat(),
+									markerLocation.getLng());
+							map.addOverlay(new Marker(poi));
+						}
+					}
+
+				});
+
+	
+		
 	}
 	/**
 	 * Creates widgets to allow searching of bike racks from specified POI  

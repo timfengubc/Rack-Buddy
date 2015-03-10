@@ -9,6 +9,8 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import ubc.cs.cpsc310.rackbuddy.client.JDOService;
+import ubc.cs.cpsc310.rackbuddy.client.JDOServiceAsync;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
@@ -57,7 +59,7 @@ public class RackBuddy implements EntryPoint {
 	private TextBox address;
 	private ListBox searchRadius;
 	private GeoParserServiceAsync geoParserService = GWT.create(GeoParserService.class);
-
+	private final JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	/**
 	 * This is the entry point method.
 	 */
@@ -99,6 +101,8 @@ public class RackBuddy implements EntryPoint {
 			}
 		});
 		signOutLink = loginInfo.getLogoutUrl();
+		
+		
 
 		// Associate the panels with the HTML host page.
 		RootPanel.get("signOut").add(signOutButton);
@@ -117,8 +121,26 @@ public class RackBuddy implements EntryPoint {
 		} else {
 			loadData.setVisible(true);
 		}
+		
+		//listen on Load Rack Data Button
+		  loadData.addClickHandler(new ClickHandler() {
+		      public void onClick(ClickEvent event) {
+		        loadRacks();
+		      }
+		    });
 	}
 
+	public void loadRacks() {
+		 jdoService.loadRacks(new AsyncCallback<Void>() {
+		    	public void onFailure(Throwable error) {
+			    	 handleError(error);
+			      }
+		      public void onSuccess(Void ignore) {
+		    
+		      }
+		    });
+		  }
+	
 	private void buildUi() {
 		// Open a map centered on Vancouver, BC, Canada
 		LatLng vancouver = LatLng.newInstance(49.261226, -123.1139268);
@@ -338,5 +360,12 @@ public class RackBuddy implements EntryPoint {
 
 		return meter;
 	}
+	
+	private void handleError(Throwable error) {
+	    Window.alert(error.getMessage());
+	
+	    }
 
 }
+
+//

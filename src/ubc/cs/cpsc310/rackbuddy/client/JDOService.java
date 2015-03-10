@@ -1,5 +1,6 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -25,6 +26,10 @@ public interface JDOService extends RemoteService {
 	public void removeDataById(Long id);
 	
 	public void updateDataById(BikeRackData data);
+
+	public void addBikeRackData(ArrayList<BikeRackData> racks);
+
+	public void loadRacks();
 	
 	
 }

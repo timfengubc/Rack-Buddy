@@ -1,5 +1,6 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -25,4 +26,7 @@ public interface JDOServiceAsync {
 
 	void updateDataById(BikeRackData data, AsyncCallback<Void> callback);
 
+	void loadRacks(AsyncCallback<Void> callback);
+	
+	void addBikeRackData(ArrayList<BikeRackData> racks, AsyncCallback<Void> callback);
 }

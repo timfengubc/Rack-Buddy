@@ -2,7 +2,6 @@ package ubc.cs.cpsc310.rackbuddy.client;
 
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -28,7 +27,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
 
 public class RackBuddy implements EntryPoint {
 	
@@ -58,34 +56,11 @@ public class RackBuddy implements EntryPoint {
 	private TextBox address;
 	private ListBox searchRadius;
 	private GeoParserServiceAsync geoParserService = GWT.create(GeoParserService.class);
-	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
-
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
 		// Check login status using login service.
-		
-//		BikeRackData first = new BikeRackData("134", 
-//								"GT", "Abbot St", "East", "", 
-//								1, "Prior 2010");
-//		
-//		jdoService.addBikeRackData(first, new AsyncCallback<Void>(){
-//
-//			@Override
-//			public void onFailure(Throwable caught) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//
-//			@Override
-//			public void onSuccess(Void result) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//		});
-		
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(),
 				new AsyncCallback<LoginInfo>() {
@@ -101,7 +76,6 @@ public class RackBuddy implements EntryPoint {
 						}
 					}
 				});
-		
 	}
 	/**
 	 * Assemble login panel
@@ -122,8 +96,6 @@ public class RackBuddy implements EntryPoint {
 			}
 		});
 		signOutLink = loginInfo.getLogoutUrl();
-		
-		//TODO: to be implemented
 
 		// Associate the panels with the HTML host page.
 		RootPanel.get("signOut").add(signOutButton);
@@ -144,66 +116,51 @@ public class RackBuddy implements EntryPoint {
 		}
 	}
 
+	private void buildUi() {
+		// Open a map centered on Vancouver, BC, Canada
+		LatLng vancouver = LatLng.newInstance(49.261226, -123.1139268);
+		map = new MapWidget(vancouver, 2);
+		map.setSize("60%", "100%");
+		map.setZoomLevel(ZOOM_LEVEL);
 
-	  private void buildUi() {
-		    // Open a map centered on Vancouver, BC, Canada
-		    LatLng vancouver = LatLng.newInstance(49.261226,-123.1139268);
-		    map = new MapWidget(vancouver, 2);
-		    map.setSize("60%", "100%");
-		    map.setZoomLevel(ZOOM_LEVEL);
-		    
-		    // Add some controls for the zoom level
-		    map.addControl(new LargeMapControl());
+		// Add some controls for the zoom level
+		map.addControl(new LargeMapControl());
 
 		LayoutPanel rackMapPanel = new LayoutPanel();
 		rackMapPanel.setSize("100em", "40em");
 		rackMapPanel.setStyleName("rackMap");
 		rackMapPanel.add(map);
-		
+
 		RootPanel.get().add(rackMapPanel);
-		
+
 		initSearchPanel();
-	
-		    // Add a marker
-//		    map.addOverlay(new Marker(vancouver));
-//	
-//		     	 
-//		   
-//		   // Get distance between the two point
-//		   double distance = vancouver.distanceFrom(ponderosa);
-//		
-//		    
-//		    // Add an info window to highlight a point of interest
-//		    map.getInfoWindow().open(ponderosa,
-//		        new InfoWindowContent(String.valueOf(distance)));
-	  }
-	  
+	}
+	/**
+	 * Creates widgets to allow searching of bike racks from specified POI  
+	 */
 	private void initSearchPanel() {
 		searchPanel = new VerticalPanel();
-		
+
 		searchButton = new Button(SEARCH);
 		searchButton.addStyleName("marginTop");
-		
-		searchButton.addClickHandler(new ClickHandler(){
 
+		searchButton.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				if(isTextValid(address.getValue()) == true){
-					
+				if (isTextValid(address.getValue()) == true) {
+
 					map.clearOverlays();
-					
-					displayPOI(address.getValue().trim());
-					
-					displayBikeRacks(searchRadius.getValue(searchRadius.getSelectedIndex()));
-					
-				}else{
+
+					displayRacksFromPOI(address.getValue().trim(), searchRadius
+							.getValue(searchRadius.getSelectedIndex()));
+				} else {
 					Window.alert(INVALID_ADDRESS);
 				}
-				
-			}			
+
+			}
 		});
-		
+
 		address = new TextBox();
 		address.addStyleName("paddedLeft");
 		address.setWidth("40em");
@@ -214,138 +171,140 @@ public class RackBuddy implements EntryPoint {
 		searchRadius.addItem(_100_M);
 		searchRadius.addItem(_500_M);
 		searchRadius.addItem(_1_KM);
-		
+
 		HorizontalPanel h1 = new HorizontalPanel();
 		h1.setStyleName("marginTop");
-		
+
 		HorizontalPanel h2 = new HorizontalPanel();
 		h2.setStyleName("marginTop");
-		
+
 		h1.add(new Label(ADDRESS_TO_SEARCH_FROM));
 		h1.add(address);
-		
+
 		h2.add(new Label(SEARCH_RADIUS));
 		h2.add(searchRadius);
-		
+
 		searchPanel.add(h1);
 		searchPanel.add(h2);
 		searchPanel.add(searchButton);
-		
+
 		RootPanel.get().add(searchPanel);
 	}
-	
-	private boolean isTextValid(String text){
-		
-		if(text == null){
+	/**
+	 * Checks if specified text is valid
+	 */
+	private boolean isTextValid(String text) {
+
+		if (text == null) {
 			return false;
 		}
-		
-		if(text.isEmpty()){
+
+		if (text.isEmpty()) {
 			return false;
 		}
-		
-		if(text.matches("\\s+")){
+
+		if (text.matches("\\s+")) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
-	private void displayPOI(String trim) {
+	/**
+	 * Displays all bike rack from a specified POI address with a given radius
+	 */
+	private void displayRacksFromPOI(String poiAddress,
+			final String searchRadius) {
 		map.clearOverlays();
-		
-		if(geoParserService == null){
+
+		if (geoParserService == null) {
 			geoParserService = GWT.create(GeoParserService.class);
 		}
-		
-		geoParserService.getMarkerLocation(trim, new AsyncCallback<MarkerLocation>(){
 
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert(UNABLE_TO_DISPLAY_POI_ON_MAP);
-			}
+		geoParserService.getMarkerLocation(poiAddress,
+				new AsyncCallback<MarkerLocation>() {
 
-			@Override
-			public void onSuccess(MarkerLocation result) {
-				map.clearOverlays();
-				
-				LatLng poi = LatLng.newInstance(result.getLat()	,result.getLng());
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert(UNABLE_TO_DISPLAY_POI_ON_MAP);
+					}
 
-				Icon icon = Icon.newInstance(POI_ICON);
-				MarkerOptions ops = MarkerOptions.newInstance(icon);
-				Marker marker = new Marker(poi, ops);
-				map.addOverlay(marker);
-				
-				map.setCenter(poi);
-				map.setZoomLevel(ZOOM_LEVEL);
-			}
-			
-		});
+					@Override
+					public void onSuccess(MarkerLocation result) {
+						map.clearOverlays();
+
+						LatLng poi = LatLng.newInstance(result.getLat(),
+								result.getLng());
+
+						Icon icon = Icon.newInstance(POI_ICON);
+						MarkerOptions ops = MarkerOptions.newInstance(icon);
+						Marker marker = new Marker(poi, ops);
+						map.addOverlay(marker);
+
+						map.setCenter(poi);
+
+						map.setZoomLevel(ZOOM_LEVEL);
+
+						displayBikeRacks(searchRadius);
+					}
+
+				});
 	}
 	
 	private void displayBikeRacks(final String seachRadius) {
-		//use map set center
-		if(geoParserService == null){
+		if (geoParserService == null) {
 			geoParserService = GWT.create(GeoParserService.class);
 		}
-		
-		geoParserService.getAllMarkerLocation(new AsyncCallback<List<MarkerLocation>>(){
 
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert(UNABLE_TO_DISPLAY_BIKE_RACK_LOCATION_ON_MAP);
-			}
+		geoParserService
+				.getAllMarkerLocation(new AsyncCallback<List<MarkerLocation>>() {
 
-			@Override
-			public void onSuccess(List<MarkerLocation> result) {
-				
-				double radius = getSearchRadius(seachRadius);
-				
-				LatLng center = map.getCenter();
-				
-				
-				for(MarkerLocation markerLocation : result){
-					LatLng poi = LatLng.newInstance(markerLocation.getLat()	,markerLocation.getLng());
-					
-					
-					if(center.distanceFrom(poi) <= radius){
-						Marker marker = new Marker(poi);
-						map.addOverlay(marker);
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert(UNABLE_TO_DISPLAY_BIKE_RACK_LOCATION_ON_MAP);
 					}
-				}
-			}
-			
-		});
-		
+
+					@Override
+					public void onSuccess(List<MarkerLocation> result) {
+
+						double radius = getSearchRadius(seachRadius);
+
+						LatLng center = map.getCenter();
+
+						for (MarkerLocation markerLocation : result) {
+							LatLng poi = LatLng.newInstance(
+									markerLocation.getLat(),
+									markerLocation.getLng());
+
+							if (center.distanceFrom(poi) <= radius) {
+								Marker marker = new Marker(poi);
+								map.addOverlay(marker);
+							}
+						}
+					}
+
+				});
+
 	}
 	
-	private double getSearchRadius(String searchRadius){
+	private double getSearchRadius(String searchRadius) {
 		double meter = 0.0;
-		
-		if(searchRadius.equals(_100_M)){
+
+		if (searchRadius.equals(_100_M)) {
 			meter = 100.0;
 			return meter;
 		}
-		
-		if(searchRadius.equals(_500_M)){
+
+		if (searchRadius.equals(_500_M)) {
 			meter = 500.0;
 			return meter;
 		}
-		
-		if(searchRadius.equals(_1_KM)){
+
+		if (searchRadius.equals(_1_KM)) {
 			meter = 1000.0;
 			return meter;
 		}
-		
-		return meter;
-	}
-	
-	private void primeDisplayBikeRacks(String prime){
 
-		map.clearOverlays();
-		displayBikeRacks(prime);
-		map.clearOverlays();
-		
+		return meter;
 	}
 
 }

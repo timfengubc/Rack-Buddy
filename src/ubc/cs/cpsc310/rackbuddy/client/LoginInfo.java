@@ -53,7 +53,7 @@ public class LoginInfo implements Serializable {
 
 	public boolean getAdmin() {
 		if (this.emailAddress
-				.matches("timyzfeng@gmail.com|xwei7778@gmail.com|")) {
+				.matches("timyzfeng@gmail.com|xwei7778@gmail.com|williamwlxu@gmail.com|sanghyeokpark7@gmail.com")) {
 			this.admin = true;
 		}
 		else {this.admin = false;

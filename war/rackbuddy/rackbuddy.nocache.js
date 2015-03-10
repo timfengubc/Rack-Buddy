@@ -115,7 +115,7 @@ function computeScriptBase() {
 
   // Compute some codeserver urls so as the user does not need bookmarklets
   var hostName = $wnd.location.hostname;
-  var serverUrl = 'http://' + hostName + ':62739';
+  var serverUrl = 'http://' + hostName + ':63937';
   var nocacheUrl = serverUrl + '/rackbuddy/rackbuddy.nocache.js';
 
   // Save supder-devmode url in session

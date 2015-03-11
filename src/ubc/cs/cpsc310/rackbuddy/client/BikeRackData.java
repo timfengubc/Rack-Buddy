@@ -21,7 +21,7 @@ public class BikeRackData implements Serializable {
 //	private User user;
 	
 	@Persistent
-	private String streetNumber;
+	private String streetNumber; 
 	
 	@Persistent
 	private String bia;

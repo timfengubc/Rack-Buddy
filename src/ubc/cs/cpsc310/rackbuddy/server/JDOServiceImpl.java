@@ -61,7 +61,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 					// feed inputstream to reader
 					Reader reader = new InputStreamReader(input, "UTF-8");
 					//initiate csv reader, skip one line
-					CSVReader csvReader = new CSVReader(reader, ',', '"', 1);
+					CSVReader csvReader = new CSVReader(reader, ',', '"', 900);
 					String[] row = null;
 					//parse csv into objects row by row
 					while((row = csvReader.readNext()) != null) {

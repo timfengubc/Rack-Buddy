@@ -42,6 +42,7 @@ public class RackBuddy implements EntryPoint {
 	private static final String SEARCH = "Search...";
 	public static final String INVALID_ADDRESS = "Please input a valid address.";
 	protected static final String UNABLE_TO_DISPLAY_POI_ON_MAP = "Unable to display POI on map...";
+	protected static final String DATA_LOADED = "Data loaded into database.";
 	protected static final int ZOOM_LEVEL = 12;
 	protected static final String POI_ICON = "http://maps.google.com/mapfiles/arrow.png";
 	private LoginInfo loginInfo = null;
@@ -136,7 +137,7 @@ public class RackBuddy implements EntryPoint {
 			    	 handleError(error);
 			      }
 		      public void onSuccess(Void ignore) {
-		    
+		    		Window.alert(DATA_LOADED);
 		      }
 		    });
 		  }

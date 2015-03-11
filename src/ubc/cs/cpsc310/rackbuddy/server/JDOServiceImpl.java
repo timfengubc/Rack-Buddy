@@ -132,6 +132,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	/**
 	 * Retreives all the BikeRackData objects currently in the datasore.
 	 */
+	@SuppressWarnings("unchecked")
 	@Transactional
 	@Override
 	public List<BikeRackData> getAllData() {

@@ -49,6 +49,9 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	 * downloads rack data from server and parses into BikeRackData objects, then stores in database
 	 */
 	public void loadRacks() {
+		//clear current data set so that multiple loads dont create duplicate data
+		removeAll();
+		
 		InputStream input;
 		ArrayList<BikeRackData> racks = new ArrayList<BikeRackData>();
 		try {

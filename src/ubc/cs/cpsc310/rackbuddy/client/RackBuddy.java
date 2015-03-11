@@ -116,11 +116,11 @@ public class RackBuddy implements EntryPoint {
 		
 		
 		RootPanel.get("loadData").add(loadData);
-		//if (loginInfo.getAdmin() == false) {
-			//loadData.setVisible(false);
-		//} else {
+		if (loginInfo.getAdmin() == false) {
+			loadData.setVisible(false);
+		} else {
 			loadData.setVisible(true);
-		//}
+		}
 		
 		//listen on Load Rack Data Button
 		  loadData.addClickHandler(new ClickHandler() {

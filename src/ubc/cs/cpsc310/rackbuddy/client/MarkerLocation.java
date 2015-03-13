@@ -8,7 +8,8 @@ public class MarkerLocation implements Serializable {
 	private double lng;
 
 	public MarkerLocation() {
-	// TODO Auto-generated constructor stub
+	lat = 0;
+	lng = 0;
 	}
 	
 	public MarkerLocation(double lat, double lng) {

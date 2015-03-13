@@ -21,9 +21,9 @@ public class DatastoreOpTest {
 	
 	public DatastoreOpTest() {
 		racks = new ArrayList<BikeRackData>();
-		b1 = new BikeRackData("street num 1", "bia 1", "street name 1", "streetside 1", "skytrain stn 1", 1, "year installed 1");
-		b2 = new BikeRackData("street num 2", "bia 2", "street name 2", "streetside 2", "skytrain stn 2", 2, "year installed 2");
-		b3 = new BikeRackData("street num 3", "bia 3", "street name 3", "streetside 3", "skytrain stn 3", 3, "year installed 3");
+//		b1 = new BikeRackData("street num 1", "bia 1", "street name 1", "streetside 1", "skytrain stn 1", 1, "year installed 1");
+//		b2 = new BikeRackData("street num 2", "bia 2", "street name 2", "streetside 2", "skytrain stn 2", 2, "year installed 2");
+//		b3 = new BikeRackData("street num 3", "bia 3", "street name 3", "streetside 3", "skytrain stn 3", 3, "year installed 3");
 		
 		racks.add(b1);
 		racks.add(b2);

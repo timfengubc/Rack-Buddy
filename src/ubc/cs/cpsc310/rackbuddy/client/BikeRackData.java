@@ -41,6 +41,12 @@ public class BikeRackData implements Serializable {
 	@Persistent
 	private String yearInstalled;
 	
+	@Persistent
+	private double lat;
+	
+	@Persistent
+	private double lng;
+	
 	
 	public BikeRackData() {
 		this.streetNumber = "";
@@ -50,7 +56,32 @@ public class BikeRackData implements Serializable {
 		this.skytrainStation = "";
 		this.numRacks = 0;
 		this.yearInstalled = "";
+		this.lat = 0;
+		this.lng = 0;
 	}
+	/**
+	 * This constructor is only for the JUNIT tests
+	 * since it is only testing parsing of the data,
+	 * we don't need to worry about lat lng.
+	 * So just set lat lng to default value
+	 */
+	public BikeRackData(String streetNumber, String bia, String streetName,
+			String streetSide, String skytrainStation, int numRacks,
+			String yearInstalled) {
+
+		this.streetNumber = streetNumber;
+		this.bia = bia;
+		this.streetName = streetName;
+		this.streetSide = streetSide;
+		this.skytrainStation = skytrainStation;
+		this.numRacks = numRacks;
+		this.yearInstalled = yearInstalled;
+		this.lat = 0;
+		this.lng = 0;
+		// this.user = user;
+
+	}
+
 	//Don't need user variable yet...
 	public BikeRackData(String streetNumber,
 						String bia,
@@ -58,7 +89,9 @@ public class BikeRackData implements Serializable {
 						String streetSide,
 						String skytrainStation,
 						int numRacks,
-						String yearInstalled
+						String yearInstalled,
+						double lat,
+						double lng
 						){
 		
 		this.streetNumber = streetNumber;
@@ -68,6 +101,8 @@ public class BikeRackData implements Serializable {
 		this.skytrainStation = skytrainStation;
 		this.numRacks = numRacks;
 		this.yearInstalled = yearInstalled;
+		this.lat = lat;
+		this.lng = lng;
 //		this.user = user;
 		
 	}
@@ -85,10 +120,29 @@ public class BikeRackData implements Serializable {
 		this.skytrainStation = other.skytrainStation;
 		this.numRacks = other.numRacks;
 		this.yearInstalled = other.yearInstalled;
+		this.lat = other.lat;
+		this.lng = other.lng;
 	}
+
 //	public User getUser() {
 //		return user;
 //	}
+
+	public double getLat() {
+		return lat;
+	}
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+	public double getLng() {
+		return lng;
+	}
+
+	public void setLng(double lng) {
+		this.lng = lng;
+	}
 
 	public String getBia() {
 		return bia;
@@ -160,6 +214,8 @@ public class BikeRackData implements Serializable {
 		hash = hash * 31 + (skytrainStation == null ? 0 : skytrainStation.hashCode());
 		hash = hash * 37 + numRacks;
 		hash = hash * 41 + (yearInstalled == null ? 0 : yearInstalled.hashCode());
+		hash = hash * 51 + Double.valueOf(lat).hashCode();
+		hash = hash * 53 + Double.valueOf(lng).hashCode();
 		
 		return hash;
 	}
@@ -186,6 +242,8 @@ public class BikeRackData implements Serializable {
 				sameID = false;
 			}
 		}
+		
+		double epilson = 0.00001;
 
 		boolean sameStreetNum = (this.streetNumber == null? this.streetNumber == other.streetNumber : this.streetNumber.equals(other.streetNumber));
 		boolean sameBia = (this.bia == null? this.bia == other.bia : this.bia.equals(other.bia));
@@ -194,8 +252,10 @@ public class BikeRackData implements Serializable {
 		boolean sameNumRacks = this.numRacks == other.numRacks;
 		boolean sameYearInstalled = (this.yearInstalled == null? this.yearInstalled == other.yearInstalled : this.yearInstalled.equals(other.yearInstalled));
 		boolean sameSkytrainStn = (this.skytrainStation == null? this.skytrainStation == other.skytrainStation : this.skytrainStation.equals(other.skytrainStation));
+		boolean sameLat = this.compareDouble(this.lat, other.lat, epilson);
+		boolean sameLng = this.compareDouble(this.lng, other.lng, epilson);
 		
-		return  sameStreetNum && sameStreetName && sameStreetSide && sameNumRacks && sameYearInstalled && sameSkytrainStn && sameID && sameBia;
+		return  sameStreetNum && sameStreetName && sameStreetSide && sameNumRacks && sameYearInstalled && sameSkytrainStn && sameID && sameBia && sameLat && sameLng;
 	}
 	
 	@Override
@@ -207,6 +267,8 @@ public class BikeRackData implements Serializable {
 		String streetName = (this.streetName==null? "null" : this.streetName);
 		String streetSide = (this.streetSide==null? "null" : this.streetSide);
 		String yearInstalled = (this.yearInstalled==null? "null" : this.yearInstalled);
+		String lat = String.valueOf(this.lat);
+		String lng = String.valueOf(this.lng);
 		
 		return "id: " + id + ", "+
 				" steetNum: " + streetNum+ ", "+
@@ -214,6 +276,18 @@ public class BikeRackData implements Serializable {
 				" streetName: " + streetName+ ", "+
 				" streetSide: " + streetSide+ ", "+
 				" numRacks: " + this.numRacks+ ", "+
-				" yearInstalled: " + yearInstalled;
+				" yearInstalled: " + yearInstalled+
+				" Lat: " + lat + 
+				" Lng: " + lng;
 	}
+	
+	private boolean compareDouble(double a, double b, double epilson){
+		
+		if(Math.abs(a - b) <= epilson){
+			return true;
+		}
+		
+		return false;
+	}
+	
 }

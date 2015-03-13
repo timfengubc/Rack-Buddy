@@ -48,6 +48,7 @@ import static org.junit.Assert.*;
 		
 		ArrayList<BikeRackData> racks = new ArrayList<BikeRackData>(); 
 		ArrayList<BikeRackData> testrack = new ArrayList<BikeRackData>();
+		
 		testrack.add(new BikeRackData("134", "GT", "Abbott St", "East", "", 1, "Prior 2010"));
 		System.out.println(testrack);
 		try {

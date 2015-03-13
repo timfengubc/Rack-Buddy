@@ -5,6 +5,7 @@ import java.util.List;
 
 import ubc.cs.cpsc310.rackbuddy.client.BikeRackData;
 import ubc.cs.cpsc310.rackbuddy.client.JDOService;
+import ubc.cs.cpsc310.rackbuddy.client.MarkerLocation;
 import ubc.cs.cpsc310.rackbuddy.client.NotLoggedInException;
 
 import com.google.appengine.api.users.User;
@@ -31,7 +32,10 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	private static final Logger LOG = Logger.getLogger(JDOServiceImpl.class.getName());
 	private static final PersistenceManagerFactory PMF = JDOHelper.getPersistenceManagerFactory("transactions-optional");
 	
+	private GeoParser myGeoParser;
+	
 	public JDOServiceImpl() {
+		this.myGeoParser = new GeoParser("");
 	}
 	
 	@Override
@@ -75,6 +79,12 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 					   rack.setNumRacks( Integer.parseInt(row[5]));
 					   rack.setYearInstalled(row[6]);
 					   
+						String address = rack.getStreetNumber() + " " + rack.getStreetName() + ", Vancouver, BC";
+						double lat = myGeoParser.getLatitude(address);
+						double lng = myGeoParser.getLongitude(address);
+						
+						rack.setLat(lat);
+						rack.setLng(lng);
 					   racks.add(rack);
 					}
 					addBikeRackData(racks);
@@ -88,9 +98,6 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
 	}
 	@Override
 	/**

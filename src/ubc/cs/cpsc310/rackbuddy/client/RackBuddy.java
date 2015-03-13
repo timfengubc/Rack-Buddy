@@ -9,8 +9,10 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+
 import ubc.cs.cpsc310.rackbuddy.client.JDOService;
 import ubc.cs.cpsc310.rackbuddy.client.JDOServiceAsync;
+
 import com.google.gwt.user.client.Window;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
@@ -33,6 +35,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class RackBuddy implements EntryPoint {
 	
+	private static final String MARKERS_ARE_ADDED = "Markers are added...";
 	private static final String UNABLE_TO_DISPLAY_BIKE_RACK_LOCATION_ON_MAP = "Unable to display bike rack location on map...";
 	private static final String SEARCH_RADIUS = "Search radius: ";
 	private static final String ADDRESS_TO_SEARCH_FROM = "Address to search from:";
@@ -138,6 +141,7 @@ public class RackBuddy implements EntryPoint {
 			      }
 		      public void onSuccess(Void ignore) {
 		    		Window.alert(DATA_LOADED);
+		    		displayAllMarkers();
 		      }
 		    });
 		  }
@@ -187,6 +191,7 @@ public class RackBuddy implements EntryPoint {
 									markerLocation.getLng());
 							map.addOverlay(new Marker(poi));
 						}
+						Window.alert(MARKERS_ARE_ADDED);
 					}
 				});		
 	}

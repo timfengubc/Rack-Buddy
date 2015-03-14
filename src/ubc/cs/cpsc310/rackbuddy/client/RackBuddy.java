@@ -18,10 +18,12 @@ import com.google.gwt.user.client.ui.Anchor;
 
 public class RackBuddy implements EntryPoint {
 
+	private static final String ALL_DATA_SUCCESSFULLY_REMOVED_FROM_DATASTORE = "All data successfully removed from datastore.";
 	protected static final String DATA_LOADED = "Data loaded into database.";
 	private LoginInfo loginInfo = null;
 	private FlowPanel loginPanel = new FlowPanel();
 	private Button loadData = new Button("Load Data");
+	private Button removeData = new Button("Remove all Data");
 	private Label loginLabel = new Label(
 			"Please sign in to your Google Account to access the RackBuddy application.");
 	private Anchor signInLink = new Anchor("Sign In");
@@ -79,10 +81,13 @@ public class RackBuddy implements EntryPoint {
 		});
 
 		RootPanel.get("loadData").add(loadData);
+		RootPanel.get("loadData").add(removeData);
 		if (loginInfo.getAdmin() == false) {
 			loadData.setVisible(false);
+			removeData.setVisible(false);
 		} else {
 			loadData.setVisible(true);
+			removeData.setVisible(true);
 		}
 		
 		//listen on Load Rack Data Button
@@ -91,9 +96,18 @@ public class RackBuddy implements EntryPoint {
 		        loadRacks();
 		      }
 		    });
+		  
+		  removeData.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				removeAllData();
+			}
+			  
+		  });
 	}
 
-	public void loadRacks() {
+	private void loadRacks() {
 		 jdoService.loadRacks(new AsyncCallback<Void>() {
 		    	public void onFailure(Throwable error) {
 			    	 handleError(error);
@@ -104,7 +118,25 @@ public class RackBuddy implements EntryPoint {
 		    		mapDisplay.displayAllMarkers();
 		      }
 		    });
-		  }
+	}
+	
+	private void removeAllData(){
+		jdoService.removeAll(new AsyncCallback<Void>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				handleError(caught);
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				Window.alert(ALL_DATA_SUCCESSFULLY_REMOVED_FROM_DATASTORE);
+			}
+			
+		});
+	}
+	
+	
 		
 	private void handleError(Throwable error) {
 	    Window.alert(error.getMessage());

@@ -5,7 +5,6 @@ import java.util.List;
 
 import ubc.cs.cpsc310.rackbuddy.client.BikeRackData;
 import ubc.cs.cpsc310.rackbuddy.client.JDOService;
-import ubc.cs.cpsc310.rackbuddy.client.MarkerLocation;
 import ubc.cs.cpsc310.rackbuddy.client.NotLoggedInException;
 
 import com.google.appengine.api.users.User;
@@ -23,6 +22,8 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.annotations.Transactional;
+
+import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 
 import java.io.*;
 import java.net.*;
@@ -54,7 +55,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	 */
 	public void loadRacks() {
 		//clear current data set so that multiple loads dont create duplicate data
-		removeAll();
+		//removeAll();
 		
 		InputStream input;
 		ArrayList<BikeRackData> racks = new ArrayList<BikeRackData>();
@@ -161,7 +162,11 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 				detachedList.add(pm.detachCopy(data));
 			}
 
-		} finally {
+		}catch(NucleusObjectNotFoundException e){
+			detachedList = new ArrayList<BikeRackData>();
+			
+		}
+		finally {
 			pm.close();
 		}
 
@@ -176,7 +181,10 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		PersistenceManager pm = getPersistenceManager();
 		try{
 			List<BikeRackData> removedDatas = getAllData();
-			pm.deletePersistentAll(removedDatas);
+			if(!removedDatas.isEmpty()){
+				pm.deletePersistentAll(removedDatas);
+			}
+			
 			
 		}finally{
 			pm.close();

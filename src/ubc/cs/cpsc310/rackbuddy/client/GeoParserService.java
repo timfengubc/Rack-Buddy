@@ -9,7 +9,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface GeoParserService extends RemoteService {
 	
 	public MarkerLocation getMarkerLocation(String address);
-	
-	public List<MarkerLocation> getAllMarkerLocation();
 
 }

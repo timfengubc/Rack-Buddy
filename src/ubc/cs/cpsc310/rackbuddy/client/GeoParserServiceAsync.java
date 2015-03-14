@@ -9,6 +9,4 @@ public interface GeoParserServiceAsync {
 	void getMarkerLocation(String address,
 			AsyncCallback<MarkerLocation> callback);
 
-	void getAllMarkerLocation(AsyncCallback<List<MarkerLocation>> callback);
-
 }

@@ -28,21 +28,4 @@ public class GeoParserServiceImpl extends RemoteServiceServlet implements GeoPar
 		return result;
 	}
 
-	@Override
-	public List<MarkerLocation> getAllMarkerLocation() {
-		List<MarkerLocation> markers = new ArrayList<MarkerLocation>();
-		List<BikeRackData> datas = jdoService.getAllData();
-		
-		for(BikeRackData brd : datas){
-			String address = brd.getStreetNumber() + " " + brd.getStreetName() + ", Vancouver, BC";
-			double lat = myGeoParser.getLatitude(address);
-			double lng = myGeoParser.getLongitude(address);
-			MarkerLocation marker = new MarkerLocation(lat,lng);
-			markers.add(marker);
-		}
-		
-		return markers;
-	}
-	
-	
 }

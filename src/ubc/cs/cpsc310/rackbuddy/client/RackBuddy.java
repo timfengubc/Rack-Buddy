@@ -38,7 +38,7 @@ public class RackBuddy implements EntryPoint {
 	private static final String MARKERS_ARE_ADDED = "Markers were added to the map...";
 	private static final String UNABLE_TO_DISPLAY_BIKE_RACK_LOCATION_ON_MAP = "Unable to display bike rack location on map...";
 	private static final String SEARCH_RADIUS = "Search radius: ";
-	private static final String ADDRESS_TO_SEARCH_FROM = "Address to search from:";
+	private static final String POINT_OF_INTEREST = "Point of interest:";
 	private static final String _1_KM = "1 km";
 	private static final String _500_M = "500 m";
 	private static final String _100_M = "100 m";
@@ -171,29 +171,7 @@ public class RackBuddy implements EntryPoint {
 	
 	// displaying all bike rack data from the data store as markers on the map.
 	private void displayAllMarkers() {
-//		if (geoParserService == null) {
-//			geoParserService = GWT.create(GeoParserService.class);
-//		}
-//
-//		geoParserService.getAllMarkerLocation(new AsyncCallback<List<MarkerLocation>>() {
-//			
-//					@Override
-//					public void onFailure(Throwable caught) {
-//						Window.alert(UNABLE_TO_DISPLAY_BIKE_RACK_LOCATION_ON_MAP);
-//					}
-//
-//					@Override
-//					public void onSuccess(List<MarkerLocation> result) {
-//						map.clearOverlays();
-//						for (MarkerLocation markerLocation : result) {
-//							LatLng poi = LatLng.newInstance(
-//									markerLocation.getLat(),
-//									markerLocation.getLng());
-//							map.addOverlay(new Marker(poi));
-//						}
-//						Window.alert(MARKERS_ARE_ADDED);
-//					}
-//				});		
+
 		if(jdoService == null){
 			jdoService = GWT.create(JDOService.class);
 		}
@@ -260,7 +238,7 @@ public class RackBuddy implements EntryPoint {
 		HorizontalPanel h2 = new HorizontalPanel();
 		h2.setStyleName("marginTop");
 
-		h1.add(new Label(ADDRESS_TO_SEARCH_FROM));
+		h1.add(new Label(POINT_OF_INTEREST));
 		h1.add(address);
 
 		h2.add(new Label(SEARCH_RADIUS));
@@ -333,38 +311,6 @@ public class RackBuddy implements EntryPoint {
 	}
 	
 	private void displayBikeRacks(final String seachRadius) {
-//		if (geoParserService == null) {
-//			geoParserService = GWT.create(GeoParserService.class);
-//		}
-//
-//		geoParserService
-//				.getAllMarkerLocation(new AsyncCallback<List<MarkerLocation>>() {
-//
-//					@Override
-//					public void onFailure(Throwable caught) {
-//						Window.alert(UNABLE_TO_DISPLAY_BIKE_RACK_LOCATION_ON_MAP);
-//					}
-//
-//					@Override
-//					public void onSuccess(List<MarkerLocation> result) {
-//
-//						double radius = getSearchRadius(seachRadius);
-//
-//						LatLng center = map.getCenter();
-//
-//						for (MarkerLocation markerLocation : result) {
-//							LatLng poi = LatLng.newInstance(
-//									markerLocation.getLat(),
-//									markerLocation.getLng());
-//
-//							if (center.distanceFrom(poi) <= radius) {
-//								Marker marker = new Marker(poi);
-//								map.addOverlay(marker);
-//							}
-//						}
-//					}
-//
-//				});
 		
 		if(jdoService == null){
 			jdoService = GWT.create(JDOService.class);

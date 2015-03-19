@@ -7,10 +7,12 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+import javax.jdo.annotations.Inheritance;
+import javax.jdo.annotations.InheritanceStrategy;
 
-import com.google.appengine.api.users.User;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION, detachable="true")
+@Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 public class BikeRackData implements Serializable {
 	
 	@PrimaryKey
@@ -21,31 +23,31 @@ public class BikeRackData implements Serializable {
 //	private User user;
 	
 	@Persistent
-	private String streetNumber; 
+	protected String streetNumber; 
 	
 	@Persistent
-	private String bia;
+	protected String bia;
 	
 	@Persistent
-	private String streetName;
+	protected String streetName;
 
 	@Persistent
-	private String streetSide;
+	protected String streetSide;
 
 	@Persistent
-	private String skytrainStation;
+	protected String skytrainStation;
 	
 	@Persistent
-	private int numRacks; 
+	protected int numRacks; 
 
 	@Persistent
-	private String yearInstalled;
+	protected String yearInstalled;
 	
 	@Persistent
-	private double lat;
+	protected double lat;
 	
 	@Persistent
-	private double lng;
+	protected double lng;
 	
 	
 	public BikeRackData() {
@@ -123,10 +125,6 @@ public class BikeRackData implements Serializable {
 		this.lat = other.lat;
 		this.lng = other.lng;
 	}
-
-//	public User getUser() {
-//		return user;
-//	}
 
 	public double getLat() {
 		return lat;

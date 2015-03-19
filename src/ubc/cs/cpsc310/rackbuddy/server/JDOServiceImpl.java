@@ -5,8 +5,6 @@ import java.util.List;
 
 import ubc.cs.cpsc310.rackbuddy.client.BikeRackData;
 import ubc.cs.cpsc310.rackbuddy.client.JDOService;
-import ubc.cs.cpsc310.rackbuddy.client.NotLoggedInException;
-
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -243,12 +241,6 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	private User getUser(){
 		UserService userService = UserServiceFactory.getUserService();
 		return userService.getCurrentUser();
-	}
-	
-	private void checkLoggedIn() throws NotLoggedInException{
-		if(getUser() == null ){
-			throw new NotLoggedInException("Not logged in");
-		}
 	}
 
 	/**

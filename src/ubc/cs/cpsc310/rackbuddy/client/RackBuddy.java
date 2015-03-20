@@ -62,6 +62,7 @@ public class RackBuddy implements EntryPoint {
 		loginPanel.add(loginLabel);
 		loginPanel.add(signInLink);
 		RootPanel.get("rackMap").add(loginPanel);
+
 	}
 
 	private void loadRackBuddy() {

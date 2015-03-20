@@ -10,7 +10,7 @@ public class LoginInfo implements Serializable {
 	private String logoutUrl;
 	private String emailAddress;
 	private String nickname;
-
+	
 	public boolean isLoggedIn() {
 		return loggedIn;
 	}

@@ -63,7 +63,7 @@ public class MapDisplay {
 		map.setZoomLevel(ZOOM_LEVEL);
 		
 		// Add bike rack markers
-		displayAllMarkers();
+		//displayAllMarkers();
 		
 		// Add some controls for the zoom level
 		map.addControl(new LargeMapControl());
@@ -186,6 +186,7 @@ public class MapDisplay {
 						if(center.distanceFrom(latlng) <= radius){
 							Marker marker = new Marker(latlng);
 							map.addOverlay(marker);
+							
 						}
 					}
 					

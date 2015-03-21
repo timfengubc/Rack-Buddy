@@ -51,7 +51,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	/**
 	 * downloads rack data from server and parses into BikeRackData objects, then stores in database
 	 */
-	public void loadRacks() {
+	public void loadRacks(String url) {
 		//clear current data set so that multiple loads dont create duplicate data
 		//removeAll();
 		
@@ -59,12 +59,12 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		ArrayList<BikeRackData> racks = new ArrayList<BikeRackData>();
 		try {
 			//open inputstream from url
-			input = new URL("http://m.uploadedit.com/ba3a/1426016101419.txt").openStream();
+			input = new URL(url).openStream();
 				try {
 					// feed inputstream to reader
 					Reader reader = new InputStreamReader(input, "UTF-8");
 					//initiate csv reader, skip one line
-					CSVReader csvReader = new CSVReader(reader, ',', '"', 900);
+					CSVReader csvReader = new CSVReader(reader, ',', '"', 2);
 					String[] row = null;
 					//parse csv into objects row by row
 					while((row = csvReader.readNext()) != null) {

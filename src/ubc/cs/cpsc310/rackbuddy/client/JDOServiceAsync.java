@@ -26,7 +26,7 @@ public interface JDOServiceAsync {
 
 	void updateDataById(BikeRackData data, AsyncCallback<Void> callback);
 
-	void loadRacks(AsyncCallback<Void> callback);
+	void loadRacks(String url, AsyncCallback<Void> callback);
 	
 	void addBikeRackData(ArrayList<BikeRackData> racks, AsyncCallback<Void> callback);
 }

@@ -29,7 +29,7 @@ public interface JDOService extends RemoteService {
 
 	public void addBikeRackData(ArrayList<BikeRackData> racks);
 
-	public void loadRacks();
+	public void loadRacks(String url);
 	
 	
 }

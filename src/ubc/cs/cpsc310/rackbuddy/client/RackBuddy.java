@@ -12,9 +12,13 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class RackBuddy implements EntryPoint {
 
@@ -24,13 +28,16 @@ public class RackBuddy implements EntryPoint {
 	private FlowPanel loginPanel = new FlowPanel();
 	private Button loadData = new Button("Load Data");
 	private Button removeData = new Button("Remove all Data");
+	private String url = "http://m.uploadedit.com/ba3a/1426016101419.txt";
+	private TextBox urlbox = new TextBox();
 	private Label loginLabel = new Label(
 			"Please sign in to your Google Account to access the RackBuddy application.");
 	private Anchor signInLink = new Anchor("Sign In");
 	private String signOutLink = new String();
 	private Button signOutButton = new Button("Sign Out");
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
-	
+	private String LOAD_FROM = "Load from: ";
+	private HorizontalPanel loadPanel = new HorizontalPanel();
 	private MapDisplay mapDisplay;
 	/**
 	 * This is the entry point method.
@@ -81,16 +88,7 @@ public class RackBuddy implements EntryPoint {
 			}
 		});
 
-		RootPanel.get("loadData").add(loadData);
-		RootPanel.get("loadData").add(removeData);
-		if (loginInfo.getAdmin() == false) {
-			loadData.setVisible(false);
-			removeData.setVisible(false);
-		} else {
-			loadData.setVisible(true);
-			removeData.setVisible(true);
-		}
-		
+	
 		//listen on Load Rack Data Button
 		  loadData.addClickHandler(new ClickHandler() {
 		      public void onClick(ClickEvent event) {
@@ -98,25 +96,58 @@ public class RackBuddy implements EntryPoint {
 		      }
 		    });
 		  
+		  //listen on removealldatabutton
 		  removeData.addClickHandler(new ClickHandler(){
 
 			@Override
 			public void onClick(ClickEvent event) {
 				removeAllData();
 			}
-			  
-		  });
+			});
+		  
+		  
+			if (loginInfo.getAdmin() == false) {
+				loadPanel.setVisible(false);
+				removeData.setVisible(false);
+			} else {
+				loadPanel.setVisible(true);
+				removeData.setVisible(true);
+			}
+			
+		  //textbox formatting
+
+			urlbox.addStyleName("paddedRight");
+			urlbox.setWidth("40em");
+			urlbox.setHeight("10px");
+			urlbox.setValue(url);
+			
+			loadPanel.setStyleName("marginTop");
+			loadPanel.add(new Label(LOAD_FROM));
+			loadPanel.add(urlbox);
+			loadPanel.add(loadData);
+			
+			RootPanel.get("loadData").add(loadPanel);
+			RootPanel.get("loadData").add(removeData);
+		
+		  
+		/*	refreshDispl.addClickHandler(new ClickHandler(){
+
+				@Override
+				public void onClick(ClickEvent event) {
+					mapDisplay.displayAllMarkers();
+				}
+				});*/
 	}
 
 	private void loadRacks() {
-		 jdoService.loadRacks(new AsyncCallback<Void>() {
+		 jdoService.loadRacks(urlbox.getValue(), new AsyncCallback<Void>() {
 		    	public void onFailure(Throwable error) {
 			    	 handleError(error);
 			      }
 		      public void onSuccess(Void ignore) {
 		    		Window.alert(DATA_LOADED);
 
-		    		mapDisplay.displayAllMarkers();
+		    		//mapDisplay.displayAllMarkers();
 		      }
 		    });
 	}

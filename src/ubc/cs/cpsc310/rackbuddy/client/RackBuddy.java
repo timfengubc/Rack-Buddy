@@ -119,65 +119,7 @@ public class RackBuddy implements EntryPoint {
 			}
 			  
 		  });
-		  
-//		// Create a CellTable.
-//		    final CellTable<Contact> table = new CellTable<Contact>();
-//		    // Display 3 rows in one page
-//		    table.setPageSize(3);
-//
-//		    // Add a text column to show the name.
-//		    TextColumn<Contact> nameColumn = new TextColumn<Contact>() {
-//		      @Override
-//		      public String getValue(Contact object) {
-//		        return object.name;
-//		      }
-//		    };
-//		    table.addColumn(nameColumn, "Name");
-//
-//		    // Add a date column to show the birthday.
-//		    DateCell dateCell = new DateCell();
-//		    Column<Contact, Date> dateColumn = new Column<Contact, Date>(dateCell) {
-//		      @Override
-//		      public Date getValue(Contact object) {
-//		        return object.birthday;
-//		      }
-//		    };
-//		    table.addColumn(dateColumn, "Birthday");
-//
-//		    // Add a text column to show the address.
-//		    TextColumn<Contact> addressColumn = new TextColumn<Contact>() {
-//		      @Override
-//		      public String getValue(Contact object) {
-//		        return object.address;
-//		      }
-//		    };
-//		    table.addColumn(addressColumn, "Address");
-//
-//		    // Associate an async data provider to the table
-//		    // XXX: Use AsyncCallback in the method onRangeChanged
-//		    // to actaully get the data from the server side
-//		    AsyncDataProvider<Contact> provider = new AsyncDataProvider<Contact>() {
-//		      @Override
-//		      protected void onRangeChanged(HasData<Contact> display) {
-//		        int start = display.getVisibleRange().getStart();
-//		        int end = start + display.getVisibleRange().getLength();
-//		        end = end >= CONTACTS.size() ? CONTACTS.size() : end;
-//		        List<Contact> sub = CONTACTS.subList(start, end);
-//		        updateRowData(start, sub);
-//		      }
-//		    };
-//		    provider.addDataDisplay(table);
-//		    provider.updateRowCount(CONTACTS.size(), true);
-//
-//		    SimplePager pager = new SimplePager();
-//		    pager.setDisplay(table);
-//
-//		    VerticalPanel vp = new VerticalPanel();
-//		    vp.add(table);
-//		    vp.add(pager);
-//
-//		    // Add it to the root panel.
-//		    RootPanel.get().add(vp);
+
 	}
 
 	private void loadRacks() {

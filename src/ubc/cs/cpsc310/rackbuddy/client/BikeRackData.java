@@ -293,13 +293,5 @@ public class BikeRackData implements Serializable {
 			return false;
 		return true;
 	}
-	private boolean compareDouble(double a, double b, double epilson){
-		
-		if(Math.abs(a - b) <= epilson){
-			return true;
-		}
-		
-		return false;
-	}
 	
 }

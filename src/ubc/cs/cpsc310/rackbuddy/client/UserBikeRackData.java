@@ -18,20 +18,15 @@ public class UserBikeRackData extends BikeRackData {
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
 	
-//	@Persistent
-//	private boolean isFave;
-	
 	@Persistent
 	private User user;
 
 	public UserBikeRackData() {
 		super();
-		//isFave = false;
 	}
 
 	public UserBikeRackData(UserBikeRackData other) {
 		super(other);
-		//this.isFave = other.isFave;
 		this.user = other.user;
 	}
 
@@ -41,21 +36,12 @@ public class UserBikeRackData extends BikeRackData {
 		super(streetNumber, bia, streetName, streetSide, skytrainStation, numRacks,
 				yearInstalled, lat, lng, isFave);
 		
-		//this.isFave = isFave;
 		this.user = user;
 	}
 
 	public Long getId() {
 		return id;
 	}
-
-//	public boolean isFave() {
-//		return isFave;
-//	}
-//
-//	public void setFave(boolean isFave) {
-//		this.isFave = isFave;
-//	}
 
 	public User getUser() {
 		return user;
@@ -96,10 +82,4 @@ public class UserBikeRackData extends BikeRackData {
 		return true;
 	}
 
-
-	
-	
-
-	
-	
 }

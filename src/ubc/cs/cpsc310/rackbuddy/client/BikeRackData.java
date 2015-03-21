@@ -19,8 +19,8 @@ public class BikeRackData implements Serializable {
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
 	
-//	@Persistent
-//	private User user;
+	@Persistent
+	private boolean isFave;
 	
 	@Persistent
 	protected String streetNumber; 
@@ -60,6 +60,7 @@ public class BikeRackData implements Serializable {
 		this.yearInstalled = "";
 		this.lat = 0;
 		this.lng = 0;
+		this.isFave = false;
 	}
 	/**
 	 * This constructor is only for the JUNIT tests
@@ -80,7 +81,7 @@ public class BikeRackData implements Serializable {
 		this.yearInstalled = yearInstalled;
 		this.lat = 0;
 		this.lng = 0;
-		// this.user = user;
+		this.isFave = false;
 
 	}
 
@@ -93,7 +94,8 @@ public class BikeRackData implements Serializable {
 						int numRacks,
 						String yearInstalled,
 						double lat,
-						double lng
+						double lng,
+						boolean isFave
 						){
 		
 		this.streetNumber = streetNumber;
@@ -105,7 +107,7 @@ public class BikeRackData implements Serializable {
 		this.yearInstalled = yearInstalled;
 		this.lat = lat;
 		this.lng = lng;
-//		this.user = user;
+		this.isFave = isFave;
 		
 	}
 	
@@ -124,6 +126,7 @@ public class BikeRackData implements Serializable {
 		this.yearInstalled = other.yearInstalled;
 		this.lat = other.lat;
 		this.lng = other.lng;
+		this.isFave = other.isFave;
 	}
 
 	public double getLat() {
@@ -200,85 +203,96 @@ public class BikeRackData implements Serializable {
 		this.yearInstalled = yearInstalled;
 	}
 
+	
+	
+	public boolean isFave() {
+		return isFave;
+	}
+	public void setFave(boolean isFave) {
+		this.isFave = isFave;
+	}
+	
+	
+	
 	@Override
 	public int hashCode() {
-		int hash = 1;
-
-		hash = hash * 5 + (id == null? 0 : id.hashCode());
-		hash = hash * 11 + (streetNumber == null ? 0 : streetNumber.hashCode());
-		hash = hash * 17 + (bia == null ? 0 : bia.hashCode());
-		hash = hash * 17 + (streetName == null ? 0 : streetName.hashCode());
-		hash = hash * 13 + (streetSide == null ? 0 : streetSide.hashCode());
-		hash = hash * 31 + (skytrainStation == null ? 0 : skytrainStation.hashCode());
-		hash = hash * 37 + numRacks;
-		hash = hash * 41 + (yearInstalled == null ? 0 : yearInstalled.hashCode());
-		hash = hash * 51 + Double.valueOf(lat).hashCode();
-		hash = hash * 53 + Double.valueOf(lng).hashCode();
-		
-		return hash;
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((bia == null) ? 0 : bia.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + (isFave ? 1231 : 1237);
+		long temp;
+		temp = Double.doubleToLongBits(lat);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(lng);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + numRacks;
+		result = prime * result
+				+ ((skytrainStation == null) ? 0 : skytrainStation.hashCode());
+		result = prime * result
+				+ ((streetName == null) ? 0 : streetName.hashCode());
+		result = prime * result
+				+ ((streetNumber == null) ? 0 : streetNumber.hashCode());
+		result = prime * result
+				+ ((streetSide == null) ? 0 : streetSide.hashCode());
+		result = prime * result
+				+ ((yearInstalled == null) ? 0 : yearInstalled.hashCode());
+		return result;
 	}
-	
 	@Override
 	public boolean equals(Object obj) {
-		
-		if(obj == null){
+		if (this == obj)
+			return true;
+		if (obj == null)
 			return false;
-		}
-		
-		if(obj.getClass() != this.getClass()){
+		if (getClass() != obj.getClass())
 			return false;
-		}
-		
 		BikeRackData other = (BikeRackData) obj;
-
-		boolean sameID = true;
-		if(this.id != null){
-			if(this.id.equals(other.id)){
-				sameID = true;
-			}
-			else{
-				sameID = false;
-			}
-		}
-		
-		double epilson = 0.00001;
-
-		boolean sameStreetNum = (this.streetNumber == null? this.streetNumber == other.streetNumber : this.streetNumber.equals(other.streetNumber));
-		boolean sameBia = (this.bia == null? this.bia == other.bia : this.bia.equals(other.bia));
-		boolean sameStreetName = (this.streetName == null? this.streetName == other.streetName : this.streetName.equals(other.streetName));
-		boolean sameStreetSide = (this.streetSide == null? this.streetSide == other.streetSide : this.streetSide.equals(other.streetSide));
-		boolean sameNumRacks = this.numRacks == other.numRacks;
-		boolean sameYearInstalled = (this.yearInstalled == null? this.yearInstalled == other.yearInstalled : this.yearInstalled.equals(other.yearInstalled));
-		boolean sameSkytrainStn = (this.skytrainStation == null? this.skytrainStation == other.skytrainStation : this.skytrainStation.equals(other.skytrainStation));
-		boolean sameLat = this.compareDouble(this.lat, other.lat, epilson);
-		boolean sameLng = this.compareDouble(this.lng, other.lng, epilson);
-		
-		return  sameStreetNum && sameStreetName && sameStreetSide && sameNumRacks && sameYearInstalled && sameSkytrainStn && sameID && sameBia && sameLat && sameLng;
+		if (bia == null) {
+			if (other.bia != null)
+				return false;
+		} else if (!bia.equals(other.bia))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (isFave != other.isFave)
+			return false;
+		if (Double.doubleToLongBits(lat) != Double.doubleToLongBits(other.lat))
+			return false;
+		if (Double.doubleToLongBits(lng) != Double.doubleToLongBits(other.lng))
+			return false;
+		if (numRacks != other.numRacks)
+			return false;
+		if (skytrainStation == null) {
+			if (other.skytrainStation != null)
+				return false;
+		} else if (!skytrainStation.equals(other.skytrainStation))
+			return false;
+		if (streetName == null) {
+			if (other.streetName != null)
+				return false;
+		} else if (!streetName.equals(other.streetName))
+			return false;
+		if (streetNumber == null) {
+			if (other.streetNumber != null)
+				return false;
+		} else if (!streetNumber.equals(other.streetNumber))
+			return false;
+		if (streetSide == null) {
+			if (other.streetSide != null)
+				return false;
+		} else if (!streetSide.equals(other.streetSide))
+			return false;
+		if (yearInstalled == null) {
+			if (other.yearInstalled != null)
+				return false;
+		} else if (!yearInstalled.equals(other.yearInstalled))
+			return false;
+		return true;
 	}
-	
-	@Override
-	public String toString() {
-		
-		String id = (this.id == null? "null" : Long.toString(this.id));
-		String streetNum = (this.streetNumber==null? "null" : this.streetNumber);
-		String bia = (this.bia==null? "null" : this.bia);
-		String streetName = (this.streetName==null? "null" : this.streetName);
-		String streetSide = (this.streetSide==null? "null" : this.streetSide);
-		String yearInstalled = (this.yearInstalled==null? "null" : this.yearInstalled);
-		String lat = String.valueOf(this.lat);
-		String lng = String.valueOf(this.lng);
-		
-		return "id: " + id + ", "+
-				" steetNum: " + streetNum+ ", "+
-				" bia: " + bia + ", " +
-				" streetName: " + streetName+ ", "+
-				" streetSide: " + streetSide+ ", "+
-				" numRacks: " + this.numRacks+ ", "+
-				" yearInstalled: " + yearInstalled+
-				" Lat: " + lat + 
-				" Lng: " + lng;
-	}
-	
 	private boolean compareDouble(double a, double b, double epilson){
 		
 		if(Math.abs(a - b) <= epilson){

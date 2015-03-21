@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 
-public class BikeRackTable implements IsWidget {
+public class UserRackTable implements IsWidget {
 
 	/**
 	 * A simple data type that represents a contact.

@@ -21,6 +21,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -81,10 +83,19 @@ public class RackBuddy implements EntryPoint {
 
 	private void loadRackBuddy() {
 		
-		BikeRackTable bikeRackTable = new BikeRackTable();
-		RootPanel.get().add(bikeRackTable);
-		
 		mapDisplay = new MapDisplay();
+		
+		BikeRackTable bikeRackTable = new BikeRackTable();
+		UserRackTable userRackTable = new UserRackTable();
+		
+		VerticalPanel bigTable = new VerticalPanel();
+		bigTable.setSpacing(10);
+		
+		bigTable.add(bikeRackTable);
+		bigTable.add(userRackTable);
+		
+		RootPanel.get("bigTable").add(bigTable);
+		RootPanel.get().add(mapDisplay.getMapPanel());
 		
 		signOutLink = loginInfo.getLogoutUrl();
 

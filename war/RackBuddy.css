@@ -26,10 +26,10 @@ h1 {
 
 #rackMap {
 	position:absolute;
-	left:1em;
-	top:10em;
+	left: 0em;
 }
 
-#marginTop {
-    top:5em;
+#bigTable {
+	position:absolute;
+	left: 64em;
 }

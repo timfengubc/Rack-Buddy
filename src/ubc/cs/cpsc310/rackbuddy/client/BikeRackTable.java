@@ -16,8 +16,12 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
+import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionModel;
 
 public class BikeRackTable implements IsWidget {
 
@@ -48,9 +52,20 @@ public class BikeRackTable implements IsWidget {
 				racks = new ArrayList<BikeRackData>();
 				
 				// Create a CellTable.
-				final CellTable<BikeRackData> table = new CellTable<BikeRackData>();
+				 final CellTable<BikeRackData> table = new CellTable<BikeRackData>(BikeRackData.KEY_PROVIDER);
+				 
+				 MultiSelectionModel<BikeRackData> multi_selectionModel = new MultiSelectionModel<BikeRackData>(BikeRackData.KEY_PROVIDER);
+				 
+				 table.setSelectionModel(multi_selectionModel);
 				
 				table.setPageSize(NUM_DATA_PER_PAGE);
+				
+				
+				
+				  SimplePager pager = new SimplePager(TextLocation.CENTER,true,true);
+					 //SimplePager   pager = new SimplePager();
+					 pager.setPageSize(NUM_DATA_PER_PAGE);
+					pager.setDisplay(table);
 
 				// Add a text column to show the street num.
 				TextColumn<BikeRackData> stNum = new TextColumn<BikeRackData>() {
@@ -116,6 +131,9 @@ public class BikeRackTable implements IsWidget {
 			        	return object.isFave();
 			        } 
 			    };
+			    
+			   
+			    
 			    table.addColumn(checkBoxCol, "Mark as favorite?");
 				
 				jdoService.getAllData(new AsyncCallback<List<BikeRackData>>(){
@@ -148,10 +166,9 @@ public class BikeRackTable implements IsWidget {
 					
 				});
 				
-				  SimplePager pager = new SimplePager(TextLocation.CENTER,true,true);
-				 //SimplePager   pager = new SimplePager();
-				 pager.setPageSize(NUM_DATA_PER_PAGE);
-				pager.setDisplay(table);
+				
+				
+				
 
 				VerticalPanel vp = new VerticalPanel();
 				vp.add(new Label(BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER));

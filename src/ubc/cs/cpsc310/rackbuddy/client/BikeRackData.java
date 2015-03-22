@@ -10,10 +10,28 @@ import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.Inheritance;
 import javax.jdo.annotations.InheritanceStrategy;
 
+import com.google.gwt.view.client.ProvidesKey;
+
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION, detachable="true")
 @Inheritance(strategy=InheritanceStrategy.NEW_TABLE)
 public class BikeRackData implements Serializable {
+	
+    /**
+     * The key provider that provides the unique ID of a contact.
+     */
+    public static final ProvidesKey<BikeRackData> KEY_PROVIDER = new ProvidesKey<BikeRackData>() {
+
+		@Override
+		public Long getKey(BikeRackData item) {
+			
+			return item.getId() == null? -1 : item.getId();
+		}
+//      @Override
+//      public Object getKey(BikeRackData item) {
+//        return item == null ? null : item.getId();
+//      }
+    };
 	
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

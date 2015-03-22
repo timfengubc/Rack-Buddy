@@ -10,6 +10,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -102,6 +103,7 @@ public class UserRackTable implements IsWidget {
 				pager.setDisplay(table);
 
 				VerticalPanel vp = new VerticalPanel();
+				vp.add(new Label("User's Bike Rack Location"));
 				vp.add(table);
 				vp.add(pager);
 				return vp;

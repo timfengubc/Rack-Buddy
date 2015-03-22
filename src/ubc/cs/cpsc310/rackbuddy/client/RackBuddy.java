@@ -84,13 +84,15 @@ public class RackBuddy implements EntryPoint {
 		
 		mapDisplay = new MapDisplay();
 		
-		BikeRackTable bikeRackTable = new BikeRackTable();
+		BikeRackTable bikeRackTable  = new BikeRackTable();
 		UserRackTable userRackTable = new UserRackTable();
 		
 		VerticalPanel bigTable = new VerticalPanel();
-		bigTable.setSpacing(10);
+		bigTable.setSpacing(35);
 		
 		bigTable.add(bikeRackTable);
+		
+		
 		bigTable.add(userRackTable);
 		
 		RootPanel.get("bigTable").add(bigTable);

@@ -10,6 +10,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -49,59 +50,100 @@ public class BikeRackTable implements IsWidget {
 
 	@Override
 	public Widget asWidget() {
-		// Create a CellTable.
+				// Create a CellTable.
 				final CellTable<Contact> table = new CellTable<Contact>();
-				// Display 3 rows in one page
+				
 				table.setPageSize(20);
 
-				// Add a text column to show the name.
-				TextColumn<Contact> nameColumn = new TextColumn<Contact>() {
+				// Add a text column to show the street num.
+				TextColumn<Contact> stNum = new TextColumn<Contact>() {
 					@Override
 					public String getValue(Contact object) {
 						return object.name;
 					}
 				};
-				table.addColumn(nameColumn, "Name");
+				table.addColumn(stNum, "St. Number");
 
 				// Add a date column to show the birthday.
-				DateCell dateCell = new DateCell();
-				Column<Contact, Date> dateColumn = new Column<Contact, Date>(dateCell) {
-					@Override
-					public Date getValue(Contact object) {
-						return object.birthday;
-					}
-				};
-				table.addColumn(dateColumn, "Birthday");
+//				DateCell dateCell = new DateCell();
+//				Column<Contact, Date> dateColumn = new Column<Contact, Date>(dateCell) {
+//					@Override
+//					public Date getValue(Contact object) {
+//						return object.birthday;
+//					}
+//				};
+//				table.addColumn(dateColumn, "Birthday");
 
-				// Add a text column to show the address.
-				TextColumn<Contact> addressColumn = new TextColumn<Contact>() {
+				// Add a text column to show the street name.
+				TextColumn<Contact> stName = new TextColumn<Contact>() {
 					@Override
 					public String getValue(Contact object) {
 						return object.address;
 					}
 				};
-				table.addColumn(addressColumn, "Address");
+				table.addColumn(stName, "St. Name");
+				
+				TextColumn<Contact> stSide = new TextColumn<Contact>() {
+					@Override
+					public String getValue(Contact object) {
+						return object.address;
+					}
+				};
+				table.addColumn(stSide, "St. Side");
+				
+				TextColumn<Contact> skytrainStn = new TextColumn<Contact>() {
+					@Override
+					public String getValue(Contact object) {
+						return object.address;
+					}
+				};
+				table.addColumn(skytrainStn, "Skytrain Station Name");
+				
+				TextColumn<Contact> bia = new TextColumn<Contact>() {
+					@Override
+					public String getValue(Contact object) {
+						return object.address;
+					}
+				};
+				table.addColumn(bia, "BIA");
+				
+				TextColumn<Contact> numRacks = new TextColumn<Contact>() {
+					@Override
+					public String getValue(Contact object) {
+						return object.address;
+					}
+				};
+				table.addColumn(numRacks, "# of Racks");
+				
+				TextColumn<Contact> yearsInstalled = new TextColumn<Contact>() {
+					@Override
+					public String getValue(Contact object) {
+						return object.address;
+					}
+				};
+				table.addColumn(yearsInstalled, "Years Installed");
 
 				// Associate an async data provider to the table
 				// XXX: Use AsyncCallback in the method onRangeChanged
 				// to actaully get the data from the server side
-				AsyncDataProvider<Contact> provider = new AsyncDataProvider<Contact>() {
-					@Override
-					protected void onRangeChanged(HasData<Contact> display) {
-						int start = display.getVisibleRange().getStart();
-						int end = start + display.getVisibleRange().getLength();
-						end = end >= CONTACTS.size() ? CONTACTS.size() : end;
-						List<Contact> sub = CONTACTS.subList(start, end);
-						updateRowData(start, sub);
-					}
-				};
-				provider.addDataDisplay(table);
-				provider.updateRowCount(CONTACTS.size(), true);
+//				AsyncDataProvider<Contact> provider = new AsyncDataProvider<Contact>() {
+//					@Override
+//					protected void onRangeChanged(HasData<Contact> display) {
+//						int start = display.getVisibleRange().getStart();
+//						int end = start + display.getVisibleRange().getLength();
+//						end = end >= CONTACTS.size() ? CONTACTS.size() : end;
+//						List<Contact> sub = CONTACTS.subList(start, end);
+//						updateRowData(start, sub);
+//					}
+//				};
+//				provider.addDataDisplay(table);
+//				provider.updateRowCount(CONTACTS.size(), true);
 
 				SimplePager pager = new SimplePager();
 				pager.setDisplay(table);
 
 				VerticalPanel vp = new VerticalPanel();
+				vp.add(new Label("Bike Rack Locations in the City of Vancouver"));
 				vp.add(table);
 				vp.add(pager);
 				return vp;

@@ -47,7 +47,6 @@ public class RackBuddy implements EntryPoint {
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	
 	private MapDisplay mapDisplay;
-	  
 	/**
 	 * This is the entry point method.
 	 */

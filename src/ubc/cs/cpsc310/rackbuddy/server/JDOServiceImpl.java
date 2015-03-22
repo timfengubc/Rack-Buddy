@@ -84,6 +84,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 						
 						rack.setLat(lat);
 						rack.setLng(lng);
+						rack.setFave(false);
 					   racks.add(rack);
 					}
 					addBikeRackData(racks);

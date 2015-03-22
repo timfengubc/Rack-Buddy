@@ -19,19 +19,14 @@ public class UserBikeRackData extends BikeRackData {
 	private Long id;
 	
 	@Persistent
-	private boolean isFave;
-	
-	@Persistent
 	private User user;
 
 	public UserBikeRackData() {
 		super();
-		isFave = false;
 	}
 
 	public UserBikeRackData(UserBikeRackData other) {
 		super(other);
-		this.isFave = other.isFave;
 		this.user = other.user;
 	}
 
@@ -39,22 +34,13 @@ public class UserBikeRackData extends BikeRackData {
 			String streetSide, String skytrainStation, int numRacks,
 			String yearInstalled, double lat, double lng, boolean isFave, User user) {
 		super(streetNumber, bia, streetName, streetSide, skytrainStation, numRacks,
-				yearInstalled, lat, lng);
+				yearInstalled, lat, lng, isFave);
 		
-		this.isFave = isFave;
 		this.user = user;
 	}
 
 	public Long getId() {
 		return id;
-	}
-
-	public boolean isFave() {
-		return isFave;
-	}
-
-	public void setFave(boolean isFave) {
-		this.isFave = isFave;
 	}
 
 	public User getUser() {
@@ -70,7 +56,6 @@ public class UserBikeRackData extends BikeRackData {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + (isFave ? 1231 : 1237);
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
@@ -89,8 +74,6 @@ public class UserBikeRackData extends BikeRackData {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (isFave != other.isFave)
-			return false;
 		if (user == null) {
 			if (other.user != null)
 				return false;
@@ -98,9 +81,5 @@ public class UserBikeRackData extends BikeRackData {
 			return false;
 		return true;
 	}
-	
-	
 
-	
-	
 }

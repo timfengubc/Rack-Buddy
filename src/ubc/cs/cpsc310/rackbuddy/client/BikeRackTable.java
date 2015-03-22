@@ -18,6 +18,10 @@ import com.google.gwt.view.client.HasData;
 
 public class BikeRackTable implements IsWidget {
 
+	private static final String BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER = "Official Bike Rack Locations in the City of Vancouver";
+
+
+
 	/**
 	 * A simple data type that represents a contact.
 	 */
@@ -51,15 +55,15 @@ public class BikeRackTable implements IsWidget {
 	@Override
 	public Widget asWidget() {
 				// Create a CellTable.
-				final CellTable<Contact> table = new CellTable<Contact>();
+				final CellTable<BikeRackData> table = new CellTable<BikeRackData>();
 				
 				table.setPageSize(20);
 
 				// Add a text column to show the street num.
-				TextColumn<Contact> stNum = new TextColumn<Contact>() {
+				TextColumn<BikeRackData> stNum = new TextColumn<BikeRackData>() {
 					@Override
-					public String getValue(Contact object) {
-						return object.name;
+					public String getValue(BikeRackData object) {
+						return object.getStreetNumber();
 					}
 				};
 				table.addColumn(stNum, "St. Number");
@@ -75,50 +79,50 @@ public class BikeRackTable implements IsWidget {
 //				table.addColumn(dateColumn, "Birthday");
 
 				// Add a text column to show the street name.
-				TextColumn<Contact> stName = new TextColumn<Contact>() {
+				TextColumn<BikeRackData> stName = new TextColumn<BikeRackData>() {
 					@Override
-					public String getValue(Contact object) {
-						return object.address;
+					public String getValue(BikeRackData object) {
+						return object.getStreetName();
 					}
 				};
 				table.addColumn(stName, "St. Name");
 				
-				TextColumn<Contact> stSide = new TextColumn<Contact>() {
+				TextColumn<BikeRackData> stSide = new TextColumn<BikeRackData>() {
 					@Override
-					public String getValue(Contact object) {
-						return object.address;
+					public String getValue(BikeRackData object) {
+						return object.getStreetName();
 					}
 				};
 				table.addColumn(stSide, "St. Side");
 				
-				TextColumn<Contact> skytrainStn = new TextColumn<Contact>() {
+				TextColumn<BikeRackData> skytrainStn = new TextColumn<BikeRackData>() {
 					@Override
-					public String getValue(Contact object) {
-						return object.address;
+					public String getValue(BikeRackData object) {
+						return object.getSkytrainStation();
 					}
 				};
 				table.addColumn(skytrainStn, "Skytrain Station Name");
 				
-				TextColumn<Contact> bia = new TextColumn<Contact>() {
+				TextColumn<BikeRackData> bia = new TextColumn<BikeRackData>() {
 					@Override
-					public String getValue(Contact object) {
-						return object.address;
+					public String getValue(BikeRackData object) {
+						return object.getBia();
 					}
 				};
 				table.addColumn(bia, "BIA");
 				
-				TextColumn<Contact> numRacks = new TextColumn<Contact>() {
+				TextColumn<BikeRackData> numRacks = new TextColumn<BikeRackData>() {
 					@Override
-					public String getValue(Contact object) {
-						return object.address;
+					public String getValue(BikeRackData object) {
+						return String.valueOf(object.getNumRacks());
 					}
 				};
 				table.addColumn(numRacks, "# of Racks");
 				
-				TextColumn<Contact> yearsInstalled = new TextColumn<Contact>() {
+				TextColumn<BikeRackData> yearsInstalled = new TextColumn<BikeRackData>() {
 					@Override
-					public String getValue(Contact object) {
-						return object.address;
+					public String getValue(BikeRackData object) {
+						return object.getYearInstalled();
 					}
 				};
 				table.addColumn(yearsInstalled, "Years Installed");
@@ -143,7 +147,7 @@ public class BikeRackTable implements IsWidget {
 				pager.setDisplay(table);
 
 				VerticalPanel vp = new VerticalPanel();
-				vp.add(new Label("Bike Rack Locations in the City of Vancouver"));
+				vp.add(new Label(BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER));
 				vp.add(table);
 				vp.add(pager);
 				return vp;

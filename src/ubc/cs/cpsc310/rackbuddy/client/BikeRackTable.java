@@ -1,10 +1,14 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -13,8 +17,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.ListDataProvider;
 
 public class BikeRackTable implements IsWidget {
+
+	public static final int NUM_DATA_PER_PAGE = 10;
 
 	public static final String YEARS_INSTALLED = "Years Installed";
 
@@ -33,13 +40,17 @@ public class BikeRackTable implements IsWidget {
 	public static final String BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER = "Official Bike Rack Locations in the City of Vancouver";
 	
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
-
+	
+	private List<BikeRackData> racks;
 	@Override
 	public Widget asWidget() {
+				
+				racks = new ArrayList<BikeRackData>();
+				
 				// Create a CellTable.
 				final CellTable<BikeRackData> table = new CellTable<BikeRackData>();
 				
-				table.setPageSize(10);
+				table.setPageSize(NUM_DATA_PER_PAGE);
 
 				// Add a text column to show the street num.
 				TextColumn<BikeRackData> stNum = new TextColumn<BikeRackData>() {
@@ -99,6 +110,14 @@ public class BikeRackTable implements IsWidget {
 				};
 				table.addColumn(yearsInstalled, YEARS_INSTALLED);
 				
+				Column<BikeRackData, Boolean> checkBoxCol = new Column<BikeRackData, Boolean>(new CheckboxCell()) { 
+			        @Override 
+			        public Boolean getValue(BikeRackData object) { 
+			        	return object.isFave();
+			        } 
+			    };
+			    table.addColumn(checkBoxCol, "Mark as favorite?");
+				
 				jdoService.getAllData(new AsyncCallback<List<BikeRackData>>(){
 
 					@Override
@@ -108,6 +127,7 @@ public class BikeRackTable implements IsWidget {
 
 					@Override
 					public void onSuccess(final List<BikeRackData> result) {
+						
 						AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>() {
 						@Override
 						protected void onRangeChanged(HasData<BikeRackData> display) {
@@ -116,21 +136,37 @@ public class BikeRackTable implements IsWidget {
 							end = end >= result.size() ? result.size() : end;
 							List<BikeRackData> sub = result.subList(start, end);
 							updateRowData(start, sub);
+							
+							
 						}
 					};
+					
 					provider.addDataDisplay(table);
 					provider.updateRowCount(result.size(), true);
+					
 					}
 					
 				});
-
-				SimplePager pager = new SimplePager();
+				
+				  SimplePager pager = new SimplePager(TextLocation.CENTER,true,true);
+				 //SimplePager   pager = new SimplePager();
+				 pager.setPageSize(NUM_DATA_PER_PAGE);
 				pager.setDisplay(table);
 
 				VerticalPanel vp = new VerticalPanel();
 				vp.add(new Label(BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER));
 				vp.add(table);
 				vp.add(pager);
+				
 				return vp;
+	}
+	
+	public List<BikeRackData> getList(){
+		return this.racks;
+	}
+	
+	public void replaceData(List<BikeRackData> dataToReplaceWith){
+		this.racks.clear();
+		this.racks.addAll(dataToReplaceWith);
 	}
 }

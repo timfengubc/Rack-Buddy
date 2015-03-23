@@ -21,6 +21,7 @@ import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SelectionModel;
 
 public class BikeRackTable implements IsWidget {
@@ -63,9 +64,11 @@ public class BikeRackTable implements IsWidget {
 				
 				
 				  SimplePager pager = new SimplePager(TextLocation.CENTER,true,true);
-					 //SimplePager   pager = new SimplePager();
+					
 					 pager.setPageSize(NUM_DATA_PER_PAGE);
 					pager.setDisplay(table);
+					
+					
 
 				// Add a text column to show the street num.
 				TextColumn<BikeRackData> stNum = new TextColumn<BikeRackData>() {
@@ -88,7 +91,7 @@ public class BikeRackTable implements IsWidget {
 				TextColumn<BikeRackData> stSide = new TextColumn<BikeRackData>() {
 					@Override
 					public String getValue(BikeRackData object) {
-						return object.getStreetName();
+						return object.getStreetSide();
 					}
 				};
 				table.addColumn(stSide, ST_SIDE);

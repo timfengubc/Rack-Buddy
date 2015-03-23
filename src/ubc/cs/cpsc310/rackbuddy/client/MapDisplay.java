@@ -160,8 +160,12 @@ public class MapDisplay {
 		searchPanel.add(h1);
 		searchPanel.add(h2);
 		searchPanel.add(searchButton);
+		
+		RootPanel.get("rackMap").add(searchPanel);
+	}
 
-		RootPanel.get().add(searchPanel);
+	public VerticalPanel getSearchPanel() {
+		return searchPanel;
 	}
 
 	private void displayBikeRacks(final String seachRadius) {

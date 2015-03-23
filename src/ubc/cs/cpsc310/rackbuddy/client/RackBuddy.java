@@ -96,7 +96,7 @@ public class RackBuddy implements EntryPoint {
 		bigTable.add(userRackTable);
 		
 		RootPanel.get("bigTable").add(bigTable);
-		RootPanel.get().add(mapDisplay.getMapPanel());
+		RootPanel.get("rackMap").add(mapDisplay.getMapPanel());
 		
 		signOutLink = loginInfo.getLogoutUrl();
 

@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -50,135 +52,138 @@ public class BikeRackTable implements IsWidget {
 	@Override
 	public Widget asWidget() {
 				
-				racks = new ArrayList<BikeRackData>();
-				
-				// Create a CellTable.
-				 final CellTable<BikeRackData> table = new CellTable<BikeRackData>(BikeRackData.KEY_PROVIDER);
-				 
-				 MultiSelectionModel<BikeRackData> multi_selectionModel = new MultiSelectionModel<BikeRackData>(BikeRackData.KEY_PROVIDER);
-				 
-				 table.setSelectionModel(multi_selectionModel);
-				
-				table.setPageSize(NUM_DATA_PER_PAGE);
-				
-				
-				
-				  SimplePager pager = new SimplePager(TextLocation.CENTER,true,true);
-					
-					 pager.setPageSize(NUM_DATA_PER_PAGE);
-					pager.setDisplay(table);
-					
-					
+		racks = new ArrayList<BikeRackData>();
 
-				// Add a text column to show the street num.
-				TextColumn<BikeRackData> stNum = new TextColumn<BikeRackData>() {
-					@Override
-					public String getValue(BikeRackData object) {
-						return object.getStreetNumber();
-					}
-				};
-				table.addColumn(stNum, ST_NUMBER);
+		// Create a CellTable.
+		final CellTable<BikeRackData> table = new CellTable<BikeRackData>(
+				BikeRackData.KEY_PROVIDER);
 
-				// Add a text column to show the street name.
-				TextColumn<BikeRackData> stName = new TextColumn<BikeRackData>() {
-					@Override
-					public String getValue(BikeRackData object) {
-						return object.getStreetName();
-					}
-				};
-				table.addColumn(stName, ST_NAME);
-				
-				TextColumn<BikeRackData> stSide = new TextColumn<BikeRackData>() {
-					@Override
-					public String getValue(BikeRackData object) {
-						return object.getStreetSide();
-					}
-				};
-				table.addColumn(stSide, ST_SIDE);
-				
-				TextColumn<BikeRackData> skytrainStn = new TextColumn<BikeRackData>() {
-					@Override
-					public String getValue(BikeRackData object) {
-						return object.getSkytrainStation();
-					}
-				};
-				table.addColumn(skytrainStn, SKYTRAIN_STATION_NAME);
-				
-				TextColumn<BikeRackData> bia = new TextColumn<BikeRackData>() {
-					@Override
-					public String getValue(BikeRackData object) {
-						return object.getBia();
-					}
-				};
-				table.addColumn(bia, BIA2);
-				
-				TextColumn<BikeRackData> numRacks = new TextColumn<BikeRackData>() {
-					@Override
-					public String getValue(BikeRackData object) {
-						return String.valueOf(object.getNumRacks());
-					}
-				};
-				table.addColumn(numRacks, NUM_RACKS);
-				
-				TextColumn<BikeRackData> yearsInstalled = new TextColumn<BikeRackData>() {
-					@Override
-					public String getValue(BikeRackData object) {
-						return object.getYearInstalled();
-					}
-				};
-				table.addColumn(yearsInstalled, YEARS_INSTALLED);
-				
-				Column<BikeRackData, Boolean> checkBoxCol = new Column<BikeRackData, Boolean>(new CheckboxCell()) { 
-			        @Override 
-			        public Boolean getValue(BikeRackData object) { 
-			        	return object.isFave();
-			        } 
-			    };
-			    
-			   
-			    
-			    table.addColumn(checkBoxCol, "Mark as favorite?");
-				
-				jdoService.getAllData(new AsyncCallback<List<BikeRackData>>(){
+		MultiSelectionModel<BikeRackData> multiSelect = new MultiSelectionModel<BikeRackData>(
+				BikeRackData.KEY_PROVIDER);
 
-					@Override
-					public void onFailure(Throwable caught) {
-						
-					}
+		table.setSelectionModel(multiSelect);
 
-					@Override
-					public void onSuccess(final List<BikeRackData> result) {
-						
-						AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>() {
-						@Override
-						protected void onRangeChanged(HasData<BikeRackData> display) {
-							int start = display.getVisibleRange().getStart();
-							int end = start + display.getVisibleRange().getLength();
-							end = end >= result.size() ? result.size() : end;
-							List<BikeRackData> sub = result.subList(start, end);
-							updateRowData(start, sub);
-							
-							
-						}
-					};
-					
-					provider.addDataDisplay(table);
-					provider.updateRowCount(result.size(), true);
-					
-					}
-					
-				});
-				
-				
-				
-				
+		table.setPageSize(NUM_DATA_PER_PAGE);
 
-				VerticalPanel vp = new VerticalPanel();
-				vp.add(new Label(BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER));
-				vp.add(table);
-				vp.add(pager);
-				
-				return vp;
+		SimplePager pager = new SimplePager(TextLocation.CENTER, true, true);
+
+		pager.setPageSize(NUM_DATA_PER_PAGE);
+		pager.setDisplay(table);
+		
+		
+
+		// Add a text column to show the street num.
+		TextColumn<BikeRackData> stNum = new TextColumn<BikeRackData>() {
+			@Override
+			public String getValue(BikeRackData object) {
+				return object.getStreetNumber();
+			}
+		};
+		table.addColumn(stNum, ST_NUMBER);
+
+		// Add a text column to show the street name.
+		TextColumn<BikeRackData> stName = new TextColumn<BikeRackData>() {
+			@Override
+			public String getValue(BikeRackData object) {
+				return object.getStreetName();
+			}
+		};
+		table.addColumn(stName, ST_NAME);
+
+		TextColumn<BikeRackData> stSide = new TextColumn<BikeRackData>() {
+			@Override
+			public String getValue(BikeRackData object) {
+				return object.getStreetSide();
+			}
+		};
+		table.addColumn(stSide, ST_SIDE);
+
+		TextColumn<BikeRackData> skytrainStn = new TextColumn<BikeRackData>() {
+			@Override
+			public String getValue(BikeRackData object) {
+				return object.getSkytrainStation();
+			}
+		};
+		table.addColumn(skytrainStn, SKYTRAIN_STATION_NAME);
+
+		TextColumn<BikeRackData> bia = new TextColumn<BikeRackData>() {
+			@Override
+			public String getValue(BikeRackData object) {
+				return object.getBia();
+			}
+		};
+		table.addColumn(bia, BIA2);
+
+		TextColumn<BikeRackData> numRacks = new TextColumn<BikeRackData>() {
+			@Override
+			public String getValue(BikeRackData object) {
+				return String.valueOf(object.getNumRacks());
+			}
+		};
+		table.addColumn(numRacks, NUM_RACKS);
+
+		TextColumn<BikeRackData> yearsInstalled = new TextColumn<BikeRackData>() {
+			@Override
+			public String getValue(BikeRackData object) {
+				return object.getYearInstalled();
+			}
+		};
+		table.addColumn(yearsInstalled, YEARS_INSTALLED);
+
+		Column<BikeRackData, Boolean> checkBoxCol = new Column<BikeRackData, Boolean>(
+				new CheckboxCell()) {
+			@Override
+			public Boolean getValue(BikeRackData object) {
+				return object.isFave();
+			}
+		};
+		
+		checkBoxCol.setFieldUpdater(new FieldUpdater<BikeRackData,Boolean>(){
+
+			@Override
+			public void update(int index, BikeRackData object, Boolean value) {
+				Window.alert("what this do?");
+			}
+			
+		});
+
+		table.addColumn(checkBoxCol, "Mark as favorite?");
+
+		jdoService.getAllData(new AsyncCallback<List<BikeRackData>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+
+			}
+
+			@Override
+			public void onSuccess(final List<BikeRackData> result) {
+
+				AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>() {
+					@Override
+					protected void onRangeChanged(HasData<BikeRackData> display) {
+						int start = display.getVisibleRange().getStart();
+						int end = start + display.getVisibleRange().getLength();
+						end = end >= result.size() ? result.size() : end;
+						List<BikeRackData> sub = result.subList(start, end);
+						updateRowData(start, sub);
+
+					}
+				};
+
+				provider.addDataDisplay(table);
+				provider.updateRowCount(result.size(), true);
+
+			}
+
+		});
+
+		VerticalPanel vp = new VerticalPanel();
+		vp.add(new Label(BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER));
+		vp.add(table);
+		vp.add(pager);
+
+		return vp;
 	}
 	
 	public List<BikeRackData> getList(){

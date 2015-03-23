@@ -11,22 +11,18 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SelectionChangeEvent.Handler;
-import com.google.gwt.view.client.SelectionModel;
 
 public class BikeRackTable implements IsWidget {
+
+	public static final String MARK_AS_FAVORITE = "Mark as favorite?";
 
 	public static final int NUM_DATA_PER_PAGE = 10;
 
@@ -69,10 +65,7 @@ public class BikeRackTable implements IsWidget {
 
 		pager.setPageSize(NUM_DATA_PER_PAGE);
 		pager.setDisplay(table);
-		
-		
 
-		// Add a text column to show the street num.
 		TextColumn<BikeRackData> stNum = new TextColumn<BikeRackData>() {
 			@Override
 			public String getValue(BikeRackData object) {
@@ -81,7 +74,6 @@ public class BikeRackTable implements IsWidget {
 		};
 		table.addColumn(stNum, ST_NUMBER);
 
-		// Add a text column to show the street name.
 		TextColumn<BikeRackData> stName = new TextColumn<BikeRackData>() {
 			@Override
 			public String getValue(BikeRackData object) {
@@ -142,12 +134,12 @@ public class BikeRackTable implements IsWidget {
 
 			@Override
 			public void update(int index, BikeRackData object, Boolean value) {
-				Window.alert("what this do?");
+				//Window.alert("what this do?");
 			}
 			
 		});
 
-		table.addColumn(checkBoxCol, "Mark as favorite?");
+		table.addColumn(checkBoxCol, MARK_AS_FAVORITE);
 
 		jdoService.getAllData(new AsyncCallback<List<BikeRackData>>() {
 

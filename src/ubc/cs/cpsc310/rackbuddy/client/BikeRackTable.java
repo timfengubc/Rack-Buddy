@@ -11,6 +11,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -44,7 +45,13 @@ public class BikeRackTable implements IsWidget {
 	
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	
+	private LoginInfo loginInfo;
+	
 	private List<BikeRackData> racks;
+	public BikeRackTable(LoginInfo loginInfo) {
+		this.loginInfo = new LoginInfo();
+	}
+
 	@Override
 	public Widget asWidget() {
 				
@@ -134,8 +141,20 @@ public class BikeRackTable implements IsWidget {
 
 			@Override
 			public void update(int index, BikeRackData object, Boolean value) {
-				//Window.alert("what this do?");
+				
+				if(value == true){
+					object.setFave(true);
+					loginInfo.addNewFave(object.getId());
+					//Window.alert("new bike rack data added");
+					addNewFavBikeRack(loginInfo);
+				}else{
+					object.setFave(false);
+					loginInfo.removeNewFave(object.getId());
+					//Window.alert("bike rack data removed");
+				}
 			}
+
+			
 			
 		});
 
@@ -176,6 +195,26 @@ public class BikeRackTable implements IsWidget {
 		vp.add(pager);
 
 		return vp;
+	}
+	
+	private void addNewFavBikeRack(LoginInfo loginInfo) {
+		if(jdoService == null){
+			jdoService = GWT.create(JDOService.class);
+		}
+		
+		jdoService.addNewFavRack(loginInfo, new AsyncCallback<Void>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Error has occured: " +caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				Window.alert("successfully added");
+			}
+			
+		});
 	}
 	
 	public List<BikeRackData> getList(){

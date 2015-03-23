@@ -5,6 +5,9 @@ import java.util.List;
 
 import ubc.cs.cpsc310.rackbuddy.client.BikeRackData;
 import ubc.cs.cpsc310.rackbuddy.client.JDOService;
+import ubc.cs.cpsc310.rackbuddy.client.LoginInfo;
+
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -20,6 +23,8 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.annotations.Transactional;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 
@@ -363,6 +368,13 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		
 	}
 
-	
+	public void addNewFavRack(LoginInfo loginInfo) {
+		PersistenceManager pm = getPersistenceManager();
+		try{
+			pm.makePersistent(loginInfo);
+		}finally{
+			pm.close();
+		}
+	}
 
 }

@@ -1,16 +1,67 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.jdo.annotations.Extension;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.NotPersistent;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+import com.google.appengine.api.datastore.Key;
+
+@PersistenceCapable(identityType = IdentityType.APPLICATION)
 
 public class LoginInfo implements Serializable {
+	
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
+    private String encodedKey;
 
-	private boolean admin = false;
+    @NotPersistent	
+    private boolean admin = false;
+    
+    @NotPersistent
 	private boolean loggedIn = false;
+    
+    @NotPersistent
 	private String loginUrl;
+    
+    @NotPersistent
 	private String logoutUrl;
+    
+    @Persistent
 	private String emailAddress;
+    
+    @NotPersistent
 	private String nickname;
 	
+	@Persistent
+	private List<Long> bikeRackIDs = new ArrayList<Long>();
+
+	public void addNewFave(Long idToAdd){
+		bikeRackIDs.add(idToAdd);
+	}
+	
+	public void removeNewFave(Long idToRemove){
+		if(bikeRackIDs.contains(idToRemove)){
+			bikeRackIDs.remove(idToRemove);	
+		}
+	}
+	
+	public List<Long> getFavBikeRacks() {
+		return bikeRackIDs;
+	}
+
+	public void setFavBikeRacks(List<Long> bikeRackIDs) {
+		this.bikeRackIDs = bikeRackIDs;
+	}
+
 	public boolean isLoggedIn() {
 		return loggedIn;
 	}

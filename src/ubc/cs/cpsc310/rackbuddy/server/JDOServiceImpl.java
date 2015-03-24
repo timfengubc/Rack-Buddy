@@ -377,4 +377,24 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		}
 	}
 
+	@Override
+	public void removeFavRack(LoginInfo loginInfo) {
+		PersistenceManager pm = getPersistenceManager();
+		try{
+			Query q = pm.newQuery(LoginInfo.class,
+                    "emailAddress == '"+loginInfo.getEmailAddress()+"'" +" && bikeRackID == " + loginInfo.getBikeRackID());
+			
+			List<LoginInfo> results = (List<LoginInfo>) q.execute();
+			
+			if(!results.isEmpty()){
+				for(LoginInfo temp : results){
+					pm.deletePersistent(temp);
+				}
+			}
+			
+		}finally{
+			pm.close();
+		}
+	}
+
 }

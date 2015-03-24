@@ -44,11 +44,11 @@ public class LoginInfo implements Serializable {
 	@Persistent
 	private Long bikeRackID;
 
-	public Long getBikeRackIDs() {
+	public Long getBikeRackID() {
 		return bikeRackID;
 	}
 
-	public void setBikeRackIDs(Long bikeRackIDs) {
+	public void setBikeRackID(Long bikeRackIDs) {
 		this.bikeRackID = bikeRackIDs;
 	}
 

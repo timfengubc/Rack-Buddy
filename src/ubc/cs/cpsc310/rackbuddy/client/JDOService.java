@@ -32,4 +32,6 @@ public interface JDOService extends RemoteService {
 	public void loadRacks();	
 	
 	public void addNewFavRack(LoginInfo loginInfo);
+	
+	public void removeFavRack(LoginInfo loginInfo);
 }

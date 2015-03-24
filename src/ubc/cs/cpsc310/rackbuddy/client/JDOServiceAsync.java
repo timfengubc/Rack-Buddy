@@ -32,4 +32,6 @@ public interface JDOServiceAsync {
 	void addBikeRackData(ArrayList<BikeRackData> racks, AsyncCallback<Void> callback);
 
 	void addNewFavRack(LoginInfo loginInfo, AsyncCallback<Void> callback);
+
+	void removeFavRack(LoginInfo loginInfo, AsyncCallback<Void> callback);
 }

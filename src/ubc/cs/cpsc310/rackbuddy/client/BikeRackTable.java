@@ -144,15 +144,16 @@ public class BikeRackTable implements IsWidget {
 				
 				if(value == true){
 					object.setFave(true);
-					loginInfo.setBikeRackIDs(object.getId());
-					//Window.alert("new bike rack data added");
+					loginInfo.setBikeRackID(object.getId());
 					addNewFavBikeRack(loginInfo);
 				}else{
 					object.setFave(false);
-					//loginInfo.removeNewFave(object.getId());
-					//Window.alert("bike rack data removed");
+					loginInfo.setBikeRackID(object.getId());
+					deleteFavBikeRack(loginInfo);
 				}
 			}
+
+			
 
 			
 			
@@ -212,6 +213,26 @@ public class BikeRackTable implements IsWidget {
 			@Override
 			public void onSuccess(Void result) {
 				Window.alert("successfully added");
+			}
+			
+		});
+	}
+	
+	private void deleteFavBikeRack(LoginInfo loginInfo) {
+		if(jdoService == null){
+			jdoService = GWT.create(JDOService.class);
+		}
+		
+		jdoService.removeFavRack(loginInfo, new AsyncCallback<Void>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Error has occured: " +caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				Window.alert("successfully removed");
 			}
 			
 		});

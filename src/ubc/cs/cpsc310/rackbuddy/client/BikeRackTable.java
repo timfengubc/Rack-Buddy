@@ -49,7 +49,7 @@ public class BikeRackTable implements IsWidget {
 	
 	private List<BikeRackData> racks;
 	public BikeRackTable(LoginInfo loginInfo) {
-		this.loginInfo = new LoginInfo();
+		this.loginInfo = loginInfo;
 	}
 
 	@Override
@@ -144,12 +144,12 @@ public class BikeRackTable implements IsWidget {
 				
 				if(value == true){
 					object.setFave(true);
-					loginInfo.addNewFave(object.getId());
+					loginInfo.setBikeRackIDs(object.getId());
 					//Window.alert("new bike rack data added");
 					addNewFavBikeRack(loginInfo);
 				}else{
 					object.setFave(false);
-					loginInfo.removeNewFave(object.getId());
+					//loginInfo.removeNewFave(object.getId());
 					//Window.alert("bike rack data removed");
 				}
 			}

@@ -42,24 +42,14 @@ public class LoginInfo implements Serializable {
 	private String nickname;
 	
 	@Persistent
-	private List<Long> bikeRackIDs = new ArrayList<Long>();
+	private Long bikeRackID;
 
-	public void addNewFave(Long idToAdd){
-		bikeRackIDs.add(idToAdd);
-	}
-	
-	public void removeNewFave(Long idToRemove){
-		if(bikeRackIDs.contains(idToRemove)){
-			bikeRackIDs.remove(idToRemove);	
-		}
-	}
-	
-	public List<Long> getFavBikeRacks() {
-		return bikeRackIDs;
+	public Long getBikeRackIDs() {
+		return bikeRackID;
 	}
 
-	public void setFavBikeRacks(List<Long> bikeRackIDs) {
-		this.bikeRackIDs = bikeRackIDs;
+	public void setBikeRackIDs(Long bikeRackIDs) {
+		this.bikeRackID = bikeRackIDs;
 	}
 
 	public boolean isLoggedIn() {

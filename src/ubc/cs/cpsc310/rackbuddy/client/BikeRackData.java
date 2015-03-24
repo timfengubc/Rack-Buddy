@@ -27,10 +27,6 @@ public class BikeRackData implements Serializable {
 			
 			return item.getId() == null? -1 : item.getId();
 		}
-//      @Override
-//      public Object getKey(BikeRackData item) {
-//        return item == null ? null : item.getId();
-//      }
     };
 	
 	@PrimaryKey

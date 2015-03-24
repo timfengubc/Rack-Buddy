@@ -34,4 +34,7 @@ public interface JDOServiceAsync {
 	void addNewFavRack(LoginInfo loginInfo, AsyncCallback<Void> callback);
 
 	void removeFavRack(LoginInfo loginInfo, AsyncCallback<Void> callback);
+
+	void getListofFaves(LoginInfo loginInfo,
+			AsyncCallback<List<BikeRackData>> callback);
 }

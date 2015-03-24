@@ -34,4 +34,6 @@ public interface JDOService extends RemoteService {
 	public void addNewFavRack(LoginInfo loginInfo);
 	
 	public void removeFavRack(LoginInfo loginInfo);
+	
+	public List<BikeRackData> getListofFaves(LoginInfo loginInfo);
 }

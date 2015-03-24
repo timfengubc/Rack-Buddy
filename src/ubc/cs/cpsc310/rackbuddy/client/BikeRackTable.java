@@ -174,6 +174,9 @@ public class BikeRackTable implements IsWidget {
 				AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>() {
 					@Override
 					protected void onRangeChanged(HasData<BikeRackData> display) {
+						
+						
+						
 						int start = display.getVisibleRange().getStart();
 						int end = start + display.getVisibleRange().getLength();
 						end = end >= result.size() ? result.size() : end;
@@ -237,6 +240,28 @@ public class BikeRackTable implements IsWidget {
 			
 		});
 	}
+	
+	private void getFaveBikeRacks(LoginInfo loginInfo){
+		if(jdoService == null){
+			jdoService = GWT.create(JDOService.class);
+		}
+		
+		jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(List<BikeRackData> result) {
+				
+			}
+			
+		});
+	}
+	
+	
 	
 	public List<BikeRackData> getList(){
 		return this.racks;

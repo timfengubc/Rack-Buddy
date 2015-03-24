@@ -397,4 +397,23 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		}
 	}
 
+	@Override
+	public List<BikeRackData> getListofFaves(LoginInfo loginInfo) {
+		PersistenceManager pm = getPersistenceManager();
+	    List<BikeRackData> data = new ArrayList<BikeRackData>();
+	    try {
+	        Query q = pm.newQuery(LoginInfo.class);
+	        q.setFilter("emailAddress == emailAddressParam");
+	        q.declareParameters("String emailAddressParam");
+	        List<LoginInfo> ids = (List<LoginInfo>) q.execute(loginInfo.getEmailAddress());
+	        for (LoginInfo login : ids) {
+	          BikeRackData temp = this.findDataById(login.getBikeRackID());
+	          data.add(temp);
+	        }
+	      } finally {
+	        pm.close();
+	      }
+		return data;
+	}
+
 }

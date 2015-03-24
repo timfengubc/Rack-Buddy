@@ -4,7 +4,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.DateCell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
@@ -17,6 +19,12 @@ import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 
 public class UserRackTable implements IsWidget {
+	
+	LoginInfo loginInfo;
+	
+	public UserRackTable(LoginInfo loginInfo) {
+		this.loginInfo = loginInfo;
+	}
 
 	/**
 	 * A simple data type that represents a contact.
@@ -48,56 +56,116 @@ public class UserRackTable implements IsWidget {
 
 	
 
+
+
+
+
 	@Override
 	public Widget asWidget() {
 		// Create a CellTable.
-				final CellTable<Contact> table = new CellTable<Contact>();
+				final CellTable<UserBikeRackData> table = new CellTable<UserBikeRackData>();
 				// Display 3 rows in one page
-				table.setPageSize(20);
+				table.setPageSize(BikeRackTable.NUM_DATA_PER_PAGE);
 
-				// Add a text column to show the name.
-				TextColumn<Contact> nameColumn = new TextColumn<Contact>() {
+				TextColumn<UserBikeRackData> stNum = new TextColumn<UserBikeRackData>() {
 					@Override
-					public String getValue(Contact object) {
-						return object.name;
+					public String getValue(UserBikeRackData object) {
+						return object.getStreetNumber();
 					}
 				};
-				table.addColumn(nameColumn, "Name");
+				table.addColumn(stNum, BikeRackTable.ST_NUMBER);
 
-				// Add a date column to show the birthday.
-				DateCell dateCell = new DateCell();
-				Column<Contact, Date> dateColumn = new Column<Contact, Date>(dateCell) {
+				TextColumn<UserBikeRackData> stName = new TextColumn<UserBikeRackData>() {
 					@Override
-					public Date getValue(Contact object) {
-						return object.birthday;
+					public String getValue(UserBikeRackData object) {
+						return object.getStreetName();
 					}
 				};
-				table.addColumn(dateColumn, "Birthday");
-
-				// Add a text column to show the address.
-				TextColumn<Contact> addressColumn = new TextColumn<Contact>() {
+				table.addColumn(stName, BikeRackTable.ST_NAME);
+				
+				TextColumn<UserBikeRackData> stSide = new TextColumn<UserBikeRackData>() {
 					@Override
-					public String getValue(Contact object) {
-						return object.address;
+					public String getValue(UserBikeRackData object) {
+						return object.getStreetSide();
 					}
 				};
-				table.addColumn(addressColumn, "Address");
+				table.addColumn(stSide, BikeRackTable.ST_SIDE);
+				
+				TextColumn<UserBikeRackData> skytrainName = new TextColumn<UserBikeRackData>() {
+					@Override
+					public String getValue(UserBikeRackData object) {
+						return object.getSkytrainStation();
+					}
+				};
+				table.addColumn(skytrainName, BikeRackTable.SKYTRAIN_STATION_NAME);
+				
+				TextColumn<UserBikeRackData> bia = new TextColumn<UserBikeRackData>() {
+					@Override
+					public String getValue(UserBikeRackData object) {
+						return object.getBia();
+					}
+				};
+				table.addColumn(bia, BikeRackTable.BIA2);
+				
+				TextColumn<UserBikeRackData> numRacks = new TextColumn<UserBikeRackData>() {
+					@Override
+					public String getValue(UserBikeRackData object) {
+						return String.valueOf(object.getNumRacks());
+					}
+				};
+				table.addColumn(numRacks, BikeRackTable.NUM_RACKS);
+				
+				TextColumn<UserBikeRackData> yearsInstalled = new TextColumn<UserBikeRackData>() {
+					@Override
+					public String getValue(UserBikeRackData object) {
+						return object.getYearInstalled();
+					}
+				};
+				table.addColumn(yearsInstalled, BikeRackTable.YEARS_INSTALLED);
+				
+				Column<UserBikeRackData, Boolean> checkBoxCol = new Column<UserBikeRackData, Boolean>(
+						new CheckboxCell()) {
+					@Override
+					public Boolean getValue(UserBikeRackData object) {
+						return object.isFave();
+					}
+				};
+				
+//				checkBoxCol.setFieldUpdater(new FieldUpdater<BikeRackData,Boolean>(){
+//
+//					@Override
+//					public void update(int index, BikeRackData object, Boolean value) {
+//						
+//						if(value == true){
+//							object.setFave(true);
+//							loginInfo.setBikeRackID(object.getId());
+//							addNewFavBikeRack(loginInfo);
+//						}else{
+//							object.setFave(false);
+//							loginInfo.setBikeRackID(object.getId());
+//							deleteFavBikeRack(loginInfo);
+//						}
+//					}
+//
+//				});
+
+				table.addColumn(checkBoxCol, BikeRackTable.MARK_AS_FAVORITE);
 
 				// Associate an async data provider to the table
 				// XXX: Use AsyncCallback in the method onRangeChanged
 				// to actaully get the data from the server side
-				AsyncDataProvider<Contact> provider = new AsyncDataProvider<Contact>() {
-					@Override
-					protected void onRangeChanged(HasData<Contact> display) {
-						int start = display.getVisibleRange().getStart();
-						int end = start + display.getVisibleRange().getLength();
-						end = end >= CONTACTS.size() ? CONTACTS.size() : end;
-						List<Contact> sub = CONTACTS.subList(start, end);
-						updateRowData(start, sub);
-					}
-				};
-				provider.addDataDisplay(table);
-				provider.updateRowCount(CONTACTS.size(), true);
+//				AsyncDataProvider<UserBikeRackData> provider = new AsyncDataProvider<UserBikeRackData>() {
+//					@Override
+//					protected void onRangeChanged(HasData<UserBikeRackData> display) {
+//						int start = display.getVisibleRange().getStart();
+//						int end = start + display.getVisibleRange().getLength();
+//						end = end >= CONTACTS.size() ? CONTACTS.size() : end;
+//						List<UserBikeRackData> sub = CONTACTS.subList(start, end);
+//						updateRowData(start, sub);
+//					}
+//				};
+//				provider.addDataDisplay(table);
+//				provider.updateRowCount(CONTACTS.size(), true);
 
 				SimplePager pager = new SimplePager();
 				pager.setDisplay(table);

@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
@@ -21,12 +22,16 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
@@ -45,6 +50,8 @@ public class RackBuddy implements EntryPoint {
 	private String signOutLink = new String();
 	private Button signOutButton = new Button("Sign Out");
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
+	
+	private TabPanel tabPanel = new TabPanel();
 	
 	private MapDisplay mapDisplay;
 	/**
@@ -82,20 +89,43 @@ public class RackBuddy implements EntryPoint {
 
 	private void loadRackBuddy() {
 		
+		
+		
 		mapDisplay = new MapDisplay();
 		
 		BikeRackTable bikeRackTable  = new BikeRackTable(loginInfo);
-		UserRackTable userRackTable = new UserRackTable(loginInfo);
 		
 		VerticalPanel bigTable = new VerticalPanel();
-		bigTable.setSpacing(35);
 		
-		bigTable.add(bikeRackTable);
+		//bigTable.add(bikeRackTable);
 		
 		
-		bigTable.add(userRackTable);
 		
-		RootPanel.get("bigTable").add(bigTable);
+		//bigTable.add(userRackTable);
+		
+		//RootPanel.get("bigTable").add(bigTable);
+		
+		TabPanel p = new TabPanel();
+	    p.add(new HTML("this"), "[this]");
+	    p.add(new HTML("that"), "[that]");
+	    p.add(new HTML("the other"), "[the other]");
+	    p.add(bikeRackTable, "dum table", false);
+	    p.selectTab(0);
+	    
+	    bigTable.add(p);
+	    
+	    RootPanel.get("bigTable").add(bigTable);
+	    
+	    //bigTable.add(p);
+	    // Attach the LayoutPanel to the RootLayoutPanel. The latter will listen for
+	    // resize events on the window to ensure that its children are informed of
+	    // possible size changes.
+	    //RootPanel.get("bigTable").add(bigTable);
+		
+//		tabPanel.selectTab(0);
+//		
+//		RootPanel.get("bigTable").add(tabPanel);
+		
 		RootPanel.get("rackMap").add(mapDisplay.getMapPanel());
 		
 		signOutLink = loginInfo.getLogoutUrl();

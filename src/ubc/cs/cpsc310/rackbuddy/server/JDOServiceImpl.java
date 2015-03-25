@@ -408,6 +408,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	        List<LoginInfo> ids = (List<LoginInfo>) q.execute(loginInfo.getEmailAddress());
 	        for (LoginInfo login : ids) {
 	          BikeRackData temp = this.findDataById(login.getBikeRackID());
+	          temp.setFave(true);
 	          data.add(temp);
 	        }
 	      } finally {

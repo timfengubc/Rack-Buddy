@@ -94,6 +94,7 @@ public class RackBuddy implements EntryPoint {
 		mapDisplay = new MapDisplay();
 		
 		BikeRackTable bikeRackTable  = new BikeRackTable(loginInfo);
+		UserRackTable favRackTable = new UserRackTable(loginInfo);
 		
 		VerticalPanel bigTable = new VerticalPanel();
 		
@@ -106,10 +107,11 @@ public class RackBuddy implements EntryPoint {
 		//RootPanel.get("bigTable").add(bigTable);
 		
 		TabPanel p = new TabPanel();
-	    p.add(new HTML("this"), "[this]");
-	    p.add(new HTML("that"), "[that]");
-	    p.add(new HTML("the other"), "[the other]");
+//	    p.add(new HTML("this"), "[this]");
+//	    p.add(new HTML("that"), "[that]");
+//	    p.add(new HTML("the other"), "[the other]");
 	    p.add(bikeRackTable, "dum table", false);
+	    p.add(favRackTable, "dum fav table", false);
 	    p.selectTab(0);
 	    
 	    bigTable.add(p);

@@ -25,7 +25,7 @@ public class BikeRackTable implements IsWidget {
 
 	public static final String MARK_AS_FAVORITE = "Mark as favorite?";
 
-	public static final int NUM_DATA_PER_PAGE = 5;
+	public static final int NUM_DATA_PER_PAGE = 10;
 
 	public static final String YEARS_INSTALLED = "Years Installed";
 

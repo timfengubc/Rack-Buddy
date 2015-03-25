@@ -1,5 +1,8 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -39,6 +42,16 @@ public class RackBuddy implements EntryPoint {
 	private String LOAD_FROM = "Load from: ";
 	private HorizontalPanel loadPanel = new HorizontalPanel();
 	private MapDisplay mapDisplay;
+	
+	private ListBox yrlistbox = new ListBox();
+	private String p2010 = "Prior 2010";
+	private String _2011 = "2011";
+	private String _2012 = "2012";
+	private String _2013 = "2013";
+	private String _2014 = "2014";
+	
+	private String sharecode = "FB.ui({ method: 'share', href: 'https://developers.facebook.com/docs/',}, function(response){});";
+	
 	/**
 	 * This is the entry point method.
 	 */
@@ -73,7 +86,11 @@ public class RackBuddy implements EntryPoint {
 	}
 
 	private void loadRackBuddy() {
-
+		
+		// ScriptEngineManager manager = new ScriptEngineManager ();
+	    //ScriptEngine engine = new ScriptEngineManager().getEngineByName("javascript");
+	    //engine.eval(sharecode);
+			
 		mapDisplay = new MapDisplay();
 		
 		signOutLink = loginInfo.getLogoutUrl();
@@ -91,6 +108,7 @@ public class RackBuddy implements EntryPoint {
 	
 		//listen on Load Rack Data Button
 		  loadData.addClickHandler(new ClickHandler() {
+			  @Override
 		      public void onClick(ClickEvent event) {
 		        loadRacks();
 		      }
@@ -114,17 +132,25 @@ public class RackBuddy implements EntryPoint {
 				removeData.setVisible(true);
 			}
 			
-		  //textbox formatting
+		  //load data textbox formatting
 
 			urlbox.addStyleName("paddedRight");
 			urlbox.setWidth("40em");
 			urlbox.setHeight("10px");
 			urlbox.setValue(url);
 			
+			yrlistbox.setVisibleItemCount(1);
+			yrlistbox.addItem(p2010);
+			yrlistbox.addItem(_2011);
+			yrlistbox.addItem(_2012);
+			yrlistbox.addItem(_2013);
+			yrlistbox.addItem(_2014);
+			
 			loadPanel.setStyleName("marginTop");
 			loadPanel.add(new Label(LOAD_FROM));
 			loadPanel.add(urlbox);
 			loadPanel.add(loadData);
+			loadPanel.add(yrlistbox);
 			
 			RootPanel.get("loadData").add(loadPanel);
 			RootPanel.get("loadData").add(removeData);
@@ -140,7 +166,7 @@ public class RackBuddy implements EntryPoint {
 	}
 
 	private void loadRacks() {
-		 jdoService.loadRacks(urlbox.getValue(), new AsyncCallback<Void>() {
+		 jdoService.loadRacks(urlbox.getValue(), yrlistbox.getValue(yrlistbox.getSelectedIndex()), new AsyncCallback<Void>() {
 		    	public void onFailure(Throwable error) {
 			    	 handleError(error);
 			      }

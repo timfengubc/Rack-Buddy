@@ -147,9 +147,9 @@ public class BikeRackTable implements IsWidget {
 					loginInfo.setBikeRackID(object.getId());
 					addNewFavBikeRack(loginInfo);
 				}else{
-					object.setFave(false);
-					loginInfo.setBikeRackID(object.getId());
-					deleteFavBikeRack(loginInfo);
+//					object.setFave(false);
+//					loginInfo.setBikeRackID(object.getId());
+//					deleteFavBikeRack(loginInfo);
 				}
 			}
 

@@ -92,6 +92,7 @@ public class UserRackTable implements IsWidget {
 					}
 				};
 				table.addColumn(yearsInstalled, BikeRackTable.YEARS_INSTALLED);
+
 				
 				Column<BikeRackData, Boolean> checkBoxCol = new Column<BikeRackData, Boolean>(
 						new CheckboxCell()) {
@@ -100,6 +101,20 @@ public class UserRackTable implements IsWidget {
 						return object.isFave();
 					}
 				};
+				
+				checkBoxCol.setFieldUpdater(new FieldUpdater<BikeRackData,Boolean>(){
+
+					@Override
+					public void update(int index, BikeRackData object, Boolean value) {
+						
+						if(value == false){{
+							object.setFave(false);
+							loginInfo.setBikeRackID(object.getId());
+							deleteFavBikeRack(loginInfo);
+						}
+					}
+
+					}});
 
 
 				table.addColumn(checkBoxCol, BikeRackTable.MARK_AS_FAVORITE);
@@ -177,23 +192,24 @@ public class UserRackTable implements IsWidget {
 				return vp;
 	}
 	
-	private void getFaveBikeRacks(LoginInfo loginInfo){
-		if(jdoService  == null){
+	private void deleteFavBikeRack(LoginInfo loginInfo) {
+		if(jdoService == null){
 			jdoService = GWT.create(JDOService.class);
 		}
 		
-		jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
+		jdoService.removeFavRack(loginInfo, new AsyncCallback<Void>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert(caught.getMessage());
+				Window.alert("Error has occured: " +caught.getMessage());
 			}
 
 			@Override
-			public void onSuccess(List<BikeRackData> result) {
-				
+			public void onSuccess(Void result) {
+				Window.alert("successfully removed");
 			}
 			
 		});
+		
 	}
 }

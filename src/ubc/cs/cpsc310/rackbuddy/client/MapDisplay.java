@@ -1,5 +1,6 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -25,7 +26,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class MapDisplay {
+public class MapDisplay   {
 
 	private MapWidget map;
 	private static final int ZOOM_LEVEL = 12;
@@ -42,6 +43,9 @@ public class MapDisplay {
 	protected static final String POI_ICON = "http://maps.google.com/mapfiles/arrow.png";
 
 	private VerticalPanel searchPanel;
+	private VerticalPanel bigTable;
+	private BikeRackTable bikeRackTable;
+	private UserRackTable userRackTable;
 	private Button searchButton;
 	private TextBox address;
 	private ListBox searchRadius;
@@ -49,6 +53,15 @@ public class MapDisplay {
 			.create(GeoParserService.class);
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	private LayoutPanel rackMapPanel = new LayoutPanel();
+	private static List<BikeRackData> newList = new ArrayList<BikeRackData>();	
+	private  List<BikeRackData> tempList = new ArrayList<BikeRackData>();	
+	public List<BikeRackData> getNewList() {
+		return newList;
+	}
+
+	public void setNewList(List<BikeRackData> newList) {
+		this.newList = newList;
+	}
 
 	public MapDisplay() {
 		Maps.loadMapsApi("", "2", false, new Runnable() {
@@ -57,8 +70,10 @@ public class MapDisplay {
 
 			}
 		});
+		
 	}
 
+	
 	private void buildUi() {
 		// Open a map centered on Vancouver, BC, Canada
 		LatLng vancouver = LatLng.newInstance(49.261226, -123.1139268);
@@ -68,7 +83,8 @@ public class MapDisplay {
 
 		// Add bike rack markers
 		displayAllMarkers();
-
+		
+				
 		// Add some controls for the zoom level
 		map.addControl(new LargeMapControl());
 
@@ -78,8 +94,28 @@ public class MapDisplay {
 		rackMapPanel.add(map);
 
 		initSearchPanel();
+		
+		
 	}
+	 
+	public void initTable() {
+		bigTable = new VerticalPanel();
+		bikeRackTable  = new BikeRackTable();
+		userRackTable = new UserRackTable();
 
+		bigTable.setSpacing(35);
+
+		bigTable.add(bikeRackTable);
+
+
+		bigTable.add(userRackTable);
+
+		RootPanel.get("bigTable").add(bigTable);
+		
+
+	}
+	
+	
 	// displaying all bike rack data from the data store as markers on the map.
 	public void displayAllMarkers() {
 
@@ -96,16 +132,27 @@ public class MapDisplay {
 
 			@Override
 			public void onSuccess(List<BikeRackData> result) {
-				map.clearOverlays();
+				map.clearOverlays();			
+				tempList.clear();
 				for (BikeRackData brd : result) {
 					LatLng latlng = LatLng.newInstance(brd.getLat(),
 							brd.getLng());
-					map.addOverlay(new Marker(latlng));
+					
+					map.addOverlay(new Marker(latlng));				
+					if (map.getBounds().containsLatLng(latlng)) {						
+						tempList.add(brd);						
+					}
 				}
+				
 				Window.alert(MARKERS_ARE_ADDED);
+			
+				setNewList(tempList);
+				
+				
 			}
-
+			
 		});
+		
 	}
 
 	/**
@@ -169,7 +216,6 @@ public class MapDisplay {
 	}
 
 	private void displayBikeRacks(final String seachRadius) {
-
 		if (jdoService == null) {
 			jdoService = GWT.create(JDOService.class);
 		}
@@ -184,23 +230,40 @@ public class MapDisplay {
 			@Override
 			public void onSuccess(List<BikeRackData> result) {
 				double radius = getSearchRadius(seachRadius);
-
+					
 				LatLng center = map.getCenter();
-
+				tempList.clear();
 				for (BikeRackData brd : result) {
 					LatLng latlng = LatLng.newInstance(brd.getLat(),
 							brd.getLng());
 
 					if (center.distanceFrom(latlng) <= radius) {
+						
 						Marker marker = new Marker(latlng);
+						
 						map.addOverlay(marker);
+						if (map.getBounds().containsLatLng(latlng)) {
+							
+							tempList.add(brd);		
+						}		
+						
 					}
 				}
-
+				
+				setNewList(tempList);
+				initTable();
+				
 			}
 
-		});
+//			private void updateTable() {
+//				BikeRackTable updatedTable = new BikeRackTable();
+//				bikeRackTable = updatedTable;
+//			
+//				
+//			}
 
+		});
+		
 	}
 
 	/**
@@ -212,7 +275,7 @@ public class MapDisplay {
 		if (geoParserService == null) {
 			geoParserService = GWT.create(GeoParserService.class);
 		}
-
+	
 		geoParserService.getMarkerLocation(poiAddress,
 				new AsyncCallback<MarkerLocation>() {
 
@@ -232,7 +295,7 @@ public class MapDisplay {
 						MarkerOptions ops = MarkerOptions.newInstance(icon);
 						Marker marker = new Marker(poi, ops);
 						map.addOverlay(marker);
-
+						
 						map.setCenter(poi);
 
 						map.setZoomLevel(ZOOM_LEVEL);
@@ -292,5 +355,7 @@ public class MapDisplay {
 	public LayoutPanel getMapPanel() {
 		return this.rackMapPanel;
 	}
+	
+
 
 }

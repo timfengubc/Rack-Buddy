@@ -61,8 +61,10 @@ public class RackBuddy implements EntryPoint {
 
 					public void onSuccess(LoginInfo result) {
 						loginInfo = result;
-						if (loginInfo.isLoggedIn()) {
+						if (loginInfo.isLoggedIn()) {	
 							loadRackBuddy();
+						
+							
 						} else {
 							loadLogin();
 						}
@@ -80,22 +82,28 @@ public class RackBuddy implements EntryPoint {
 
 	}
 
+	
+	
+		
+	
 	private void loadRackBuddy() {
+		mapDisplay = new MapDisplay();	
+
+//		BikeRackTable bikeRackTable  = new BikeRackTable();
+//
+//		UserRackTable userRackTable = new UserRackTable();
+//
+//
+//		VerticalPanel bigTable = new VerticalPanel();
+//		bigTable.setSpacing(35);
+//
+//		bigTable.add(bikeRackTable);
+//
+//
+//		bigTable.add(userRackTable);
+//
+//		RootPanel.get("bigTable").add(bigTable);
 		
-		mapDisplay = new MapDisplay();
-		
-		BikeRackTable bikeRackTable  = new BikeRackTable();
-		UserRackTable userRackTable = new UserRackTable();
-		
-		VerticalPanel bigTable = new VerticalPanel();
-		bigTable.setSpacing(35);
-		
-		bigTable.add(bikeRackTable);
-		
-		
-		bigTable.add(userRackTable);
-		
-		RootPanel.get("bigTable").add(bigTable);
 		RootPanel.get("rackMap").add(mapDisplay.getMapPanel());
 		
 		signOutLink = loginInfo.getLogoutUrl();
@@ -135,6 +143,8 @@ public class RackBuddy implements EntryPoint {
 			}
 			  
 		  });
+		  
+	
 	}
 
 	private void loadRacks() {

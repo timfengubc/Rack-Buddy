@@ -111,6 +111,8 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 			pm.close();
 		}
 	}
+	
+	
 	/**
 	 * Can't remove null data
 	 * http://stackoverflow.com/questions/8868449/how-to-check-the-text-is-null-or-not-using-jdo

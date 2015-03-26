@@ -4,31 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.cell.client.CheckboxCell;
-import com.google.gwt.core.shared.GWT;
-import com.google.gwt.maps.client.MapWidget;
-import com.google.gwt.maps.client.control.LargeMapControl;
-import com.google.gwt.maps.client.geom.LatLng;
-import com.google.gwt.maps.client.overlay.Marker;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
+//import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.DefaultSelectionEventManager;
+
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.ListDataProvider;
+
 import com.google.gwt.view.client.MultiSelectionModel;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SelectionChangeEvent.Handler;
-import com.google.gwt.view.client.SelectionModel;
+
 
 public class BikeRackTable  implements IsWidget {
 
@@ -50,21 +41,25 @@ public class BikeRackTable  implements IsWidget {
 
 	public static final String BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER = "Official Bike Rack Locations in the City of Vancouver";
 	
-	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
+
 	
 	private List<BikeRackData> tableList;
-	private List<BikeRackData> racks;
 	private List<BikeRackData> tempList;
-	public static MapDisplay mapDisplay;
+	private List<BikeRackData> racks;
+
+
+	private final CellTable<BikeRackData> table = new CellTable<BikeRackData>(BikeRackData.KEY_PROVIDER);
+	private VerticalPanel vp = new VerticalPanel();
 	@Override
 	public Widget asWidget() {
 				
+					
 				racks = new ArrayList<BikeRackData>();
 				tableList = new ArrayList<BikeRackData>();
-				
-				
+				tempList = new ArrayList<BikeRackData>();
+					
 				// Create a CellTable.
-				 final CellTable<BikeRackData> table = new CellTable<BikeRackData>(BikeRackData.KEY_PROVIDER);
+				
 				 
 				 MultiSelectionModel<BikeRackData> multi_selectionModel = new MultiSelectionModel<BikeRackData>(BikeRackData.KEY_PROVIDER);
 				 
@@ -146,83 +141,41 @@ public class BikeRackTable  implements IsWidget {
 			        } 
 			    };
 			    
-			    table.addColumn(checkBoxCol, "Mark as favorite?");
-			    
-			    mapDisplay = new MapDisplay();
-			    tableList = mapDisplay.getNewList();
-			    
-				AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>() {
-					@Override
-					protected void onRangeChanged(HasData<BikeRackData> display) {
-						int start = display.getVisibleRange().getStart();
-						int end = start + display.getVisibleRange().getLength();
-						end = end >= tableList.size() ? tableList.size() : end;
-						List<BikeRackData> sub = tableList.subList(start, end);
-						updateRowData(start, sub);	
-						
-									
-						
-					}
-				};
+			    table.addColumn(checkBoxCol, "Mark as favorite?");  
 				
-				provider.addDataDisplay(table);
-				provider.updateRowCount(tableList.size(), true);
-				
-						 
-				
-				
-//				jdoService.getAllData(new AsyncCallback<List<BikeRackData>>(){
-//
-//					@Override
-//					public void onFailure(Throwable caught) {
-//						
-//					}
-//					
-//					@Override
-//					public void onSuccess(final List<BikeRackData> result) {
-//						mapdis = new MapDisplay();
-//						for(BikeRackData brd : result) {						
-//							if (mapdis.getNewList().contains(brd)) {
-//								tempList.add(brd);
-//						  	}
-//						}
-//									
-//						
-//						tableList = tempList;
-//						
-//						AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>() {
-//						@Override
-//						protected void onRangeChanged(HasData<BikeRackData> display) {
-//							int start = display.getVisibleRange().getStart();
-//							int end = start + display.getVisibleRange().getLength();
-//							end = end >= tableList.size() ? tableList.size() : end;
-//							List<BikeRackData> sub = tableList.subList(start, end);
-//							updateRowData(start, sub);
-//							
-//							
-//							
-//						}
-//					};
-//					
-//					provider.addDataDisplay(table);
-//					provider.updateRowCount(tableList.size(), true);
-//					
-//					}
-//					
-//				});
-//				
-				
-				
-				
-
-				VerticalPanel vp = new VerticalPanel();
-				vp.add(new Label(BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER));
+			   
+			   
+			    vp.add(new Label(BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER));
 				vp.add(table);
-				vp.add(pager);
+				vp.add(pager);				
 				
-				return vp;
+				
+				return vp ;
+	} 
+	public void updateList(final List<BikeRackData> list){
+		
+		AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>() {
+			@Override
+			protected void onRangeChanged(HasData<BikeRackData> display) {
+				int start = display.getVisibleRange().getStart();
+				int end = start + display.getVisibleRange().getLength();
+				end = end >= list.size() ? list.size() : end;
+				List<BikeRackData> sub = list.subList(start, end);
+				updateRowData(start, sub);
+		
+				
+			}
+		};
+		provider.addDataDisplay(table);
+		provider.updateRowCount(list.size(), true);				
+		
 	}
-	
+	public VerticalPanel getVP() {
+		return this.vp;
+		
+	}
+
+		
 	public List<BikeRackData> getList(){
 		return this.racks;
 	}

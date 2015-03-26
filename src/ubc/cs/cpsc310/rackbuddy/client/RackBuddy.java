@@ -3,6 +3,7 @@ package ubc.cs.cpsc310.rackbuddy.client;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.core.client.EntryPoint;
@@ -83,26 +84,9 @@ public class RackBuddy implements EntryPoint {
 	}
 
 	
-	
-		
-	
+
 	private void loadRackBuddy() {
 		mapDisplay = new MapDisplay();	
-
-//		BikeRackTable bikeRackTable  = new BikeRackTable();
-//
-//		UserRackTable userRackTable = new UserRackTable();
-//
-//
-//		VerticalPanel bigTable = new VerticalPanel();
-//		bigTable.setSpacing(35);
-//
-//		bigTable.add(bikeRackTable);
-//
-//
-//		bigTable.add(userRackTable);
-//
-//		RootPanel.get("bigTable").add(bigTable);
 		
 		RootPanel.get("rackMap").add(mapDisplay.getMapPanel());
 		

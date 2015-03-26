@@ -43,9 +43,7 @@ public class MapDisplay   {
 	protected static final String POI_ICON = "http://maps.google.com/mapfiles/arrow.png";
 
 	private VerticalPanel searchPanel;
-	private VerticalPanel bigTable;
-	private BikeRackTable bikeRackTable;
-	private UserRackTable userRackTable;
+
 	private Button searchButton;
 	private TextBox address;
 	private ListBox searchRadius;
@@ -53,21 +51,18 @@ public class MapDisplay   {
 			.create(GeoParserService.class);
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	private LayoutPanel rackMapPanel = new LayoutPanel();
-	private static List<BikeRackData> newList = new ArrayList<BikeRackData>();	
-	private  List<BikeRackData> tempList = new ArrayList<BikeRackData>();	
-	public List<BikeRackData> getNewList() {
-		return newList;
-	}
 
-	public void setNewList(List<BikeRackData> newList) {
-		this.newList = newList;
-	}
+	//private  List<BikeRackData> tableList = new ArrayList<BikeRackData>();	
+	private  List<BikeRackData> tempList = new ArrayList<BikeRackData>();	
+	private BikeRackTable brt = new BikeRackTable();
+	private VerticalPanel bigTable = new VerticalPanel();
+	
 
 	public MapDisplay() {
 		Maps.loadMapsApi("", "2", false, new Runnable() {
 			public void run() {
-				buildUi();
-
+				buildUi();		
+				
 			}
 		});
 		
@@ -98,22 +93,7 @@ public class MapDisplay   {
 		
 	}
 	 
-	public void initTable() {
-		bigTable = new VerticalPanel();
-		bikeRackTable  = new BikeRackTable();
-		userRackTable = new UserRackTable();
 
-		bigTable.setSpacing(35);
-
-		bigTable.add(bikeRackTable);
-
-
-		bigTable.add(userRackTable);
-
-		RootPanel.get("bigTable").add(bigTable);
-		
-
-	}
 	
 	
 	// displaying all bike rack data from the data store as markers on the map.
@@ -140,15 +120,15 @@ public class MapDisplay   {
 					
 					map.addOverlay(new Marker(latlng));				
 					if (map.getBounds().containsLatLng(latlng)) {						
-						tempList.add(brd);						
+						tempList.add(brd);		
+						
 					}
 				}
-				
 				Window.alert(MARKERS_ARE_ADDED);
-			
-				setNewList(tempList);
-				
-				
+				brt.updateList(tempList);				
+				bigTable.add(brt);
+				RootPanel.get("bigTable").add(bigTable);
+				Window.alert("tableLoaded");
 			}
 			
 		});
@@ -216,6 +196,7 @@ public class MapDisplay   {
 	}
 
 	private void displayBikeRacks(final String seachRadius) {
+		
 		if (jdoService == null) {
 			jdoService = GWT.create(JDOService.class);
 		}
@@ -233,6 +214,7 @@ public class MapDisplay   {
 					
 				LatLng center = map.getCenter();
 				tempList.clear();
+				
 				for (BikeRackData brd : result) {
 					LatLng latlng = LatLng.newInstance(brd.getLat(),
 							brd.getLng());
@@ -249,22 +231,27 @@ public class MapDisplay   {
 						
 					}
 				}
-				
-				setNewList(tempList);
-				initTable();
+				brt.updateList(tempList);
+				bigTable.add(brt.getVP());
+				RootPanel.get("bigTable").add(bigTable);						
 				
 			}
 
-//			private void updateTable() {
-//				BikeRackTable updatedTable = new BikeRackTable();
-//				bikeRackTable = updatedTable;
-//			
-//				
-//			}
+		
 
 		});
 		
 	}
+	
+//	private void updateTable() {		
+//		VerticalPanel uTable = new VerticalPanel();
+//		uTable.clear();
+//		BikeRackTable updatedTable = new BikeRackTable();
+//		uTable.add(updatedTable);			
+//		RootPanel.get("uTable").add(uTable);
+//	
+//		
+//	}
 
 	/**
 	 * Displays all bike rack from a specified POI address with a given radius

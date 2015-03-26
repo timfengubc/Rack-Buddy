@@ -162,10 +162,16 @@ public class FavRackTable implements IsWidget {
 
 							@Override
 							public void onSuccess(List<BikeRackData> result) {
-								final int start = display.getVisibleRange().getStart();
-						        int length = display.getVisibleRange().getLength();
-								updateRowData(start,result);
-								updateRowCount(result.size(), true);
+//								final int start = display.getVisibleRange().getStart();
+//						        int length = display.getVisibleRange().getLength();
+//								updateRowData(start,result);
+//								updateRowCount(result.size(), true);
+								int start = display.getVisibleRange().getStart();
+						        int end = start + display.getVisibleRange().getLength();
+						        end = end >= result.size() ? result.size() : end;
+						        List<BikeRackData> sub = result.subList(start, end);
+						        updateRowData(start, sub);
+						        updateRowCount(result.size(), true);
 							}
 							
 						});
@@ -173,6 +179,8 @@ public class FavRackTable implements IsWidget {
 					}
 					
 				};
+				
+				provider.addDataDisplay(table);
 			
 				
 				SimplePager pager = new SimplePager();

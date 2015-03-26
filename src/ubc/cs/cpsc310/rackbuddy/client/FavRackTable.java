@@ -1,11 +1,8 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.cell.client.CheckboxCell;
-import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -21,12 +18,12 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 
-public class UserRackTable implements IsWidget {
+public class FavRackTable implements IsWidget {
 	
 	LoginInfo loginInfo;
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	
-	public UserRackTable(LoginInfo loginInfo) {
+	public FavRackTable(LoginInfo loginInfo) {
 		this.loginInfo = loginInfo;
 	}
 
@@ -111,6 +108,7 @@ public class UserRackTable implements IsWidget {
 							object.setFave(false);
 							loginInfo.setBikeRackID(object.getId());
 							deleteFavBikeRack(loginInfo);
+							
 						}
 					}
 
@@ -119,67 +117,62 @@ public class UserRackTable implements IsWidget {
 
 				table.addColumn(checkBoxCol, BikeRackTable.MARK_AS_FAVORITE);
 				
-				// Associate an async data provider to the table
-				// XXX: Use AsyncCallback in the method onRangeChanged
-				// to actaully get the data from the server side
-				
-//				AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>(){
+//				jdoService.getListofFaves(loginInfo,new AsyncCallback<List<BikeRackData>>() {
 //
 //					@Override
-//					protected void onRangeChanged(HasData<BikeRackData> display) {
-//				        final int start = display.getVisibleRange().getStart();
-//				        final int length = display.getVisibleRange().getLength();
-//				        
-//				        jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
+//					public void onFailure(Throwable caught) {
 //
-//							@Override
-//							public void onFailure(Throwable caught) {
-//								Window.alert(caught.getMessage());
-//							}
-//
-//							@Override
-//							public void onSuccess(List<BikeRackData> result) {
-//								List<BikeRackData> temp = result.subList(start, length);
-//								updateRowData(start,temp);
-//								updateRowCount(result.size(), true);
-//							}
-//				        	
-//				        });
 //					}
-//					
-//				};
-//				
-//				provider.addDataDisplay(table);
+//
+//					@Override
+//					public void onSuccess(final List<BikeRackData> result) {
+//
+//						AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>() {
+//							@Override
+//							protected void onRangeChanged(HasData<BikeRackData> display) {
+//
+//								int start = display.getVisibleRange().getStart();
+//								int length = display.getVisibleRange().getLength();
+//								length = length >= result.size() ? result.size() : length;
+//								List<BikeRackData> sub = result.subList(start, length);
+//								updateRowData(start, sub);
+//
+//							}
+//						};
+//
+//						provider.addDataDisplay(table);
+//						provider.updateRowCount(result.size(), true);
+//
+//					}
+//
+//				});
 				
-				jdoService.getListofFaves(loginInfo,new AsyncCallback<List<BikeRackData>>() {
+				AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>(){
 
 					@Override
-					public void onFailure(Throwable caught) {
+					protected void onRangeChanged(final HasData<BikeRackData> display) {
+						
+						jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
 
-					}
-
-					@Override
-					public void onSuccess(final List<BikeRackData> result) {
-
-						AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>() {
 							@Override
-							protected void onRangeChanged(HasData<BikeRackData> display) {
-
-								int start = display.getVisibleRange().getStart();
-								int end = start + display.getVisibleRange().getLength();
-								end = end >= result.size() ? result.size() : end;
-								List<BikeRackData> sub = result.subList(start, end);
-								updateRowData(start, sub);
-
+							public void onFailure(Throwable caught) {
+								// TODO Auto-generated method stub
+								
 							}
-						};
 
-						provider.addDataDisplay(table);
-						provider.updateRowCount(result.size(), true);
-
+							@Override
+							public void onSuccess(List<BikeRackData> result) {
+								final int start = display.getVisibleRange().getStart();
+						        int length = display.getVisibleRange().getLength();
+								updateRowData(start,result);
+								updateRowCount(result.size(), true);
+							}
+							
+						});
+						
 					}
-
-				});
+					
+				};
 			
 				
 				SimplePager pager = new SimplePager();

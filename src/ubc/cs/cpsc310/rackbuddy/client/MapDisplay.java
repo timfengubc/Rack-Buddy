@@ -51,8 +51,6 @@ public class MapDisplay   {
 			.create(GeoParserService.class);
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	private LayoutPanel rackMapPanel = new LayoutPanel();
-
-	//private  List<BikeRackData> tableList = new ArrayList<BikeRackData>();	
 	private  List<BikeRackData> tempList = new ArrayList<BikeRackData>();	
 	private BikeRackTable brt = new BikeRackTable();
 	private VerticalPanel bigTable = new VerticalPanel();
@@ -243,16 +241,6 @@ public class MapDisplay   {
 		
 	}
 	
-//	private void updateTable() {		
-//		VerticalPanel uTable = new VerticalPanel();
-//		uTable.clear();
-//		BikeRackTable updatedTable = new BikeRackTable();
-//		uTable.add(updatedTable);			
-//		RootPanel.get("uTable").add(uTable);
-//	
-//		
-//	}
-
 	/**
 	 * Displays all bike rack from a specified POI address with a given radius
 	 */

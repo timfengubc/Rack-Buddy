@@ -11,7 +11,7 @@ import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-//import com.google.gwt.user.client.ui.RootPanel;
+
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -42,9 +42,6 @@ public class BikeRackTable  implements IsWidget {
 	public static final String BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER = "Official Bike Rack Locations in the City of Vancouver";
 	
 
-	
-	private List<BikeRackData> tableList;
-	private List<BikeRackData> tempList;
 	private List<BikeRackData> racks;
 
 
@@ -55,9 +52,7 @@ public class BikeRackTable  implements IsWidget {
 				
 					
 				racks = new ArrayList<BikeRackData>();
-				tableList = new ArrayList<BikeRackData>();
-				tempList = new ArrayList<BikeRackData>();
-					
+				
 				// Create a CellTable.
 				
 				 

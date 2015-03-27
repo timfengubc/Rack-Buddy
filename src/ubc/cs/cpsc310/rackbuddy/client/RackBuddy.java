@@ -1,43 +1,21 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
-
 import ubc.cs.cpsc310.rackbuddy.client.JDOService;
 import ubc.cs.cpsc310.rackbuddy.client.JDOServiceAsync;
 
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
 
 public class RackBuddy implements EntryPoint {
 
@@ -53,9 +31,6 @@ public class RackBuddy implements EntryPoint {
 	private String signOutLink = new String();
 	private Button signOutButton = new Button("Sign Out");
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
-	
-	private TabPanel tabPanel = new TabPanel();
-	
 	private MapDisplay mapDisplay;
 	/**
 	 * This is the entry point method.
@@ -91,9 +66,7 @@ public class RackBuddy implements EntryPoint {
 	}
 
 	private void loadRackBuddy() {
-		
-		
-		
+
 		mapDisplay = new MapDisplay();
 		
 		BikeRackTable bikeRackTable  = new BikeRackTable(loginInfo);
@@ -101,36 +74,15 @@ public class RackBuddy implements EntryPoint {
 		
 		VerticalPanel bigTable = new VerticalPanel();
 		
-		//bigTable.add(bikeRackTable);
-		
-		
-		
-		//bigTable.add(userRackTable);
-		
-		//RootPanel.get("bigTable").add(bigTable);
-		
 		final TabPanel p = new TabPanel();
-//	    p.add(new HTML("this"), "[this]");
-//	    p.add(new HTML("that"), "[that]");
-//	    p.add(new HTML("the other"), "[the other]");
-	    p.add(bikeRackTable, "dum table", false);
-	    p.add(favRackTable, "dum fav table", false);
+	    p.add(bikeRackTable, BikeRackTable.BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER, false);
+	    p.add(favRackTable, FavRackTable.USER_S_FAVORITE_BIKE_RACK_LOCATION, false);
 
 	    p.selectTab(0);
 
 	    bigTable.add(p);
 	    
 	    RootPanel.get("bigTable").add(bigTable);
-	    
-	    //bigTable.add(p);
-	    // Attach the LayoutPanel to the RootLayoutPanel. The latter will listen for
-	    // resize events on the window to ensure that its children are informed of
-	    // possible size changes.
-	    //RootPanel.get("bigTable").add(bigTable);
-		
-//		tabPanel.selectTab(0);
-//		
-//		RootPanel.get("bigTable").add(tabPanel);
 		
 		RootPanel.get("rackMap").add(mapDisplay.getMapPanel());
 		

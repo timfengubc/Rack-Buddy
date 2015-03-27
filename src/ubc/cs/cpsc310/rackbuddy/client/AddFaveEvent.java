@@ -1,7 +1,6 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.user.client.Window;
 
 public class AddFaveEvent extends GwtEvent<AddFaveEventHandler> {
 	
@@ -11,8 +10,6 @@ public class AddFaveEvent extends GwtEvent<AddFaveEventHandler> {
 	
 	public AddFaveEvent(LoginInfo loginInfo) {
 		this.loginInfo = loginInfo;
-		
-		Window.alert("in constructor of faveevent");
 	}
 	
 	@Override

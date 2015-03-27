@@ -1,8 +1,6 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.GwtEvent.Type;
-import com.google.gwt.user.client.Window;
 
 public class RemoveFaveEvent extends GwtEvent<RemoveFaveEventHandler> {
 	
@@ -12,8 +10,6 @@ public class RemoveFaveEvent extends GwtEvent<RemoveFaveEventHandler> {
 	
 	public RemoveFaveEvent(LoginInfo loginInfo){
 		this.loginInfo = loginInfo;
-		
-		Window.alert("in constructor of Removefaveevent");
 	}
 
 	@Override

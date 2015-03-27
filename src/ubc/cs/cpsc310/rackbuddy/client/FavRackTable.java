@@ -2,7 +2,7 @@ package ubc.cs.cpsc310.rackbuddy.client;
 
 import java.util.List;
 
-import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -12,21 +12,18 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.Range;
 
 public class FavRackTable implements IsWidget {
 	
+	public static final String USER_S_FAVORITE_BIKE_RACK_LOCATION = "User's Favorite Bike Rack Location";
 	LoginInfo loginInfo;
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	private AsyncDataProvider<BikeRackData> provider;
-	private ListDataProvider<BikeRackData> dataProvider;
-	
 	public FavRackTable(LoginInfo loginInfo) {
 		this.loginInfo = loginInfo;
 	}
@@ -94,31 +91,27 @@ public class FavRackTable implements IsWidget {
 				};
 				table.addColumn(yearsInstalled, BikeRackTable.YEARS_INSTALLED);
 
-				
-				Column<BikeRackData, Boolean> checkBoxCol = new Column<BikeRackData, Boolean>(
-						new CheckboxCell()) {
-					@Override
-					public Boolean getValue(BikeRackData object) {
-						return object.isFave();
-					}
-				};
-				
-				checkBoxCol.setFieldUpdater(new FieldUpdater<BikeRackData,Boolean>(){
+				Column<BikeRackData, String> removeFave = new Column<BikeRackData, String>(new ButtonCell()) {
+
+		            @Override
+		            public String getValue(final BikeRackData object) {
+		                return BikeRackTable.YES;
+		            }
+		        };
+		        
+		        removeFave.setFieldUpdater(new FieldUpdater<BikeRackData,String>(){
 
 					@Override
-					public void update(int index, BikeRackData object, Boolean value) {
+					public void update(int index, BikeRackData object, String value) {
+						object.setFave(false);
+						loginInfo.setBikeRackID(object.getId());
+						deleteFavBikeRack(loginInfo);
 						
-						if(value == false){{
-							object.setFave(false);
-							loginInfo.setBikeRackID(object.getId());
-							deleteFavBikeRack(loginInfo);
-							
-						}
 					}
-
-					}});
-
-				table.addColumn(checkBoxCol, BikeRackTable.MARK_AS_FAVORITE);
+		        	
+		        });
+		        
+		        table.addColumn(removeFave, BikeRackTable.UNMARK_AS_FAVORITE);
 				
 				provider = new AsyncDataProvider<BikeRackData>(){
 
@@ -170,8 +163,7 @@ public class FavRackTable implements IsWidget {
 
 							@Override
 							public void onFailure(Throwable caught) {
-								// TODO Auto-generated method stub
-								
+								Window.alert(caught.getMessage());
 							}
 
 							@Override
@@ -224,45 +216,11 @@ public class FavRackTable implements IsWidget {
 				});
 
 				VerticalPanel vp = new VerticalPanel();
-				vp.add(new Label("User's Favorite Bike Rack Location"));
 				vp.add(table);
 				vp.add(pager);
 				return vp;
 	}
 
-	private void initProvider(final LoginInfo loginInfo) {
-		provider = new AsyncDataProvider<BikeRackData>(){
-
-			@Override
-			protected void onRangeChanged(final HasData<BikeRackData> display) {
-				
-				jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
-
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert(caught.getMessage());
-						
-					}
-
-					@Override
-					public void onSuccess(List<BikeRackData> result) {
-						int start = display.getVisibleRange().getStart();
-				        int end = start + display.getVisibleRange().getLength();
-				        end = end >= result.size() ? result.size() : end;
-				        List<BikeRackData> sub = result.subList(start, end);
-				        updateRowData(start, sub);
-				        updateRowCount(result.size(), true);
-
-					}
-				});
-				
-			}
-			
-		};
-		
-		
-	}
-	
 	private void deleteFavBikeRack(final LoginInfo loginInfo) {
 		if(jdoService == null){
 			jdoService = GWT.create(JDOService.class);

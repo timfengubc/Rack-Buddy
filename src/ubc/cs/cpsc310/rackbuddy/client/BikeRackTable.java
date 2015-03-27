@@ -3,7 +3,7 @@ package ubc.cs.cpsc310.rackbuddy.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -14,7 +14,6 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -24,6 +23,8 @@ import com.google.gwt.view.client.MultiSelectionModel;
 public class BikeRackTable implements IsWidget {
 
 	public static final String MARK_AS_FAVORITE = "Mark as favorite?";
+	public static final String UNMARK_AS_FAVORITE = "Unmark as favorite?";
+	public static final String YES = "Yes";
 
 	public static final int NUM_DATA_PER_PAGE = 10;
 
@@ -128,35 +129,29 @@ public class BikeRackTable implements IsWidget {
 			}
 		};
 		table.addColumn(yearsInstalled, YEARS_INSTALLED);
-
-		Column<BikeRackData, Boolean> checkBoxCol = new Column<BikeRackData, Boolean>(
-				new CheckboxCell()) {
-			@Override
-			public Boolean getValue(BikeRackData object) {
-				return object.isFave();
-			}
-		};
 		
-		checkBoxCol.setFieldUpdater(new FieldUpdater<BikeRackData,Boolean>(){
+		Column<BikeRackData, String> addFave = new Column<BikeRackData, String>(new ButtonCell()) {
+
+            @Override
+            public String getValue(final BikeRackData object) {
+                return YES;
+            }
+        };
+        
+        addFave.setFieldUpdater(new FieldUpdater<BikeRackData,String>(){
 
 			@Override
-			public void update(int index, BikeRackData object, Boolean value) {
+			public void update(int index, BikeRackData object, String value) {
+				object.setFave(true);
+				loginInfo.setBikeRackID(object.getId());
+				addNewFavBikeRack(loginInfo);
 				
-				if(value == true){
-					object.setFave(true);
-					loginInfo.setBikeRackID(object.getId());
-					addNewFavBikeRack(loginInfo);
-				}else{
-//					object.setFave(false);
-//					loginInfo.setBikeRackID(object.getId());
-//					deleteFavBikeRack(loginInfo);
-				}
 			}
-
-		});
-
-		table.addColumn(checkBoxCol, MARK_AS_FAVORITE);
-
+        	
+        });
+        
+        table.addColumn(addFave, MARK_AS_FAVORITE);
+		
 		jdoService.getAllData(new AsyncCallback<List<BikeRackData>>() {
 
 			@Override
@@ -170,9 +165,7 @@ public class BikeRackTable implements IsWidget {
 				AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>() {
 					@Override
 					protected void onRangeChanged(HasData<BikeRackData> display) {
-						
-						
-						
+
 						int start = display.getVisibleRange().getStart();
 						int end = start + display.getVisibleRange().getLength();
 						end = end >= result.size() ? result.size() : end;
@@ -190,7 +183,6 @@ public class BikeRackTable implements IsWidget {
 		});
 
 		VerticalPanel vp = new VerticalPanel();
-		vp.add(new Label(BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER));
 		vp.add(table);
 		vp.add(pager);
 
@@ -221,25 +213,6 @@ public class BikeRackTable implements IsWidget {
 		});
 	}
 	
-	private void deleteFavBikeRack(LoginInfo loginInfo) {
-		if(jdoService == null){
-			jdoService = GWT.create(JDOService.class);
-		}
-		
-		jdoService.removeFavRack(loginInfo, new AsyncCallback<Void>(){
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert("Error has occured: " +caught.getMessage());
-			}
-
-			@Override
-			public void onSuccess(Void result) {
-				Window.alert("successfully removed");
-			}
-			
-		});
-	}
 	public List<BikeRackData> getList(){
 		return this.racks;
 	}

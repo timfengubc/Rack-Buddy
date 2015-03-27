@@ -12,7 +12,7 @@ public class AddFaveEvent extends GwtEvent<AddFaveEventHandler> {
 	public AddFaveEvent(LoginInfo loginInfo) {
 		this.loginInfo = loginInfo;
 		
-		Window.alert("in constructor of addfaveevent");
+		Window.alert("in constructor of faveevent");
 	}
 	
 	@Override

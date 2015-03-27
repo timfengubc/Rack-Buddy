@@ -153,6 +153,44 @@ public class FavRackTable implements IsWidget {
 					
 				};
 				
+				
+				
+				provider.addDataDisplay(table);
+			    
+				final SimplePager pager = new SimplePager();
+				pager.setDisplay(table);
+				
+				AppUtils.EVENT_BUS.addHandler(RemoveFaveEvent.TYPE	, new RemoveFaveEventHandler(){
+
+					@Override
+					public void onFaveRemoved(RemoveFaveEvent event) {
+						Window.alert("in on fave removed");
+						
+						jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
+
+							@Override
+							public void onFailure(Throwable caught) {
+								// TODO Auto-generated method stub
+								
+							}
+
+							@Override
+							public void onSuccess(List<BikeRackData> result) {
+								Window.alert("in on success of on fave removed");
+								
+								provider.updateRowCount(result.size(), true);
+								
+								table.setRowCount(result.size());
+								table.setRowData(result);
+								table.redraw();
+							}
+							
+						});
+						
+					}
+					
+				});
+				
 				AppUtils.EVENT_BUS.addHandler(AddFaveEvent.TYPE, new AddFaveEventHandler(){
 
 					@Override
@@ -176,17 +214,14 @@ public class FavRackTable implements IsWidget {
 								table.setRowCount(result.size());
 								table.setRowData(result);
 								table.redraw();
+							
+								
 							}
 							
 						});
 					}
 					
 				});
-				
-				provider.addDataDisplay(table);
-			    
-				SimplePager pager = new SimplePager();
-				pager.setDisplay(table);
 
 				VerticalPanel vp = new VerticalPanel();
 				vp.add(new Label("User's Favorite Bike Rack Location"));
@@ -228,7 +263,7 @@ public class FavRackTable implements IsWidget {
 		
 	}
 	
-	private void deleteFavBikeRack(LoginInfo loginInfo) {
+	private void deleteFavBikeRack(final LoginInfo loginInfo) {
 		if(jdoService == null){
 			jdoService = GWT.create(JDOService.class);
 		}
@@ -243,6 +278,8 @@ public class FavRackTable implements IsWidget {
 			@Override
 			public void onSuccess(Void result) {
 				Window.alert("successfully removed");
+				
+				AppUtils.EVENT_BUS.fireEvent(new RemoveFaveEvent(loginInfo));
 			}
 			
 		});

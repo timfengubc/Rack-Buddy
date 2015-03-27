@@ -157,7 +157,6 @@ public class FavRackTable implements IsWidget {
 
 					@Override
 					public void onFaveRemoved(RemoveFaveEvent event) {
-						Window.alert("in on fave removed");
 						
 						jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
 

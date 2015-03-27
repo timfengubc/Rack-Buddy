@@ -17,12 +17,15 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.Range;
 
 public class FavRackTable implements IsWidget {
 	
 	LoginInfo loginInfo;
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	private AsyncDataProvider<BikeRackData> provider;
+	private ListDataProvider<BikeRackData> dataProvider;
 	
 	public FavRackTable(LoginInfo loginInfo) {
 		this.loginInfo = loginInfo;
@@ -32,7 +35,7 @@ public class FavRackTable implements IsWidget {
 	public Widget asWidget() {
 				// Create a CellTable.
 				final CellTable<BikeRackData> table = new CellTable<BikeRackData>();
-
+				
 				table.setPageSize(BikeRackTable.NUM_DATA_PER_PAGE);
 
 				TextColumn<BikeRackData> stNum = new TextColumn<BikeRackData>() {
@@ -117,10 +120,66 @@ public class FavRackTable implements IsWidget {
 
 				table.addColumn(checkBoxCol, BikeRackTable.MARK_AS_FAVORITE);
 				
-				initProvider(loginInfo);
+				provider = new AsyncDataProvider<BikeRackData>(){
+
+					@Override
+					protected void onRangeChanged(HasData<BikeRackData> display) {
+						final Range range = display.getVisibleRange();
+						
+						jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
+
+							@Override
+							public void onFailure(Throwable caught) {
+								Window.alert(caught.getMessage());
+								
+							}
+
+							@Override
+							public void onSuccess(List<BikeRackData> result) {
+								int start = range.getStart();
+						        int end = start + range.getLength();
+						        end = end >= result.size() ? result.size() : end;
+						        List<BikeRackData> sub = result.subList(start, end);
+						        updateRowData(start, sub);
+						        updateRowCount(result.size(), true);
+						        
+						        table.setRowData(sub);
+						        table.redraw();
+
+							}
+						});
+
+					}
+					
+				};
+				
+				AppUtils.EVENT_BUS.addHandler(AddFaveEvent.TYPE, new AddFaveEventHandler(){
+
+					@Override
+					public void onFaveAdded(AddFaveEvent event) {
+						Window.alert("in on fave added");
+						
+						jdoService.getListofFaves(event.getLoginInfo(), new AsyncCallback<List<BikeRackData>>(){
+
+							@Override
+							public void onFailure(Throwable caught) {
+								
+								
+							}
+
+							@Override
+							public void onSuccess(List<BikeRackData> result) {
+								Window.alert("in on success");
+								
+							}
+							
+						});
+					}
+					
+				});
 				
 				provider.addDataDisplay(table);
-			
+			    
 				SimplePager pager = new SimplePager();
 				pager.setDisplay(table);
 
@@ -153,12 +212,15 @@ public class FavRackTable implements IsWidget {
 				        List<BikeRackData> sub = result.subList(start, end);
 				        updateRowData(start, sub);
 				        updateRowCount(result.size(), true);
+
 					}
 				});
 				
 			}
 			
 		};
+		
+		
 	}
 	
 	private void deleteFavBikeRack(LoginInfo loginInfo) {

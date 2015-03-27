@@ -197,7 +197,7 @@ public class BikeRackTable implements IsWidget {
 		return vp;
 	}
 	
-	private void addNewFavBikeRack(LoginInfo loginInfo) {
+	private void addNewFavBikeRack(final LoginInfo loginInfo) {
 		if(jdoService == null){
 			jdoService = GWT.create(JDOService.class);
 		}
@@ -212,6 +212,10 @@ public class BikeRackTable implements IsWidget {
 			@Override
 			public void onSuccess(Void result) {
 				Window.alert("successfully added");
+				
+				AppUtils.EVENT_BUS.fireEvent(new AddFaveEvent(loginInfo));
+				
+				
 			}
 			
 		});

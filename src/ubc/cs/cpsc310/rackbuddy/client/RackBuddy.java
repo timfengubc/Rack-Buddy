@@ -10,6 +10,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 
 import ubc.cs.cpsc310.rackbuddy.client.JDOService;
 import ubc.cs.cpsc310.rackbuddy.client.JDOServiceAsync;
@@ -33,6 +35,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 
@@ -106,16 +109,15 @@ public class RackBuddy implements EntryPoint {
 		
 		//RootPanel.get("bigTable").add(bigTable);
 		
-		TabPanel p = new TabPanel();
+		final TabPanel p = new TabPanel();
 //	    p.add(new HTML("this"), "[this]");
 //	    p.add(new HTML("that"), "[that]");
 //	    p.add(new HTML("the other"), "[the other]");
 	    p.add(bikeRackTable, "dum table", false);
 	    p.add(favRackTable, "dum fav table", false);
 
-	    
 	    p.selectTab(0);
-	    
+
 	    bigTable.add(p);
 	    
 	    RootPanel.get("bigTable").add(bigTable);

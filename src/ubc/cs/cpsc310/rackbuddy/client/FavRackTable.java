@@ -22,6 +22,7 @@ public class FavRackTable implements IsWidget {
 	
 	LoginInfo loginInfo;
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
+	private AsyncDataProvider<BikeRackData> provider;
 	
 	public FavRackTable(LoginInfo loginInfo) {
 		this.loginInfo = loginInfo;
@@ -29,9 +30,9 @@ public class FavRackTable implements IsWidget {
 
 	@Override
 	public Widget asWidget() {
-		// Create a CellTable.
+				// Create a CellTable.
 				final CellTable<BikeRackData> table = new CellTable<BikeRackData>();
-				// Display 3 rows in one page
+
 				table.setPageSize(BikeRackTable.NUM_DATA_PER_PAGE);
 
 				TextColumn<BikeRackData> stNum = new TextColumn<BikeRackData>() {
@@ -114,75 +115,12 @@ public class FavRackTable implements IsWidget {
 
 					}});
 
-
 				table.addColumn(checkBoxCol, BikeRackTable.MARK_AS_FAVORITE);
 				
-//				jdoService.getListofFaves(loginInfo,new AsyncCallback<List<BikeRackData>>() {
-//
-//					@Override
-//					public void onFailure(Throwable caught) {
-//
-//					}
-//
-//					@Override
-//					public void onSuccess(final List<BikeRackData> result) {
-//
-//						AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>() {
-//							@Override
-//							protected void onRangeChanged(HasData<BikeRackData> display) {
-//
-//								int start = display.getVisibleRange().getStart();
-//								int length = display.getVisibleRange().getLength();
-//								length = length >= result.size() ? result.size() : length;
-//								List<BikeRackData> sub = result.subList(start, length);
-//								updateRowData(start, sub);
-//
-//							}
-//						};
-//
-//						provider.addDataDisplay(table);
-//						provider.updateRowCount(result.size(), true);
-//
-//					}
-//
-//				});
-				
-				AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>(){
-
-					@Override
-					protected void onRangeChanged(final HasData<BikeRackData> display) {
-						
-						jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
-
-							@Override
-							public void onFailure(Throwable caught) {
-								// TODO Auto-generated method stub
-								
-							}
-
-							@Override
-							public void onSuccess(List<BikeRackData> result) {
-//								final int start = display.getVisibleRange().getStart();
-//						        int length = display.getVisibleRange().getLength();
-//								updateRowData(start,result);
-//								updateRowCount(result.size(), true);
-								int start = display.getVisibleRange().getStart();
-						        int end = start + display.getVisibleRange().getLength();
-						        end = end >= result.size() ? result.size() : end;
-						        List<BikeRackData> sub = result.subList(start, end);
-						        updateRowData(start, sub);
-						        updateRowCount(result.size(), true);
-							}
-							
-						});
-						
-					}
-					
-				};
+				initProvider(loginInfo);
 				
 				provider.addDataDisplay(table);
 			
-				
 				SimplePager pager = new SimplePager();
 				pager.setDisplay(table);
 
@@ -191,6 +129,36 @@ public class FavRackTable implements IsWidget {
 				vp.add(table);
 				vp.add(pager);
 				return vp;
+	}
+
+	private void initProvider(final LoginInfo loginInfo) {
+		provider = new AsyncDataProvider<BikeRackData>(){
+
+			@Override
+			protected void onRangeChanged(final HasData<BikeRackData> display) {
+				
+				jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert(caught.getMessage());
+						
+					}
+
+					@Override
+					public void onSuccess(List<BikeRackData> result) {
+						int start = display.getVisibleRange().getStart();
+				        int end = start + display.getVisibleRange().getLength();
+				        end = end >= result.size() ? result.size() : end;
+				        List<BikeRackData> sub = result.subList(start, end);
+				        updateRowData(start, sub);
+				        updateRowCount(result.size(), true);
+					}
+				});
+				
+			}
+			
+		};
 	}
 	
 	private void deleteFavBikeRack(LoginInfo loginInfo) {

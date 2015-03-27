@@ -121,7 +121,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 					//parse csv into objects row by row
 					while((row = csvReader.readNext()) != null) {
 						
-						if (row[6].toLowerCase().contains(year.toLowerCase())) {
+						if (row[6].equals(year)) {
 					   BikeRackData rack = new BikeRackData();
 					   rack.setStreetNumber(row[0]);
 					   rack.setStreetName(row[1]);

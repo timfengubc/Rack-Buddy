@@ -2,6 +2,7 @@ package ubc.cs.cpsc310.rackbuddy.client;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -84,12 +85,13 @@ public class RackBuddy implements EntryPoint {
 		RootPanel.get("rackMap").add(loginPanel);
 
 	}
+	
+	
+	
 
 	private void loadRackBuddy() {
 		
-		// ScriptEngineManager manager = new ScriptEngineManager ();
-	    //ScriptEngine engine = new ScriptEngineManager().getEngineByName("javascript");
-	    //engine.eval(sharecode);
+	
 			
 		mapDisplay = new MapDisplay();
 		
@@ -200,6 +202,12 @@ public class RackBuddy implements EntryPoint {
 	    Window.alert(error.getMessage());
 	
 	    }
+	
+	public static native void shareFb() /*-{ 
+	FB.ui({ method: 'share', href: 'http://1-dot-wxcs310s1final.appspot.com/',}, function(response){});
+	}-*/;
+		
+	
 
 }
 

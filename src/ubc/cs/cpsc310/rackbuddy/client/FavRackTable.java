@@ -168,9 +168,14 @@ public class FavRackTable implements IsWidget {
 							}
 
 							@Override
-							public void onSuccess(List<BikeRackData> result) {
+							public void onSuccess(final List<BikeRackData> result) {
 								Window.alert("in on success");
 								
+								provider.updateRowCount(result.size(), true);
+								
+								table.setRowCount(result.size());
+								table.setRowData(result);
+								table.redraw();
 							}
 							
 						});

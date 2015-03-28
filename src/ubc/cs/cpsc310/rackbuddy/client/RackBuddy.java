@@ -67,7 +67,7 @@ public class RackBuddy implements EntryPoint {
 
 	private void loadRackBuddy() {
 
-		mapDisplay = new MapDisplay();
+		mapDisplay = new MapDisplay(loginInfo);
 		
 		BikeRackTable bikeRackTable  = new BikeRackTable(loginInfo);
 		FavRackTable favRackTable = new FavRackTable(loginInfo);

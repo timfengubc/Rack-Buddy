@@ -3,6 +3,8 @@ package ubc.cs.cpsc310.rackbuddy.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import ubc.cs.cpsc310.rackbuddy.shared.AlreadyFavoritedException;
+
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -31,7 +33,7 @@ public interface JDOService extends RemoteService {
 
 	public void loadRacks();	
 	
-	public void addNewFavRack(LoginInfo loginInfo);
+	public void addNewFavRack(LoginInfo loginInfo) throws AlreadyFavoritedException;
 	
 	public void removeFavRack(LoginInfo loginInfo);
 	

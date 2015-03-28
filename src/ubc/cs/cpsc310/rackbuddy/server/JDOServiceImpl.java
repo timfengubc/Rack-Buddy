@@ -6,6 +6,7 @@ import java.util.List;
 import ubc.cs.cpsc310.rackbuddy.client.BikeRackData;
 import ubc.cs.cpsc310.rackbuddy.client.JDOService;
 import ubc.cs.cpsc310.rackbuddy.client.LoginInfo;
+import ubc.cs.cpsc310.rackbuddy.shared.AlreadyFavoritedException;
 
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
@@ -23,6 +24,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.annotations.Transactional;
+
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
@@ -368,9 +370,18 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		
 	}
 
-	public void addNewFavRack(LoginInfo loginInfo) {
+	public void addNewFavRack(LoginInfo loginInfo) throws AlreadyFavoritedException{
 		PersistenceManager pm = getPersistenceManager();
 		try{
+			
+			List<BikeRackData> data = getListofFaves(loginInfo);
+			
+			for(BikeRackData brd : data){
+				if(loginInfo.getBikeRackID().equals(brd.getId())){
+					throw new AlreadyFavoritedException();
+				}
+			}
+			
 			pm.makePersistent(loginInfo);
 		}finally{
 			pm.close();

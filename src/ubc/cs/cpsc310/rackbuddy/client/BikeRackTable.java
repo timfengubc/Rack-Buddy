@@ -3,6 +3,8 @@ package ubc.cs.cpsc310.rackbuddy.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import ubc.cs.cpsc310.rackbuddy.shared.AlreadyFavoritedException;
+
 import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.shared.GWT;
@@ -22,6 +24,7 @@ import com.google.gwt.view.client.MultiSelectionModel;
 
 public class BikeRackTable implements IsWidget {
 
+	private static final String BIKE_RACK_NOT_MARKED_AS_FAVORITE_THIS_BIKE_RACK_HAS_ALREADY_BEEN_MARKED_AS_FAVORITE = "Bike rack not marked as favorite: This bike rack has already been marked as favorite.";
 	public static final String MARK_AS_FAVORITE = "Mark as favorite?";
 	public static final String UNMARK_AS_FAVORITE = "Unmark as favorite?";
 	public static final String YES = "Yes";
@@ -198,7 +201,14 @@ public class BikeRackTable implements IsWidget {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Error has occured: " +caught.getMessage());
+				
+				if(caught instanceof AlreadyFavoritedException){
+					Window.alert(BIKE_RACK_NOT_MARKED_AS_FAVORITE_THIS_BIKE_RACK_HAS_ALREADY_BEEN_MARKED_AS_FAVORITE);
+				}
+				else{
+					Window.alert("Error has occured: " +caught.getMessage());
+				}
+				
 			}
 
 			@Override

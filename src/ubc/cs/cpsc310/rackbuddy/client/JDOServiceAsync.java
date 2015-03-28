@@ -3,6 +3,8 @@ package ubc.cs.cpsc310.rackbuddy.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import ubc.cs.cpsc310.rackbuddy.shared.AlreadyFavoritedException;
+
 import com.google.appengine.api.users.User;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

@@ -206,6 +206,38 @@ public class FavRackTable implements IsWidget {
 					}
 					
 				});
+				
+				AppUtils.EVENT_BUS.addHandler(RemoveFaveEvent.TYPE, new RemoveFaveEventHandler(){
+
+					@Override
+					public void onFaveRemoved(RemoveFaveEvent event) {
+						Window.alert("In on fave removed");
+						
+						jdoService.findDataById(event.getLoginInfo().getBikeRackID(), new AsyncCallback<BikeRackData>(){
+
+							@Override
+							public void onFailure(Throwable caught) {
+								Window.alert(caught.getMessage());
+								
+							}
+
+							@Override
+							public void onSuccess(BikeRackData result) {
+								if(dataProvider.getList().contains(result)){
+									Window.alert("In on success of fave removed");
+									dataProvider.getList().remove(result);
+									dataProvider.flush();
+									dataProvider.refresh();
+									table.redraw();
+								}
+								
+							}
+							
+						});
+						
+					}
+					
+				});
 //				
 //				AppUtils.EVENT_BUS.addHandler(RemoveFaveEvent.TYPE	, new RemoveFaveEventHandler(){
 //

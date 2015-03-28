@@ -15,6 +15,7 @@ import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -25,6 +26,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class MapDisplay {
 
+	private static final String TOGGLE_TO_DISPLAY_FAVORITE_MARKERS_ON_MAP = "Toggle to display favorite markers on map: ";
 	private MapWidget map;
 	private static final int ZOOM_LEVEL = 12;
 	private static final String UNABLE_TO_DISPLAY_BIKE_RACK_LOCATION_ON_MAP = "Unable to display bike rack location on map...";
@@ -47,7 +49,9 @@ public class MapDisplay {
 			.create(GeoParserService.class);
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	private LayoutPanel rackMapPanel = new LayoutPanel();
-
+	
+	private CheckBox showFaves;
+	
 	public MapDisplay() {
 		Maps.loadMapsApi("", "2", false, new Runnable() {
 			public void run() {
@@ -142,22 +146,33 @@ public class MapDisplay {
 		searchRadius.addItem(_100_M);
 		searchRadius.addItem(_500_M);
 		searchRadius.addItem(_1_KM);
+		
+		showFaves = new CheckBox();
+		showFaves.setValue(false);
 
 		HorizontalPanel h1 = new HorizontalPanel();
 		h1.setStyleName("marginTop");
 
 		HorizontalPanel h2 = new HorizontalPanel();
 		h2.setStyleName("marginTop");
+		
+		HorizontalPanel h3 = new HorizontalPanel();
+		h3.setStyleName("marginTop");
 
 		h1.add(new Label(POINT_OF_INTEREST));
 		h1.add(address);
-
+		
 		h2.add(new Label(SEARCH_RADIUS));
 		h2.add(searchRadius);
+		
+		h3.add(new Label(TOGGLE_TO_DISPLAY_FAVORITE_MARKERS_ON_MAP));
+		h3.add(showFaves);
 
 		searchPanel.add(h1);
 		searchPanel.add(h2);
 		searchPanel.add(searchButton);
+		searchPanel.add(h3);
+	
 		
 		RootPanel.get("rackMap").add(searchPanel);
 	}

@@ -1,6 +1,7 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -63,6 +64,9 @@ public class BikeRackData implements Serializable {
 	@Persistent
 	protected double lng;
 	
+	@Persistent
+	protected List<String> comments;
+	
 	
 	public BikeRackData() {
 		this.streetNumber = "";
@@ -75,6 +79,7 @@ public class BikeRackData implements Serializable {
 		this.lat = 0;
 		this.lng = 0;
 		this.isFave = false;
+		this.comments = null;
 	}
 	/**
 	 * This constructor is only for the JUNIT tests
@@ -109,7 +114,8 @@ public class BikeRackData implements Serializable {
 						String yearInstalled,
 						double lat,
 						double lng,
-						boolean isFave
+						boolean isFave,
+						List<String> comments
 						){
 		
 		this.streetNumber = streetNumber;
@@ -122,7 +128,7 @@ public class BikeRackData implements Serializable {
 		this.lat = lat;
 		this.lng = lng;
 		this.isFave = isFave;
-		
+		this.comments = comments;
 	}
 	
 	/**
@@ -141,6 +147,7 @@ public class BikeRackData implements Serializable {
 		this.lat = other.lat;
 		this.lng = other.lng;
 		this.isFave = other.isFave;
+		this.comments = other.comments;
 	}
 
 	public double getLat() {
@@ -224,6 +231,14 @@ public class BikeRackData implements Serializable {
 	}
 	public void setFave(boolean isFave) {
 		this.isFave = isFave;
+	}
+	
+	public List<String> getComments(){
+		return comments;
+	}
+	
+	public void setComments(List<String> comments){
+		this.comments = comments;
 	}
 	
 	

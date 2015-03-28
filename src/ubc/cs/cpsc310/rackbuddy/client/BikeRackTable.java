@@ -6,10 +6,12 @@ import java.util.List;
 import ubc.cs.cpsc310.rackbuddy.shared.AlreadyFavoritedException;
 
 import com.google.gwt.cell.client.ButtonCell;
+import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortList.ColumnSortInfo;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
@@ -154,7 +156,25 @@ public class BikeRackTable implements IsWidget {
         });
         
         table.addColumn(addFave, MARK_AS_FAVORITE);
-		
+        
+        Column<BikeRackData, String> commentCol = new Column<BikeRackData, String>(new ButtonCell()) {
+
+            @Override
+            public String getValue(final BikeRackData object) {
+                return "View Comments";
+            }
+        };
+        
+       commentCol.setFieldUpdater(new FieldUpdater<BikeRackData,String>(){
+
+		@Override
+		public void update(int index, BikeRackData object, String value) {
+			 Window.alert("Comments here");
+		}
+       });
+       
+       table.addColumn(addFave, "Comments");
+       
 		jdoService.getAllData(new AsyncCallback<List<BikeRackData>>() {
 
 			@Override

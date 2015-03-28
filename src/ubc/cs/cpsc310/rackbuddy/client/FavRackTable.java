@@ -14,17 +14,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ListDataProvider;
-import com.google.gwt.view.client.Range;
 
 public class FavRackTable implements IsWidget {
 	
 	public static final String USER_S_FAVORITE_BIKE_RACK_LOCATION = "User's Favorite Bike Rack Location";
 	LoginInfo loginInfo;
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
-	//private AsyncDataProvider<BikeRackData> provider;
 	private ListDataProvider<BikeRackData> dataProvider;
 	public FavRackTable(LoginInfo loginInfo) {
 		this.loginInfo = loginInfo;
@@ -114,43 +110,7 @@ public class FavRackTable implements IsWidget {
 		        });
 		        
 		        table.addColumn(removeFave, BikeRackTable.UNMARK_AS_FAVORITE);
-				
-//				provider = new AsyncDataProvider<BikeRackData>(){
-//
-//					@Override
-//					protected void onRangeChanged(HasData<BikeRackData> display) {
-//						final Range range = display.getVisibleRange();
-//						
-//						jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
-//
-//							@Override
-//							public void onFailure(Throwable caught) {
-//								Window.alert(caught.getMessage());
-//								
-//							}
-//
-//							@Override
-//							public void onSuccess(List<BikeRackData> result) {
-//								int start = range.getStart();
-//						        int end = start + range.getLength();
-//						        end = end >= result.size() ? result.size() : end;
-//						        List<BikeRackData> sub = result.subList(start, end);
-//						        updateRowData(start, sub);
-//						        updateRowCount(result.size(), true);
-//						        
-//						        table.setRowData(sub);
-//						        table.redraw();
-//
-//							}
-//						});
-//
-//					}
-//					
-//				};
-				
-				
-				
-//				provider.addDataDisplay(table);
+
 		        dataProvider = new ListDataProvider<BikeRackData>();
 		        dataProvider.addDataDisplay(table);
 		        
@@ -161,18 +121,16 @@ public class FavRackTable implements IsWidget {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						
+						Window.alert(caught.getMessage());
 					}
 
 					@Override
 					public void onSuccess(List<BikeRackData> result) {
-						Window.alert("In on success of get list of faves");
 						dataProvider.getList().clear();
 						dataProvider.getList().addAll(result);
 					    dataProvider.flush();
 					    dataProvider.refresh();
-					    table.redraw();
-						
+					    table.redraw();	
 					}
 					
 				});
@@ -181,8 +139,6 @@ public class FavRackTable implements IsWidget {
 
 					@Override
 					public void onFaveAdded(AddFaveEvent event) {
-						Window.alert("In on fave added");
-						
 						jdoService.findDataById(event.getLoginInfo().getBikeRackID(), new AsyncCallback<BikeRackData>(){
 
 							@Override
@@ -193,7 +149,6 @@ public class FavRackTable implements IsWidget {
 
 							@Override
 							public void onSuccess(BikeRackData result) {
-								Window.alert("In on success of fave added");
 								dataProvider.getList().add(result);
 								dataProvider.flush();
 								dataProvider.refresh();
@@ -211,8 +166,6 @@ public class FavRackTable implements IsWidget {
 
 					@Override
 					public void onFaveRemoved(RemoveFaveEvent event) {
-						Window.alert("In on fave removed");
-						
 						jdoService.findDataById(event.getLoginInfo().getBikeRackID(), new AsyncCallback<BikeRackData>(){
 
 							@Override
@@ -224,7 +177,6 @@ public class FavRackTable implements IsWidget {
 							@Override
 							public void onSuccess(BikeRackData result) {
 								if(dataProvider.getList().contains(result)){
-									Window.alert("In on success of fave removed");
 									dataProvider.getList().remove(result);
 									dataProvider.flush();
 									dataProvider.refresh();
@@ -238,65 +190,6 @@ public class FavRackTable implements IsWidget {
 					}
 					
 				});
-//				
-//				AppUtils.EVENT_BUS.addHandler(RemoveFaveEvent.TYPE	, new RemoveFaveEventHandler(){
-//
-//					@Override
-//					public void onFaveRemoved(RemoveFaveEvent event) {
-//						
-//						jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
-//
-//							@Override
-//							public void onFailure(Throwable caught) {
-//								Window.alert(caught.getMessage());
-//							}
-//
-//							@Override
-//							public void onSuccess(List<BikeRackData> result) {
-//								Window.alert("in on success of on fave removed");
-//								
-//								provider.updateRowCount(result.size(), true);
-//								
-//								table.setRowCount(result.size());
-//								table.setRowData(result);
-//								table.redraw();
-//							}
-//							
-//						});
-//						
-//					}
-//					
-//				});
-				
-//				AppUtils.EVENT_BUS.addHandler(AddFaveEvent.TYPE, new AddFaveEventHandler(){
-//
-//					@Override
-//					public void onFaveAdded(AddFaveEvent event) {
-//						jdoService.getListofFaves(event.getLoginInfo(), new AsyncCallback<List<BikeRackData>>(){
-//
-//							@Override
-//							public void onFailure(Throwable caught) {
-//								
-//								
-//							}
-//
-//							@Override
-//							public void onSuccess(final List<BikeRackData> result) {
-//								Window.alert("in on success");
-//								
-//								provider.updateRowCount(result.size(), true);
-//								
-//								table.setRowCount(result.size());
-//								table.setRowData(result);
-//								table.redraw();
-//							
-//								
-//							}
-//							
-//						});
-//					}
-//					
-//				});
 
 				VerticalPanel vp = new VerticalPanel();
 				vp.add(table);
@@ -318,7 +211,6 @@ public class FavRackTable implements IsWidget {
 
 			@Override
 			public void onSuccess(Void result) {
-				Window.alert("successfully removed");
 				
 				AppUtils.EVENT_BUS.fireEvent(new RemoveFaveEvent(loginInfo));
 			}

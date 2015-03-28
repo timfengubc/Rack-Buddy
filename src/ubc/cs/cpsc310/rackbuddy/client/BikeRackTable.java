@@ -212,12 +212,8 @@ public class BikeRackTable implements IsWidget {
 			}
 
 			@Override
-			public void onSuccess(Void result) {
-				Window.alert("successfully added");
-				
+			public void onSuccess(Void result) {		
 				AppUtils.EVENT_BUS.fireEvent(new AddFaveEvent(loginInfo));
-				
-				
 			}
 			
 		});

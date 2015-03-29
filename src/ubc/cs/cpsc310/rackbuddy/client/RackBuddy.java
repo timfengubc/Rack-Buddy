@@ -8,7 +8,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-
 import ubc.cs.cpsc310.rackbuddy.client.JDOService;
 import ubc.cs.cpsc310.rackbuddy.client.JDOServiceAsync;
 
@@ -22,6 +21,9 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.TextBox;
+
+import com.google.gwt.user.client.ui.TabPanel;
+
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class RackBuddy implements EntryPoint {
@@ -40,8 +42,10 @@ public class RackBuddy implements EntryPoint {
 	private String signOutLink = new String();
 	private Button signOutButton = new Button("Sign Out");
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
+
 	private String LOAD_FROM = "Load from: ";
 	private HorizontalPanel loadPanel = new HorizontalPanel();
+
 	private MapDisplay mapDisplay;
 	
 	private ListBox yrlistbox = new ListBox();
@@ -86,14 +90,26 @@ public class RackBuddy implements EntryPoint {
 
 	}
 	
-	
-	
-
 	private void loadRackBuddy() {
+
+		mapDisplay = new MapDisplay(loginInfo);
 		
-	
-			
-		mapDisplay = new MapDisplay();
+		BikeRackTable bikeRackTable  = new BikeRackTable(loginInfo);
+		FavRackTable favRackTable = new FavRackTable(loginInfo);
+		
+		VerticalPanel bigTable = new VerticalPanel();
+		
+		final TabPanel p = new TabPanel();
+	    p.add(bikeRackTable, BikeRackTable.BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER, false);
+	    p.add(favRackTable, FavRackTable.USER_S_FAVORITE_BIKE_RACK_LOCATION, false);
+
+	    p.selectTab(0);
+
+	    bigTable.add(p);
+	    
+	    RootPanel.get("bigTable").add(bigTable);
+		
+		RootPanel.get("rackMap").add(mapDisplay.getMapPanel());
 		
 		signOutLink = loginInfo.getLogoutUrl();
 
@@ -122,6 +138,7 @@ public class RackBuddy implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				removeAllData();
+				
 			}
 			});
 		  
@@ -134,7 +151,7 @@ public class RackBuddy implements EntryPoint {
 				removeData.setVisible(true);
 			}
 			
-		  //load data textbox formatting
+		  //load data panel formatting
 
 			urlbox.addStyleName("paddedRight");
 			urlbox.setWidth("40em");
@@ -175,7 +192,6 @@ public class RackBuddy implements EntryPoint {
 		      public void onSuccess(Void ignore) {
 		    		Window.alert(DATA_LOADED);
 
-		    		//mapDisplay.displayAllMarkers();
 		      }
 		    });
 	}

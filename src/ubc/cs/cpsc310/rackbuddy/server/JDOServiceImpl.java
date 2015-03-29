@@ -5,6 +5,10 @@ import java.util.List;
 
 import ubc.cs.cpsc310.rackbuddy.client.BikeRackData;
 import ubc.cs.cpsc310.rackbuddy.client.JDOService;
+import ubc.cs.cpsc310.rackbuddy.client.LoginInfo;
+import ubc.cs.cpsc310.rackbuddy.shared.AlreadyFavoritedException;
+
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -20,6 +24,9 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.annotations.Transactional;
+
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 
@@ -138,6 +145,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 						
 						rack.setLat(lat);
 						rack.setLng(lng);
+						rack.setFave(false);
 					   racks.add(rack);
 					}
 					}
@@ -417,6 +425,62 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		
 	}
 
-	
+	public void addNewFavRack(LoginInfo loginInfo) throws AlreadyFavoritedException{
+		PersistenceManager pm = getPersistenceManager();
+		try{
+			
+			List<BikeRackData> data = getListofFaves(loginInfo);
+			
+			for(BikeRackData brd : data){
+				if(loginInfo.getBikeRackID().equals(brd.getId())){
+					throw new AlreadyFavoritedException();
+				}
+			}
+			
+			pm.makePersistent(loginInfo);
+		}finally{
+			pm.close();
+		}
+	}
+
+	@Override
+	public void removeFavRack(LoginInfo loginInfo) {
+		PersistenceManager pm = getPersistenceManager();
+		try{
+			Query q = pm.newQuery(LoginInfo.class,
+                    "emailAddress == '"+loginInfo.getEmailAddress()+"'" +" && bikeRackID == " + loginInfo.getBikeRackID());
+			
+			List<LoginInfo> results = (List<LoginInfo>) q.execute();
+			
+			if(!results.isEmpty()){
+				for(LoginInfo temp : results){
+					pm.deletePersistent(temp);
+				}
+			}
+			
+		}finally{
+			pm.close();
+		}
+	}
+
+	@Override
+	public List<BikeRackData> getListofFaves(LoginInfo loginInfo) {
+		PersistenceManager pm = getPersistenceManager();
+	    List<BikeRackData> data = new ArrayList<BikeRackData>();
+	    try {
+	        Query q = pm.newQuery(LoginInfo.class);
+	        q.setFilter("emailAddress == emailAddressParam");
+	        q.declareParameters("String emailAddressParam");
+	        List<LoginInfo> ids = (List<LoginInfo>) q.execute(loginInfo.getEmailAddress());
+	        for (LoginInfo login : ids) {
+	          BikeRackData temp = this.findDataById(login.getBikeRackID());
+	          temp.setFave(true);
+	          data.add(temp);
+	        }
+	      } finally {
+	        pm.close();
+	      }
+		return data;
+	}
 
 }

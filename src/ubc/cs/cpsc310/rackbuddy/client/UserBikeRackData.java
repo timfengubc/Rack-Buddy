@@ -19,59 +19,46 @@ public class UserBikeRackData extends BikeRackData {
 	private Long id;
 	
 	@Persistent
-	private boolean isFave;
-	
-	@Persistent
-	private User user;
+	private String emailAddress;
 
 	public UserBikeRackData() {
 		super();
-		isFave = false;
 	}
 
 	public UserBikeRackData(UserBikeRackData other) {
 		super(other);
-		this.isFave = other.isFave;
-		this.user = other.user;
+		this.emailAddress = other.emailAddress;
 	}
 
 	public UserBikeRackData(String streetNumber, String bia, String streetName,
 			String streetSide, String skytrainStation, int numRacks,
-			String yearInstalled, double lat, double lng, boolean isFave, User user) {
+			String yearInstalled, double lat, double lng, boolean isFave, String emailAddress) {
 		super(streetNumber, bia, streetName, streetSide, skytrainStation, numRacks,
-				yearInstalled, lat, lng);
+				yearInstalled, lat, lng, isFave);
 		
-		this.isFave = isFave;
-		this.user = user;
+		this.emailAddress = emailAddress;
+	}
+
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public boolean isFave() {
-		return isFave;
-	}
 
-	public void setFave(boolean isFave) {
-		this.isFave = isFave;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + (isFave ? 1231 : 1237);
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		result = prime * result + ((emailAddress == null) ? 0 : emailAddress.hashCode());
 		return result;
 	}
 
@@ -89,18 +76,12 @@ public class UserBikeRackData extends BikeRackData {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (isFave != other.isFave)
-			return false;
-		if (user == null) {
-			if (other.user != null)
+		if (emailAddress == null) {
+			if (other.emailAddress != null)
 				return false;
-		} else if (!user.equals(other.user))
+		} else if (!emailAddress.equals(other.emailAddress))
 			return false;
 		return true;
 	}
-	
-	
 
-	
-	
 }

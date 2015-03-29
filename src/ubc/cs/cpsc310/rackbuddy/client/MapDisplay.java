@@ -165,12 +165,7 @@ public class MapDisplay {
 				
 			}
 
-
-			
 		});
-		
-		
-		
 		HorizontalPanel h1 = new HorizontalPanel();
 		h1.setStyleName("marginTop");
 
@@ -208,12 +203,12 @@ public class MapDisplay {
 
 			@Override
 			public void onSuccess(List<BikeRackData> result) {
-				map.clearOverlays();
-				
+
 				Icon icon = Icon.newInstance(FAVE_MARKER);
 				MarkerOptions ops = MarkerOptions.newInstance(icon);
 				
 				if(!result.isEmpty()){
+					map.clearOverlays();
 					for (BikeRackData brd : result) {
 						LatLng poi = LatLng.newInstance(brd.getLat(),
 								brd.getLng());

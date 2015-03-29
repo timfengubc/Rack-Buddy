@@ -42,4 +42,11 @@ public interface JDOService extends RemoteService {
 	public void addComment(Comment comment);
 
 	public void removeCommentByID(Long id);
+	
+	public List<Comment> getRackComments(BikeRackData data);
+
+	public void addRackComment(BikeRackData data);
+
+	public Comment findCommentByID(Long id);
+
 }

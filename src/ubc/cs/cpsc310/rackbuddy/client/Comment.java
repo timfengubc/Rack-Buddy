@@ -15,7 +15,7 @@ import javax.jdo.annotations.PrimaryKey;
 public class Comment implements Serializable{
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Long id;
+	private Long commentID;
 	
 	@Persistent
 	protected String message;
@@ -25,6 +25,10 @@ public class Comment implements Serializable{
 	
 	@Persistent
 	protected String email;
+	
+	public Long getCommentID(){
+		return commentID;
+	}
 	
 	public Long getBikeRackID() {
 		return bikeRackID;

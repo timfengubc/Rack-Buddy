@@ -428,34 +428,8 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	      }
 		return data;
 	}
-	
-	
-	@Override
-	public void addComment(Comment comment) {
-		PersistenceManager pm = getPersistenceManager();
-		try{
-			pm.makePersistent(comment);
-		}finally{
-			pm.close();
-		}
-	}
-	
-	@Override
-	public void removeCommentByID(Long id) {
-		
-		Comment result = findCommentByID(id);
-		
-		if(result != null){
-			PersistenceManager pm= getPersistenceManager();
-			try{
-				pm.deletePersistent(result);
-			}finally{
-				pm.close();
-			}
-		}
-		
-	}
 
+	@Override
 	public Comment findCommentByID(Long id) {
 		Comment detachedCopy=null;
 		Comment object=null;
@@ -473,5 +447,57 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	        pm.close(); 
 	    }
 	    return detachedCopy;
+	}
+
+	@Override
+	public List<Comment> getRackComments(BikeRackData data) {
+		PersistenceManager pm = getPersistenceManager();
+	    List<Comment> comments = new ArrayList<Comment>();
+	    try{
+	    	Query q = pm.newQuery(BikeRackData.class);
+	    	q.setFilter("BikeRackID = BikeRackIDParam");
+	    	 List<BikeRackData> allracks = (List<BikeRackData>) q.execute(data.getID());
+	    	 for (BikeRackData rack : allracks) {
+		          Comment temp = this.findCommentByID(rack.getCommentID());
+		          comments.add(temp);
+		        }
+	    }
+	    finally{
+	    }
+		return null;
+	}
+
+	@Override
+	public void addComment(Comment comment) {
+		PersistenceManager pm = getPersistenceManager();
+		try{
+			pm.makePersistent(comment);
+		}finally{
+			pm.close();
+		}
+	}
+	
+	@Override
+	public void addRackComment(BikeRackData data){
+		PersistenceManager pm = getPersistenceManager();
+		// NEED TO IMPLMENT ADDING COMMENT
+		List<Comment> comments = getRackComments(data);
+			pm.makePersistent(data);
+			pm.close();
+	}
+
+	@Override
+	public void removeCommentByID(Long id) {
+		
+		Comment result = findCommentByID(id);
+		
+		if(result != null){
+			PersistenceManager pm= getPersistenceManager();
+			try{
+				pm.deletePersistent(result);
+			}finally{
+				pm.close();
+			}
+		}
 	}
 }

@@ -42,7 +42,8 @@ public class RackBuddy implements EntryPoint {
 	private String signOutLink = new String();
 	private Button signOutButton = new Button("Sign Out");
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
-
+	private Button shareFB = new Button("Share");
+	
 	private String LOAD_FROM = "Load from: ";
 	private HorizontalPanel loadPanel = new HorizontalPanel();
 
@@ -122,7 +123,14 @@ public class RackBuddy implements EntryPoint {
 				Window.Location.assign(signOutLink);
 			}
 		});
-
+//listen on sharefb button
+	shareFB.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				//Window.Location.assign("https://www.facebook.com/dialog/share_open_graph?app_id=818202371596130&display=popup&action_type=og.likes&action_properties=%7B%22object%22%3A%22http%3A%2F%2F1-dot-wxcs310s1final.appspot.com%22%7D&redirect_uri=http%3A%2F%2F1-dot-wxcs310s1final.appspot.com%2F");
+				shareFb();
+			}
+		});
 	
 		//listen on Load Rack Data Button
 		  loadData.addClickHandler(new ClickHandler() {
@@ -170,6 +178,7 @@ public class RackBuddy implements EntryPoint {
 			loadPanel.add(urlbox);
 			loadPanel.add(loadData);
 			loadPanel.add(yrlistbox);
+			loadPanel.add(shareFB);
 			
 			RootPanel.get("loadData").add(loadPanel);
 			RootPanel.get("loadData").add(removeData);
@@ -220,7 +229,14 @@ public class RackBuddy implements EntryPoint {
 	    }
 	
 	public static native void shareFb() /*-{ 
-	FB.ui({ method: 'share', href: 'http://1-dot-wxcs310s1final.appspot.com/',}, function(response){});
+		$wnd.FB.ui({
+  method: 'share_open_graph',
+  action_type: 'og.likes',
+  action_properties: JSON.stringify({
+      object:'http://1-dot-wxcs310s1final.appspot.com/',
+  })
+}, function(response){});
+	
 	}-*/;
 		
 	

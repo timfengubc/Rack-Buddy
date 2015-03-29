@@ -39,4 +39,8 @@ public interface JDOServiceAsync {
 
 	void getListofFaves(LoginInfo loginInfo,
 			AsyncCallback<List<BikeRackData>> callback);
+	
+	void addComment(Comment comment, AsyncCallback<Void> callback);
+	
+	void removeCommentByID(Long id, AsyncCallback<Void> callback);
 }

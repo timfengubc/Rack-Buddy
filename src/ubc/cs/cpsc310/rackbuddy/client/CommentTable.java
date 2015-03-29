@@ -8,13 +8,16 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 
 public class CommentTable implements IsWidget{
-	LoginInfo loginInfo;
+	Comment comment;
+	LoginInfo logininfo;
 	public static final int NUM_COM_PER_PAGE = 10;
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	private ListDataProvider<Comment> dataProvider;
@@ -44,7 +47,7 @@ public class CommentTable implements IsWidget{
 
 		};
 		
-		table.addColumn(email, "Comment");
+		table.addColumn(message, "Comment");
 		
 		Column<Comment, String> removeComment = new Column<Comment, String>(new ButtonCell()) {
 
@@ -60,16 +63,9 @@ public class CommentTable implements IsWidget{
 
 			@Override
 			public void update(int index, Comment object, String value) {
-				deleteComment(object);
+				removeCommentByID(object.getBikeRackID());
 			}
-
-			private void deleteComment(Comment object) {
-				// TODO Auto-generated method stub
-				
-			}
-        	
-        });
-		
+		});
 		
 		VerticalPanel vp = new VerticalPanel();
 		vp.add(table);
@@ -77,4 +73,24 @@ public class CommentTable implements IsWidget{
 
 	}
 
+	private void removeCommentByID(Long id) {
+		if(jdoService == null){
+			jdoService = GWT.create(JDOService.class);
+		}
+		
+		jdoService.removeCommentByID(id, new AsyncCallback<Void>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Error has occured: " +caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				Window.alert("Successfully Deleted Message!");
+			}
+			
+		});
+		
+	}
 }

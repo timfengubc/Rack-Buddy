@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ubc.cs.cpsc310.rackbuddy.client.BikeRackData;
+import ubc.cs.cpsc310.rackbuddy.client.Comment;
 import ubc.cs.cpsc310.rackbuddy.client.JDOService;
 import ubc.cs.cpsc310.rackbuddy.client.LoginInfo;
 import ubc.cs.cpsc310.rackbuddy.shared.AlreadyFavoritedException;
@@ -427,5 +428,50 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	      }
 		return data;
 	}
+	
+	
+	@Override
+	public void addComment(Comment comment) {
+		PersistenceManager pm = getPersistenceManager();
+		try{
+			pm.makePersistent(comment);
+		}finally{
+			pm.close();
+		}
+	}
+	
+	@Override
+	public void removeCommentByID(Long id) {
+		
+		Comment result = findCommentByID(id);
+		
+		if(result != null){
+			PersistenceManager pm= getPersistenceManager();
+			try{
+				pm.deletePersistent(result);
+			}finally{
+				pm.close();
+			}
+		}
+		
+	}
 
+	public Comment findCommentByID(Long id) {
+		Comment detachedCopy=null;
+		Comment object=null;
+		PersistenceManager pm= getPersistenceManager();
+	    try{
+	        object = pm.getObjectById(Comment.class,id);
+	        detachedCopy = pm.detachCopy(object);
+	    }catch (JDOObjectNotFoundException e) {
+	        return null; 
+	    }
+	    catch(JDOFatalInternalException e){
+	    	return null;
+	    }
+	    finally {
+	        pm.close(); 
+	    }
+	    return detachedCopy;
+	}
 }

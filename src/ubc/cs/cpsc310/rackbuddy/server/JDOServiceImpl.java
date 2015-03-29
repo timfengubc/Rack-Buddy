@@ -452,17 +452,17 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	@Override
 	public List<Comment> getRackComments(BikeRackData data) {
 		PersistenceManager pm = getPersistenceManager();
-	    List<Comment> comments = new ArrayList<Comment>();
+	    List<Comment> rackComments = new ArrayList<Comment>();
 	    try{
 	    	Query q = pm.newQuery(BikeRackData.class);
-	    	q.setFilter("BikeRackID = BikeRackIDParam");
-	    	 List<BikeRackData> allracks = (List<BikeRackData>) q.execute(data.getID());
-	    	 for (BikeRackData rack : allracks) {
-		          Comment temp = this.findCommentByID(rack.getCommentID());
-		          comments.add(temp);
+	    	q.setFilter("bikeRackID = bikeRackIDParam");
+	    	 List<Comment> comments = (List<Comment>) q.execute(data.getId());
+	    	 for (Comment c : comments) {
+	    		 rackComments.add(c);
 		        }
 	    }
 	    finally{
+	    	pm.close();
 	    }
 		return null;
 	}
@@ -477,15 +477,6 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		}
 	}
 	
-	@Override
-	public void addRackComment(BikeRackData data){
-		PersistenceManager pm = getPersistenceManager();
-		// NEED TO IMPLMENT ADDING COMMENT
-		List<Comment> comments = getRackComments(data);
-			pm.makePersistent(data);
-			pm.close();
-	}
-
 	@Override
 	public void removeCommentByID(Long id) {
 		

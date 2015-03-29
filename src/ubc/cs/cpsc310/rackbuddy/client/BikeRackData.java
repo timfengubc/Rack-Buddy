@@ -38,9 +38,6 @@ public class BikeRackData implements Serializable {
 	private boolean isFave;
 	
 	@Persistent
-	private Long commentID;
-	
-	@Persistent
 	protected String streetNumber; 
 	
 	@Persistent
@@ -79,7 +76,6 @@ public class BikeRackData implements Serializable {
 		this.lat = 0;
 		this.lng = 0;
 		this.isFave = false;
-		this.commentID = null;
 	}
 	/**
 	 * This constructor is only for the JUNIT tests
@@ -128,7 +124,6 @@ public class BikeRackData implements Serializable {
 		this.lat = lat;
 		this.lng = lng;
 		this.isFave = isFave;
-		this.commentID = commentID;
 	}
 	
 	/**
@@ -147,7 +142,6 @@ public class BikeRackData implements Serializable {
 		this.lat = other.lat;
 		this.lng = other.lng;
 		this.isFave = other.isFave;
-		this.commentID = other.commentID;
 	}
 
 	public double getLat() {
@@ -231,17 +225,6 @@ public class BikeRackData implements Serializable {
 	}
 	public void setFave(boolean isFave) {
 		this.isFave = isFave;
-	}
-	
-	public Long getID(){
-		return id;
-	}
-	public Long getCommentID(){
-		return commentID;
-	}
-	
-	public void setCommentID(Long commentID){
-		this.commentID = commentID;
 	}
 	
 	@Override

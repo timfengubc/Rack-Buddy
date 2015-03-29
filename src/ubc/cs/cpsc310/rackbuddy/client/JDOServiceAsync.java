@@ -45,8 +45,6 @@ public interface JDOServiceAsync {
 	void removeCommentByID(Long id, AsyncCallback<Void> callback);
 
 	void getRackComments(BikeRackData data, AsyncCallback<List<Comment>> callback);
-
-	void addRackComment(BikeRackData data, AsyncCallback<Void> callback);
 	
 	void findCommentByID(Long id, AsyncCallback<Comment> callback);
 }

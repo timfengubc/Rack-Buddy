@@ -30,7 +30,12 @@ public class CommentTable implements IsWidget{
 	private ListDataProvider<Comment> dataProvider;
 	private HorizontalPanel addPanel;
 	private Button postButton;
-	private TextBox message;
+	private TextBox textbox;
+	LoginInfo loginInfo;
+	
+	public CommentTable(BikeRackData data) {
+		this.data = data;
+	}
 
 	@Override
 	public Widget asWidget() {
@@ -137,22 +142,46 @@ public class CommentTable implements IsWidget{
 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (isTextValid(message.getValue()) == true) {
-					
+				if (isTextValid(textbox.getValue()) == true) {
+					Comment newComment = new Comment();
+					newComment.bikeRackID =  data.getId();
+					newComment.email = loginInfo.getEmailAddress();
+					newComment.message = textbox.getValue();
+					addComment(newComment);
 				} else {
 				}
 
 			}
 		});
 		
-		message = new TextBox();
-		message.setWidth("40em");
-		message.setHeight("1em");
+		textbox = new TextBox();
+		textbox.setWidth("40em");
+		textbox.setHeight("1em");
 		
-		addPanel.add(message);
+		addPanel.add(textbox);
 		addPanel.add(postButton);
 		
 	}
+
+		private void addComment(Comment comment) {
+			jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
+
+				@Override
+				public void onFailure(Throwable caught) {
+					Window.alert(caught.getMessage());
+				}
+
+				@Override
+				public void onSuccess(List<BikeRackData> result) {
+					dataProvider.getList().clear();
+					dataProvider.getList().addAll(result);
+				    dataProvider.flush();
+				    dataProvider.refresh();
+				    table.redraw();	
+				}
+				
+			});
+		}
 
 		public static boolean isTextValid(String text) {
 

@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class CommentDialogBox extends DialogBox {
-	public CommentDialogBox() {
+	public CommentDialogBox(BikeRackData object) {
         // Set the dialog box's caption.
         setText("Comments");
 
@@ -30,7 +30,7 @@ public class CommentDialogBox extends DialogBox {
         });
 
         VerticalPanel panel = new VerticalPanel();
-        CommentTable comments = new CommentTable();
+        CommentTable comments = new CommentTable(object);
         panel.add(close);
         panel.add(comments);
         setWidget(panel);

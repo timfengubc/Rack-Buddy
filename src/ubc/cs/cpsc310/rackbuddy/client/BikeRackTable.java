@@ -169,7 +169,7 @@ public class BikeRackTable implements IsWidget {
 
 		@Override
 		public void update(int index, BikeRackData object, String value) {
-			 CommentDialogBox box = new CommentDialogBox();
+			 CommentDialogBox box = new CommentDialogBox(object);
 			 box.center();
 			 box.show();
 		}

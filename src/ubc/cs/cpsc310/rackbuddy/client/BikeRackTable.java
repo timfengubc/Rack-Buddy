@@ -169,11 +169,10 @@ public class BikeRackTable implements IsWidget {
 
 		@Override
 		public void update(int index, BikeRackData object, String value) {
-			 Window.alert("Comments here");
 		}
        });
        
-       table.addColumn(addFave, "Comments");
+       table.addColumn(commentCol, "Comments");
        
 		jdoService.getAllData(new AsyncCallback<List<BikeRackData>>() {
 

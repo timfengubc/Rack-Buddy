@@ -45,7 +45,7 @@ public class BikeRackTable implements IsWidget {
 
 	public static final String ST_NUMBER = "St. Number";
 
-	public static final String BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER = "Official Bike Rack Locations in the City of Vancouver";
+	public static final String BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER = "Official Locations";
 	
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	

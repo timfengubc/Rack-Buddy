@@ -23,7 +23,7 @@ import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ListDataProvider;
 
-public class CommentTable implements IsWidget{
+public class CommentTable implements IsWidget {
 	BikeRackData data;
 	public static final int NUM_COM_PER_PAGE = 10;
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
@@ -32,17 +32,19 @@ public class CommentTable implements IsWidget{
 	private Button postButton;
 	private TextBox textbox;
 	LoginInfo loginInfo;
-	
-	public CommentTable(BikeRackData data) {
-		this.data = data;
-	}
 
+	public CommentTable(BikeRackData data, LoginInfo loginInfo) {
+		this.data = data;
+		this.loginInfo = loginInfo;
+	}
+	
+	private final CellTable<Comment> table = new CellTable<Comment>();
+	
 	@Override
 	public Widget asWidget() {
-		final CellTable<Comment> table = new CellTable<Comment>();
-		
+
 		table.setPageSize(BikeRackTable.NUM_DATA_PER_PAGE);
-		
+
 		TextColumn<Comment> email = new TextColumn<Comment>() {
 
 			@Override
@@ -50,7 +52,7 @@ public class CommentTable implements IsWidget{
 				return object.getEmail();
 			}
 		};
-		
+
 		table.addColumn(email, "Email");
 
 		TextColumn<Comment> message = new TextColumn<Comment>() {
@@ -61,50 +63,57 @@ public class CommentTable implements IsWidget{
 			}
 
 		};
-		
-		table.addColumn(message, "Comment");
-		
-		Column<Comment, String> removeComment = new Column<Comment, String>(new ButtonCell()) {
 
-            @Override
-            public String getValue(final Comment object) {
-                return "Delete";
-            }
-        };
-        
-        table.addColumn(removeComment, "Delete Comment");
-        
-		removeComment.setFieldUpdater(new FieldUpdater<Comment,String>(){
+		table.addColumn(message, "Comment");
+
+		Column<Comment, String> removeComment = new Column<Comment, String>(
+				new ButtonCell()) {
+
+			@Override
+			public String getValue(final Comment object) {
+				return "Delete";
+			}
+		};
+
+		table.addColumn(removeComment, "Delete Comment?");
+
+		removeComment.setFieldUpdater(new FieldUpdater<Comment, String>() {
 
 			@Override
 			public void update(int index, Comment object, String value) {
-				removeCommentByID(object.getCommentID());
+				if (object.email == loginInfo.getEmailAddress())	{
+						removeCommentByID(object.getCommentID());
+				}
+				else {
+					Window.alert("Not your Comment!");
+				}
 			}
 		});
 
 		dataProvider = new ListDataProvider<Comment>();
-        dataProvider.addDataDisplay(table);
-        
+		dataProvider.addDataDisplay(table);
+
 		final SimplePager pager = new SimplePager();
 		pager.setDisplay(table);
-		
-		jdoService.getRackComments(data, new AsyncCallback<List<Comment>>(){
+
+		jdoService.getRackComments(data, new AsyncCallback<List<Comment>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert(caught.getMessage());
 			}
+
 			@Override
 			public void onSuccess(List<Comment> result) {
 				dataProvider.getList().clear();
 				dataProvider.getList().addAll(result);
-			    dataProvider.flush();
-			    dataProvider.refresh();
-			    table.redraw();	
+				dataProvider.flush();
+				dataProvider.refresh();
+				table.redraw();
 			}
 
 		});
-		
+
 		VerticalPanel vp = new VerticalPanel();
 		initAddPanel();
 		vp.add(table);
@@ -113,27 +122,44 @@ public class CommentTable implements IsWidget{
 
 	}
 
-	private void removeCommentByID(Long id) {
-		if(jdoService == null){
+	private void removeCommentByID(final Long id) {
+		if (jdoService == null) {
 			jdoService = GWT.create(JDOService.class);
 		}
-		
-		jdoService.removeCommentByID(id, new AsyncCallback<Void>(){
+
+		jdoService.findCommentByID(id, new AsyncCallback<Comment>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Error has occured: " +caught.getMessage());
+				Window.alert("Error has occured: " + caught.getMessage());
 			}
 
 			@Override
-			public void onSuccess(Void result) {
-				Window.alert("Successfully Deleted Message!");
+			public void onSuccess(Comment result) {
+				dataProvider.getList().remove(result);
+				
+				jdoService.removeCommentByID(id, new AsyncCallback<Void>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Error has occured: " + caught.getMessage());
+					}
+
+					@Override
+					public void onSuccess(Void result) {
+						dataProvider.flush();
+						dataProvider.refresh();
+						table.redraw();
+						Window.alert("Removed Comment!");
+					}
+
+				});
 			}
-			
+
 		});
-		
+
 	}
-	
+
 	private void initAddPanel() {
 		addPanel = new HorizontalPanel();
 		postButton = new Button("Post");
@@ -143,60 +169,59 @@ public class CommentTable implements IsWidget{
 			@Override
 			public void onClick(ClickEvent event) {
 				if (isTextValid(textbox.getValue()) == true) {
-					Comment newComment = new Comment();
-					newComment.bikeRackID =  data.getId();
-					newComment.email = loginInfo.getEmailAddress();
-					newComment.message = textbox.getValue();
-					addComment(newComment);
+
+					final Comment newComment = new Comment();
+					newComment.setBikeRackID(data.getId());
+					newComment.setEmail(loginInfo.getEmailAddress());
+					newComment.setMessage(textbox.getValue());
+					
+					jdoService.addRackComment(data, loginInfo, newComment,
+							new AsyncCallback<Void>() {
+
+								@Override
+								public void onFailure(Throwable caught) {
+									Window.alert(caught.getMessage());
+								}
+
+								@Override
+								public void onSuccess(Void result) {
+									dataProvider.getList().add(newComment);
+									dataProvider.flush();
+									dataProvider.refresh();
+									table.redraw();
+									Window.alert("Comment Added!");
+								}
+
+							});
 				} else {
 				}
 
 			}
 		});
-		
+
 		textbox = new TextBox();
 		textbox.setWidth("40em");
 		textbox.setHeight("1em");
-		
+
 		addPanel.add(textbox);
 		addPanel.add(postButton);
-		
+
 	}
 
-		private void addComment(Comment comment) {
-			jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
+	public static boolean isTextValid(String text) {
 
-				@Override
-				public void onFailure(Throwable caught) {
-					Window.alert(caught.getMessage());
-				}
-
-				@Override
-				public void onSuccess(List<BikeRackData> result) {
-					dataProvider.getList().clear();
-					dataProvider.getList().addAll(result);
-				    dataProvider.flush();
-				    dataProvider.refresh();
-				    table.redraw();	
-				}
-				
-			});
+		if (text == null) {
+			return false;
 		}
 
-		public static boolean isTextValid(String text) {
-
-			if (text == null) {
-				return false;
-			}
-
-			if (text.isEmpty()) {
-				return false;
-			}
-
-			if (text.matches("\\s+")) {
-				return false;
-			}
-
-			return true;
+		if (text.isEmpty()) {
+			return false;
 		}
+
+		if (text.matches("\\s+")) {
+			return false;
+		}
+
+		return true;
 	}
+}

@@ -47,4 +47,7 @@ public interface JDOServiceAsync {
 	void getRackComments(BikeRackData data, AsyncCallback<List<Comment>> callback);
 	
 	void findCommentByID(Long id, AsyncCallback<Comment> callback);
+
+	void addRackComment(BikeRackData data, LoginInfo loginInfo,
+			Comment newComment, AsyncCallback<Void> asyncCallback);
 }

@@ -429,33 +429,16 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		return data;
 	}
 
-	@Override
-	public Comment findCommentByID(Long id) {
-		Comment detachedCopy=null;
-		Comment object=null;
-		PersistenceManager pm= getPersistenceManager();
-	    try{
-	        object = pm.getObjectById(Comment.class,id);
-	        detachedCopy = pm.detachCopy(object);
-	    }catch (JDOObjectNotFoundException e) {
-	        return null; 
-	    }
-	    catch(JDOFatalInternalException e){
-	    	return null;
-	    }
-	    finally {
-	        pm.close(); 
-	    }
-	    return detachedCopy;
-	}
+	
 
 	@Override
 	public List<Comment> getRackComments(BikeRackData data) {
 		PersistenceManager pm = getPersistenceManager();
 	    List<Comment> rackComments = new ArrayList<Comment>();
 	    try{
-	    	Query q = pm.newQuery(BikeRackData.class);
-	    	q.setFilter("bikeRackID = bikeRackIDParam");
+	    	Query q = pm.newQuery(Comment.class);
+	    	q.setFilter("bikeRackId == bikeRackIdParam");
+	    	q.declareParameters("Long bikeRackIdParam");
 	    	 List<Comment> comments = (List<Comment>) q.execute(data.getId());
 	    	 for (Comment c : comments) {
 	    		 rackComments.add(c);
@@ -464,7 +447,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 	    finally{
 	    	pm.close();
 	    }
-		return null;
+		return rackComments;
 	}
 
 	@Override
@@ -472,6 +455,17 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		PersistenceManager pm = getPersistenceManager();
 		try{
 			pm.makePersistent(comment);
+		}finally{
+			pm.close();
+		}
+	}
+	
+	@Override
+	public void addRackComment(BikeRackData data, LoginInfo loginInfo, Comment newComment){
+		PersistenceManager pm = getPersistenceManager();
+		try{
+			pm.makePersistent(newComment);
+		System.out.println("sucessfully added");
 		}finally{
 			pm.close();
 		}
@@ -490,5 +484,25 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 				pm.close();
 			}
 		}
+	}
+	
+	@Override
+	public Comment findCommentByID(Long id) {
+		Comment detachedCopy=null;
+		Comment object=null;
+		PersistenceManager pm= getPersistenceManager();
+	    try{
+	        object = pm.getObjectById(Comment.class,id);
+	        detachedCopy = pm.detachCopy(object);
+	    }catch (JDOObjectNotFoundException e) {
+	        return null; 
+	    }
+	    catch(JDOFatalInternalException e){
+	    	return null;
+	    }
+	    finally {
+	        pm.close(); 
+	    }
+	    return detachedCopy;
 	}
 }

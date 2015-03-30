@@ -21,7 +21,7 @@ public class Comment implements Serializable{
 	protected String message;
 	
 	@Persistent
-	protected Long bikeRackID;
+	protected Long bikeRackId;
 	
 	@Persistent
 	protected String email;
@@ -30,12 +30,12 @@ public class Comment implements Serializable{
 		return commentID;
 	}
 	
-	public Long getBikeRackID() {
-		return bikeRackID;
+	public Long getBikeRackId() {
+		return bikeRackId;
 	}
 
-	public void setBikeRackID(Long bikeRackIDs) {
-		this.bikeRackID = bikeRackIDs;
+	public void setBikeRackID(Long bikeRackIds) {
+		this.bikeRackId = bikeRackIds;
 	}
 
 	public void setMessage(String message){

@@ -42,14 +42,13 @@ public class RackBuddy implements EntryPoint {
 	private String signOutLink = new String();
 	private Button signOutButton = new Button("Sign Out");
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
-	private Button shareFB = new Button("Share");
-	
+
 	private String LOAD_FROM = "Load from: ";
 	private HorizontalPanel loadPanel = new HorizontalPanel();
 
 	private MapDisplay mapDisplay;
 	
-	private ListBox yrlistbox = new ListBox();
+	private ListBox yrListBox = new ListBox();
 	private String p2010 = "Prior 2010";
 	private String _2011 = "2011";
 	private String _2012 = "2012";
@@ -123,14 +122,6 @@ public class RackBuddy implements EntryPoint {
 				Window.Location.assign(signOutLink);
 			}
 		});
-//listen on sharefb button
-	shareFB.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				//Window.Location.assign("https://www.facebook.com/dialog/share_open_graph?app_id=818202371596130&display=popup&action_type=og.likes&action_properties=%7B%22object%22%3A%22http%3A%2F%2F1-dot-wxcs310s1final.appspot.com%22%7D&redirect_uri=http%3A%2F%2F1-dot-wxcs310s1final.appspot.com%2F");
-				shareFb();
-			}
-		});
 	
 		//listen on Load Rack Data Button
 		  loadData.addClickHandler(new ClickHandler() {
@@ -166,19 +157,18 @@ public class RackBuddy implements EntryPoint {
 			urlbox.setHeight("10px");
 			urlbox.setValue(url);
 			
-			yrlistbox.setVisibleItemCount(1);
-			yrlistbox.addItem(p2010);
-			yrlistbox.addItem(_2011);
-			yrlistbox.addItem(_2012);
-			yrlistbox.addItem(_2013);
-			yrlistbox.addItem(_2014);
+			yrListBox.setVisibleItemCount(1);
+			yrListBox.addItem(p2010);
+			yrListBox.addItem(_2011);
+			yrListBox.addItem(_2012);
+			yrListBox.addItem(_2013);
+			yrListBox.addItem(_2014);
 			
 			loadPanel.setStyleName("marginTop");
 			loadPanel.add(new Label(LOAD_FROM));
 			loadPanel.add(urlbox);
 			loadPanel.add(loadData);
-			loadPanel.add(yrlistbox);
-			loadPanel.add(shareFB);
+			loadPanel.add(yrListBox);
 			
 			RootPanel.get("loadData").add(loadPanel);
 			RootPanel.get("loadData").add(removeData);
@@ -194,7 +184,7 @@ public class RackBuddy implements EntryPoint {
 	}
 
 	private void loadRacks() {
-		 jdoService.loadRacks(urlbox.getValue(), yrlistbox.getValue(yrlistbox.getSelectedIndex()), new AsyncCallback<Void>() {
+		 jdoService.loadRacks(urlbox.getValue(), yrListBox.getValue(yrListBox.getSelectedIndex()), new AsyncCallback<Void>() {
 		    	public void onFailure(Throwable error) {
 			    	 handleError(error);
 			      }
@@ -238,8 +228,5 @@ public class RackBuddy implements EntryPoint {
 }, function(response){});
 	
 	}-*/;
-		
-	
-
 }
 

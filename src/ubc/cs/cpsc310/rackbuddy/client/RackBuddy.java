@@ -87,6 +87,7 @@ public class RackBuddy implements EntryPoint {
 
 	private void loadRackBuddy() {
 		mapDisplay = new MapDisplay();	
+
 		
 		RootPanel.get("rackMap").add(mapDisplay.getMapPanel());
 		
@@ -138,9 +139,10 @@ public class RackBuddy implements EntryPoint {
 			      }
 		      public void onSuccess(Void ignore) {
 		    		Window.alert(DATA_LOADED);
-
+		    		
 		    		mapDisplay.displayAllMarkers();
-		      }
+		    		
+		      }	
 		    });
 	}
 	
@@ -155,6 +157,7 @@ public class RackBuddy implements EntryPoint {
 			@Override
 			public void onSuccess(Void result) {
 				Window.alert(ALL_DATA_SUCCESSFULLY_REMOVED_FROM_DATASTORE);
+					mapDisplay.displayAllMarkers();
 			}
 			
 		});

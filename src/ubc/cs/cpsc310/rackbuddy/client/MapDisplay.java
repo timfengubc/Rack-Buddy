@@ -17,14 +17,13 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+
 
 public class MapDisplay   {
 
@@ -60,12 +59,14 @@ public class MapDisplay   {
 		Maps.loadMapsApi("", "2", false, new Runnable() {
 			public void run() {
 				buildUi();		
-				
+			
 			}
 		});
 		
 	}
 
+
+	
 	
 	private void buildUi() {
 		// Open a map centered on Vancouver, BC, Canada
@@ -76,8 +77,10 @@ public class MapDisplay   {
 
 		// Add bike rack markers
 		displayAllMarkers();
+
+		displayTable();
+	
 		
-				
 		// Add some controls for the zoom level
 		map.addControl(new LargeMapControl());
 
@@ -90,13 +93,17 @@ public class MapDisplay   {
 		
 		
 	}
-	 
-
+	
+	private void displayTable() {	
+		bigTable.clear();
+		bigTable.add(brt);
+		RootPanel.get("bigTable").add(bigTable);
+	}
 	
 	
 	// displaying all bike rack data from the data store as markers on the map.
 	public void displayAllMarkers() {
-
+	
 		if (jdoService == null) {
 			jdoService = GWT.create(JDOService.class);
 		}
@@ -122,15 +129,17 @@ public class MapDisplay   {
 						
 					}
 				}
-				Window.alert(MARKERS_ARE_ADDED);
-				brt.updateList(tempList);				
-				bigTable.add(brt);
-				RootPanel.get("bigTable").add(bigTable);
-				Window.alert("tableLoaded");
+				Window.alert(MARKERS_ARE_ADDED);	
+				brt.sortTable(tempList);	
+				brt.updateTable(tempList);
+				brt.saveList(tempList);						
+				
+				
 			}
 			
 		});
-		
+	
+	
 	}
 
 	/**
@@ -228,11 +237,8 @@ public class MapDisplay   {
 						}		
 						
 					}
-				}
-				brt.updateList(tempList);
-				bigTable.add(brt.getVP());
-				RootPanel.get("bigTable").add(bigTable);						
-				
+				}			
+				brt.updateTable(tempList);																		
 			}
 
 		

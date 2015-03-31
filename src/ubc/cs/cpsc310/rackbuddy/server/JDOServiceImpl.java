@@ -9,10 +9,6 @@ import ubc.cs.cpsc310.rackbuddy.client.JDOService;
 import ubc.cs.cpsc310.rackbuddy.client.LoginInfo;
 import ubc.cs.cpsc310.rackbuddy.shared.AlreadyFavoritedException;
 
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.opencsv.CSVReader;
 
@@ -25,9 +21,6 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Query;
 import javax.jdo.annotations.Transactional;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 
@@ -253,11 +246,6 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		return PMF.getPersistenceManager();
 	}
 	
-	private User getUser(){
-		UserService userService = UserServiceFactory.getUserService();
-		return userService.getCurrentUser();
-	}
-
 	/**
 	 * Retrieves the specified BikeRackData object from the datastore.
 	 * 

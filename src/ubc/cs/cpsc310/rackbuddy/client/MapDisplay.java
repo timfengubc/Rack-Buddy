@@ -6,6 +6,8 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.maps.client.MapWidget;
 import com.google.gwt.maps.client.Maps;
 import com.google.gwt.maps.client.control.LargeMapControl;
@@ -16,17 +18,21 @@ import com.google.gwt.maps.client.overlay.MarkerOptions;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 
 public class MapDisplay   {
 
+	private static final String NO_FAVORITE_BIKE_RACK_MARKERS_TO_DISPLAY = "No favorite bike rack markers to display...";
+	private static final String TOGGLE_TO_DISPLAY_FAVORITE_MARKERS_ON_MAP = "Toggle to display favorite markers on map: ";
 	private MapWidget map;
 	private static final int ZOOM_LEVEL = 12;
 	private static final String UNABLE_TO_DISPLAY_BIKE_RACK_LOCATION_ON_MAP = "Unable to display bike rack location on map...";
@@ -40,22 +46,29 @@ public class MapDisplay   {
 	public static final String INVALID_ADDRESS = "Please input a valid address.";
 	protected static final String UNABLE_TO_DISPLAY_POI_ON_MAP = "Unable to display POI on map...";
 	protected static final String POI_ICON = "http://maps.google.com/mapfiles/arrow.png";
+	private static final String FAVE_MARKER = "http://www.google.com/mapfiles/markerF.png";
 
 	private VerticalPanel searchPanel;
 
 	private Button searchButton;
 	private TextBox address;
 	private ListBox searchRadius;
-	private GeoParserServiceAsync geoParserService = GWT
-			.create(GeoParserService.class);
+	private GeoParserServiceAsync geoParserService = GWT.create(GeoParserService.class);
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	private LayoutPanel rackMapPanel = new LayoutPanel();
+
 	private  List<BikeRackData> tempList = new ArrayList<BikeRackData>();	
-	private BikeRackTable brt = new BikeRackTable();
 	private VerticalPanel bigTable = new VerticalPanel();
 	
-
-	public MapDisplay() {
+	private LoginInfo loginInfo;
+	private BikeRackTable brt;
+	private FavRackTable favRackTable;
+	private CheckBox showFaves;
+	
+	public MapDisplay(LoginInfo loginInfo) {
+		this.loginInfo = loginInfo;
+		brt = new BikeRackTable(loginInfo);
+		favRackTable = new FavRackTable(loginInfo);
 		Maps.loadMapsApi("", "2", false, new Runnable() {
 			public void run() {
 				buildUi();		
@@ -80,7 +93,7 @@ public class MapDisplay   {
 
 		displayTable();
 	
-		
+
 		// Add some controls for the zoom level
 		map.addControl(new LargeMapControl());
 
@@ -96,7 +109,15 @@ public class MapDisplay   {
 	
 	private void displayTable() {	
 		bigTable.clear();
-		bigTable.add(brt);
+		final TabPanel p = new TabPanel();
+	    p.add(brt, BikeRackTable.BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER, false);
+	    p.add(favRackTable, FavRackTable.USER_S_FAVORITE_BIKE_RACK_LOCATION, false);
+
+	    p.selectTab(0);
+
+	    bigTable.add(p);
+		
+	//	bigTable.add(brt);
 		RootPanel.get("bigTable").add(bigTable);
 	}
 	
@@ -178,26 +199,86 @@ public class MapDisplay   {
 		searchRadius.addItem(_100_M);
 		searchRadius.addItem(_500_M);
 		searchRadius.addItem(_1_KM);
+		
+		showFaves = new CheckBox();
+		showFaves.setValue(false);
+		
+		showFaves.addValueChangeHandler(new ValueChangeHandler<Boolean>(){
 
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				if(event.getValue() == true){
+					displayFaveMarkers();
+				}else{
+					map.clearOverlays();
+				}
+				
+			}
+
+		});
 		HorizontalPanel h1 = new HorizontalPanel();
 		h1.setStyleName("marginTop");
 
 		HorizontalPanel h2 = new HorizontalPanel();
 		h2.setStyleName("marginTop");
+		
+		HorizontalPanel h3 = new HorizontalPanel();
+		h3.setStyleName("marginTop");
 
 		h1.add(new Label(POINT_OF_INTEREST));
 		h1.add(address);
-
+		
 		h2.add(new Label(SEARCH_RADIUS));
 		h2.add(searchRadius);
+		
+		h3.add(new Label(TOGGLE_TO_DISPLAY_FAVORITE_MARKERS_ON_MAP));
+		h3.add(showFaves);
 
 		searchPanel.add(h1);
 		searchPanel.add(h2);
 		searchPanel.add(searchButton);
+		searchPanel.add(h3);
+	
 		
 		RootPanel.get("rackMap").add(searchPanel);
 	}
+	
+	private void displayFaveMarkers() {
+		jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
 
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(List<BikeRackData> result) {
+
+				Icon icon = Icon.newInstance(FAVE_MARKER);
+				MarkerOptions ops = MarkerOptions.newInstance(icon);
+				
+				if(!result.isEmpty()){
+					map.clearOverlays();
+					for (BikeRackData brd : result) {
+						LatLng poi = LatLng.newInstance(brd.getLat(),
+								brd.getLng());
+
+						Marker marker = new Marker(poi, ops);
+						map.addOverlay(marker);
+					}
+					
+					Window.alert(MARKERS_ARE_ADDED);
+				}else{
+					Window.alert(NO_FAVORITE_BIKE_RACK_MARKERS_TO_DISPLAY);
+				}
+				
+			}
+			
+		});
+	}
+
+	
+	
 	public VerticalPanel getSearchPanel() {
 		return searchPanel;
 	}
@@ -238,7 +319,8 @@ public class MapDisplay   {
 						
 					}
 				}			
-				brt.updateTable(tempList);																		
+				brt.updateTable(tempList);		
+				brt.saveList(tempList);
 			}
 
 		

@@ -1,33 +1,38 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
 import java.util.ArrayList;
-
 import java.util.Comparator;
 import java.util.List;
+
+
 
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+
+import ubc.cs.cpsc310.rackbuddy.shared.AlreadyFavoritedException;
+
+import com.google.gwt.cell.client.ButtonCell;
+import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
-
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
-
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.cellview.client.TextColumn;
-
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-
 import com.google.gwt.user.client.ui.PopupPanel;
-
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -36,6 +41,11 @@ import com.google.gwt.view.client.MultiSelectionModel;
 
 
 public class BikeRackTable  implements IsWidget {
+
+	private static final String BIKE_RACK_NOT_MARKED_AS_FAVORITE_THIS_BIKE_RACK_HAS_ALREADY_BEEN_MARKED_AS_FAVORITE = "Bike rack not marked as favorite: This bike rack has already been marked as favorite.";
+	public static final String MARK_AS_FAVORITE = "Mark as favorite?";
+	public static final String UNMARK_AS_FAVORITE = "Unmark as favorite?";
+	public static final String YES = "Yes";
 
 	public static final int NUM_DATA_PER_PAGE = 10;
 
@@ -53,10 +63,11 @@ public class BikeRackTable  implements IsWidget {
 
 	public static final String ST_NUMBER = "St. Number";
 
-	public static final String BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER = "Official Bike Rack Locations in the City of Vancouver";
+	public static final String BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER = "Official Locations";
 	
 	public static final String FILTER_BY = "Filter by : ";
 	
+
 	public static final String INVAILD_INPUT = "Invalid input";
 	
 	public static final String INVAILD_ST_NAME = "Invalid St. Name";
@@ -69,20 +80,28 @@ public class BikeRackTable  implements IsWidget {
 	private PopupPanel popUp;
 	private TextBox textbox;
 	private ListBox filterby;
-	private List<BikeRackData> racks;
 	private List<BikeRackData> tableList = new ArrayList<BikeRackData>();
 	private List<BikeRackData> savedList = new ArrayList<BikeRackData>();
 	private List<BikeRackData> stNameList = new ArrayList<BikeRackData>();
 	private List<BikeRackData> stNumList = new ArrayList<BikeRackData>();
 	private final CellTable<BikeRackData> table = new CellTable<BikeRackData>(BikeRackData.KEY_PROVIDER);
 	private VerticalPanel vp = new VerticalPanel();
-	
+	private JDOServiceAsync jdoService = GWT.create(JDOService.class);	
 	TextColumn<BikeRackData> stNum ;
 	TextColumn<BikeRackData> stName;
+
+	private LoginInfo loginInfo;
+	
+	private List<BikeRackData> racks;
+	public BikeRackTable(LoginInfo loginInfo) {
+		this.loginInfo = loginInfo;
+	}
+
 
 	@Override
 	public Widget asWidget() {
 				
+
 					
 				racks = new ArrayList<BikeRackData>();
 				
@@ -165,16 +184,30 @@ public class BikeRackTable  implements IsWidget {
 					}
 				};
 				table.addColumn(yearsInstalled, YEARS_INSTALLED);
-				numRacks.setSortable(true);
-				Column<BikeRackData, Boolean> checkBoxCol = new Column<BikeRackData, Boolean>(new CheckboxCell()) { 
-			        @Override 
-			        public Boolean getValue(BikeRackData object) { 
-			        	return object.isFave();
-			        } 
-			    };
-			    
-			    table.addColumn(checkBoxCol, "Mark as favorite?");  
-					 			  	    		    
+	
+				Column<BikeRackData, String> addFave = new Column<BikeRackData, String>(new ButtonCell()) {
+
+		            @Override
+		            public String getValue(final BikeRackData object) {
+		                return YES;
+		            }
+		        };
+		        
+		        addFave.setFieldUpdater(new FieldUpdater<BikeRackData,String>(){
+
+					@Override
+					public void update(int index, BikeRackData object, String value) {
+						object.setFave(true);
+						loginInfo.setBikeRackID(object.getId());
+						addNewFavBikeRack(loginInfo);
+						
+					}
+		        	
+		        });
+		        
+		        table.addColumn(addFave, MARK_AS_FAVORITE);
+				
+    		    
 			    
 			    vp.add(new Label(BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER));
 			    initFilter();
@@ -183,6 +216,34 @@ public class BikeRackTable  implements IsWidget {
 				
 				return vp ;
 	} 
+	
+	private void addNewFavBikeRack(final LoginInfo loginInfo) {
+		if(jdoService == null){
+			jdoService = GWT.create(JDOService.class);
+		}
+		
+		jdoService.addNewFavRack(loginInfo, new AsyncCallback<Void>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				
+				if(caught instanceof AlreadyFavoritedException){
+					Window.alert(BIKE_RACK_NOT_MARKED_AS_FAVORITE_THIS_BIKE_RACK_HAS_ALREADY_BEEN_MARKED_AS_FAVORITE);
+				}
+				else{
+					Window.alert("Error has occured: " +caught.getMessage());
+				}
+				
+			}
+
+			@Override
+			public void onSuccess(Void result) {		
+				AppUtils.EVENT_BUS.fireEvent(new AddFaveEvent(loginInfo));
+			}
+			
+		});
+
+	}
 	// updates table according to the markers on the map
 	public void updateTable(final List<BikeRackData> list){		
 			
@@ -293,16 +354,12 @@ public class BikeRackTable  implements IsWidget {
 				if (MapDisplay.isTextValid(textbox.getValue()) == true) {
 					
 					if (filterby.getValue(filterby.getSelectedIndex()) == ST_NAME) {
-						try {
-							int inputint1 = 0;
-							inputint1 = Integer.parseInt(textbox.getValue());
-							Window.alert(INVAILD_ST_NAME);
-						} catch (Exception e) {
+
 							matchStName(savedList, textbox.getValue());	
 							sortTable(stNameList);
 							updateTable(stNameList);	
 							popUp.hide();
-						}						
+						
 					}										
 					if (filterby.getValue(filterby.getSelectedIndex()) == ST_NUMBER) {
 						int inputint = 0;
@@ -340,18 +397,29 @@ public class BikeRackTable  implements IsWidget {
 		
 
 		vp.add(filterButton);
-	
+
 	}
 	
 	public void matchStName(List<BikeRackData> list, String stName) {
-		stNameList.clear();
-		for (BikeRackData brd : list) {
-			if (brd.getStreetName().toLowerCase().contains(stName)) {
-				
-				stNameList.add(brd);
-			}
-		}	
-	
+		if (stNameList != null){
+			stNameList.clear();
+			for (BikeRackData brd : list) {
+				if (brd.getStreetName().toLowerCase().contains(stName)) {
+					
+					stNameList.add(brd);
+				}
+			}	
+		
+		} else {
+			for (BikeRackData brd : list) {
+				if (brd.getStreetName().toLowerCase().contains(stName)) {
+					
+					stNameList.add(brd);
+				}
+			}	
+		
+		}
+		
 	}	
 	public void matchStNum (List<BikeRackData> list, int stNum) {
 		stNumList.clear();

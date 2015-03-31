@@ -38,40 +38,40 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
 
-public class BikeRackTable implements IsWidget {
+public class BikeRackTable extends Table implements IsWidget {
 
-	public static final String BIKE_RACK_NOT_MARKED_AS_FAVORITE_THIS_BIKE_RACK_HAS_ALREADY_BEEN_MARKED_AS_FAVORITE = "Bike rack not marked as favorite: This bike rack has already been marked as favorite.";
-	public static final String MARK_AS_FAVORITE = "Mark as favorite?";
-	public static final String UNMARK_AS_FAVORITE = "Unmark as favorite?";
-	public static final String YES = "Yes";
-
-	public static final int NUM_DATA_PER_PAGE = 10;
-
-	public static final String YEARS_INSTALLED = "Years Installed";
-
-	public static final String NUM_RACKS = "# of Racks";
-
-	public static final String BIA2 = "BIA";
-
-	public static final String SKYTRAIN_STATION_NAME = "Skytrain Station Name";
-
-	public static final String ST_SIDE = "St. Side";
-
-	public static final String ST_NAME = "St. Name";
-
-	public static final String ST_NUMBER = "St. Number";
-
-	public static final String BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER = "Official Locations";
-
-	public static final String FILTER_BY = "Filter by : ";
-
-	public static final String INVAILD_INPUT = "Invalid input";
-
-	public static final String INVAILD_ST_NAME = "Invalid St. Name";
-
-	public static final String INVAILD_ST_NUM = "Invalid St. Number";
-	
-	public static final String REMOVE_FILTER = "Clear filter";
+//	public static final String BIKE_RACK_NOT_MARKED_AS_FAVORITE_THIS_BIKE_RACK_HAS_ALREADY_BEEN_MARKED_AS_FAVORITE = "Bike rack not marked as favorite: This bike rack has already been marked as favorite.";
+//	public static final String MARK_AS_FAVORITE = "Mark as favorite?";
+//	public static final String UNMARK_AS_FAVORITE = "Unmark as favorite?";
+//	public static final String YES = "Yes";
+//
+//	public static final int NUM_DATA_PER_PAGE = 10;
+//
+//	public static final String YEARS_INSTALLED = "Years Installed";
+//
+//	public static final String NUM_RACKS = "# of Racks";
+//
+//	public static final String BIA2 = "BIA";
+//
+//	public static final String SKYTRAIN_STATION_NAME = "Skytrain Station Name";
+//
+//	public static final String ST_SIDE = "St. Side";
+//
+//	public static final String ST_NAME = "St. Name";
+//
+//	public static final String ST_NUMBER = "St. Number";
+//
+//	public static final String BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER = "Official Locations";
+//
+//	public static final String FILTER_BY = "Filter by : ";
+//
+//	public static final String INVAILD_INPUT = "Invalid input";
+//
+//	public static final String INVAILD_ST_NAME = "Invalid St. Name";
+//
+//	public static final String INVAILD_ST_NUM = "Invalid St. Number";
+//	
+//	public static final String REMOVE_FILTER = "Clear filter";
 
 	private Button filterButton;
 	private Button searchButton;
@@ -83,95 +83,95 @@ public class BikeRackTable implements IsWidget {
 	private List<BikeRackData> savedList = new ArrayList<BikeRackData>();
 	private List<BikeRackData> stNameList = new ArrayList<BikeRackData>();
 	private List<BikeRackData> stNumList = new ArrayList<BikeRackData>();
-	private final CellTable<BikeRackData> table = new CellTable<BikeRackData>(
-			BikeRackData.KEY_PROVIDER);
+	//private final CellTable<BikeRackData> table = new CellTable<BikeRackData>(
+	//		BikeRackData.KEY_PROVIDER);
 	private VerticalPanel vp = new VerticalPanel();
-	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
+	//private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	
-	private SimplePager pager;
+	//private SimplePager pager;
 	
-	TextColumn<BikeRackData> stNum;
-	TextColumn<BikeRackData> stName;
+//	TextColumn<BikeRackData> stNum;
+//	TextColumn<BikeRackData> stName;
 
-	private LoginInfo loginInfo;
+	//private LoginInfo loginInfo;
 
 	private List<BikeRackData> racks;
 
 	public BikeRackTable(LoginInfo loginInfo) {
-		this.loginInfo = loginInfo;
+		super(loginInfo);
 	}
 
 	@Override
 	public Widget asWidget() {
 		racks = new ArrayList<BikeRackData>();
 
-		table.setPageSize(NUM_DATA_PER_PAGE);
-
-		pager = new SimplePager(TextLocation.CENTER, true, true);
-
-		pager.setPageSize(NUM_DATA_PER_PAGE);
-		pager.setDisplay(table);
+//		table.setPageSize(NUM_DATA_PER_PAGE);
+//
+//		pager = new SimplePager(TextLocation.CENTER, true, true);
+//
+//		pager.setPageSize(NUM_DATA_PER_PAGE);
+//		pager.setDisplay(table);
 
 		// Add a text column to show the street num.
-		stNum = new TextColumn<BikeRackData>() {
-			@Override
-			public String getValue(BikeRackData object) {
-				return object.getStreetNumber();
-			}
-		};
-		table.addColumn(stNum, ST_NUMBER);
+//		stNum = new TextColumn<BikeRackData>() {
+//			@Override
+//			public String getValue(BikeRackData object) {
+//				return object.getStreetNumber();
+//			}
+//		};
+//		table.addColumn(stNum, ST_NUMBER);
 		stNum.setSortable(true);
 		
 		// Add a text column to show the street name.
-		stName = new TextColumn<BikeRackData>() {
-			@Override
-			public String getValue(BikeRackData object) {
-				return object.getStreetName();
-			}
-		};
-		table.addColumn(stName, ST_NAME);
+//		stName = new TextColumn<BikeRackData>() {
+//			@Override
+//			public String getValue(BikeRackData object) {
+//				return object.getStreetName();
+//			}
+//		};
+//		table.addColumn(stName, ST_NAME);
 		stName.setSortable(true);
 
-		TextColumn<BikeRackData> stSide = new TextColumn<BikeRackData>() {
-			@Override
-			public String getValue(BikeRackData object) {
-				return object.getStreetSide();
-			}
-		};
-		table.addColumn(stSide, ST_SIDE);
+//		TextColumn<BikeRackData> stSide = new TextColumn<BikeRackData>() {
+//			@Override
+//			public String getValue(BikeRackData object) {
+//				return object.getStreetSide();
+//			}
+//		};
+//		table.addColumn(stSide, ST_SIDE);
 
-		TextColumn<BikeRackData> skytrainStn = new TextColumn<BikeRackData>() {
-			@Override
-			public String getValue(BikeRackData object) {
-				return object.getSkytrainStation();
-			}
-		};
+//		TextColumn<BikeRackData> skytrainStn = new TextColumn<BikeRackData>() {
+//			@Override
+//			public String getValue(BikeRackData object) {
+//				return object.getSkytrainStation();
+//			}
+//		};
+//
+//		table.addColumn(skytrainStn, SKYTRAIN_STATION_NAME);
 
-		table.addColumn(skytrainStn, SKYTRAIN_STATION_NAME);
+//		TextColumn<BikeRackData> bia = new TextColumn<BikeRackData>() {
+//			@Override
+//			public String getValue(BikeRackData object) {
+//				return object.getBia();
+//			}
+//		};
+//		table.addColumn(bia, BIA2);
 
-		TextColumn<BikeRackData> bia = new TextColumn<BikeRackData>() {
-			@Override
-			public String getValue(BikeRackData object) {
-				return object.getBia();
-			}
-		};
-		table.addColumn(bia, BIA2);
+//		TextColumn<BikeRackData> numRacks = new TextColumn<BikeRackData>() {
+//			@Override
+//			public String getValue(BikeRackData object) {
+//				return String.valueOf(object.getNumRacks());
+//			}
+//		};
+//		table.addColumn(numRacks, NUM_RACKS);
 
-		TextColumn<BikeRackData> numRacks = new TextColumn<BikeRackData>() {
-			@Override
-			public String getValue(BikeRackData object) {
-				return String.valueOf(object.getNumRacks());
-			}
-		};
-		table.addColumn(numRacks, NUM_RACKS);
-
-		TextColumn<BikeRackData> yearsInstalled = new TextColumn<BikeRackData>() {
-			@Override
-			public String getValue(BikeRackData object) {
-				return object.getYearInstalled();
-			}
-		};
-		table.addColumn(yearsInstalled, YEARS_INSTALLED);
+//		TextColumn<BikeRackData> yearsInstalled = new TextColumn<BikeRackData>() {
+//			@Override
+//			public String getValue(BikeRackData object) {
+//				return object.getYearInstalled();
+//			}
+//		};
+//		table.addColumn(yearsInstalled, YEARS_INSTALLED);
 
 		Column<BikeRackData, String> addFave = new Column<BikeRackData, String>(
 				new ButtonCell()) {

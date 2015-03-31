@@ -57,18 +57,21 @@ public class MapDisplay   {
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	private LayoutPanel rackMapPanel = new LayoutPanel();
 
-	private  List<BikeRackData> tempList = new ArrayList<BikeRackData>();	
+	private  List<BikeRackData> tempList;	
 	private VerticalPanel bigTable = new VerticalPanel();
 	
 	private LoginInfo loginInfo;
 	private BikeRackTable brt;
 	private FavRackTable favRackTable;
 	private CheckBox showFaves;
+
 	
 	public MapDisplay(LoginInfo loginInfo) {
+		
 		this.loginInfo = loginInfo;
-		brt = new BikeRackTable(loginInfo);
+		brt = new BikeRackTable(loginInfo);		
 		favRackTable = new FavRackTable(loginInfo);
+		tempList = new ArrayList<BikeRackData>();
 		Maps.loadMapsApi("", "2", false, new Runnable() {
 			public void run() {
 				buildUi();		
@@ -77,7 +80,7 @@ public class MapDisplay   {
 		});
 		
 	}
-
+	
 
 	
 	
@@ -89,10 +92,10 @@ public class MapDisplay   {
 		map.setZoomLevel(ZOOM_LEVEL);
 
 		// Add bike rack markers
+		
 		displayAllMarkers();
-		
+	
 		displayTable();
-		
 		
 	
 
@@ -112,27 +115,27 @@ public class MapDisplay   {
 	private void displayTable() {	
 		bigTable.clear();
 		final TabPanel p = new TabPanel();
+		
 	    p.add(brt, BikeRackTable.BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER, false);
 	    p.add(favRackTable, FavRackTable.USER_S_FAVORITE_BIKE_RACK_LOCATION, false);
 
 	    p.selectTab(0);
 
-	    bigTable.add(p);
-		
-	//	bigTable.add(brt);
+	    bigTable.add(p);		
+
 		RootPanel.get("bigTable").add(bigTable);
 	}
 	
 	
 	// displaying all bike rack data from the data store as markers on the map.
 	public void displayAllMarkers() {
-	
+		
 		if (jdoService == null) {
 			jdoService = GWT.create(JDOService.class);
 		}
 
 		jdoService.getAllData(new AsyncCallback<List<BikeRackData>>() {
-
+			
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert(UNABLE_TO_DISPLAY_BIKE_RACK_LOCATION_ON_MAP);
@@ -141,18 +144,18 @@ public class MapDisplay   {
 			@Override
 			public void onSuccess(List<BikeRackData> result) {
 				map.clearOverlays();			
-				tempList.clear();
+				 tempList.clear();
 				for (BikeRackData brd : result) {
 					LatLng latlng = LatLng.newInstance(brd.getLat(),
 							brd.getLng());
 					
 					map.addOverlay(new Marker(latlng));				
-					if (map.getBounds().containsLatLng(latlng)) {						
+					if (map.getBounds().containsLatLng(latlng)) {									
 						tempList.add(brd);		
 						
 					}
 				}
-				Window.alert(MARKERS_ARE_ADDED);	
+				Window.alert(MARKERS_ARE_ADDED);			
 				brt.sortTable(tempList);	
 				brt.updateTable(tempList);
 				brt.saveList(tempList);						
@@ -303,7 +306,7 @@ public class MapDisplay   {
 				double radius = getSearchRadius(seachRadius);
 					
 				LatLng center = map.getCenter();
-				tempList.clear();
+				 tempList.clear();
 				
 				for (BikeRackData brd : result) {
 					LatLng latlng = LatLng.newInstance(brd.getLat(),

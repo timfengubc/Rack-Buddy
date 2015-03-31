@@ -127,7 +127,7 @@ public class BikeRackTable implements IsWidget {
 		};
 		table.addColumn(stNum, ST_NUMBER);
 		stNum.setSortable(true);
-
+		
 		// Add a text column to show the street name.
 		stName = new TextColumn<BikeRackData>() {
 			@Override
@@ -223,34 +223,6 @@ public class BikeRackTable implements IsWidget {
 
 		table.addColumn(commentCol, "Comments");
 
-		jdoService.getAllData(new AsyncCallback<List<BikeRackData>>() {
-			@Override
-			public void onFailure(Throwable caught) {
-
-			}
-
-			@Override
-			public void onSuccess(final List<BikeRackData> result) {
-
-				AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>() {
-					@Override
-					protected void onRangeChanged(HasData<BikeRackData> display) {
-
-						int start = display.getVisibleRange().getStart();
-						int end = start + display.getVisibleRange().getLength();
-						end = end >= result.size() ? result.size() : end;
-						List<BikeRackData> sub = result.subList(start, end);
-						updateRowData(start, sub);
-
-					}
-				};
-
-				provider.addDataDisplay(table);
-				provider.updateRowCount(result.size(), true);
-
-			}
-
-		});
 
 		vp.add(new Label(BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER));
 		initFilter();
@@ -312,8 +284,9 @@ public class BikeRackTable implements IsWidget {
 
 	// saves list made from displayAllMarkers
 	public void saveList(List<BikeRackData> list) {
-		savedList = list;
-
+		this.savedList.clear();
+		this.savedList.addAll(list);
+		
 	}
 
 	// sortTable function

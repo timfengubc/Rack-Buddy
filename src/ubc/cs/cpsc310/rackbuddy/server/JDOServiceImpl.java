@@ -245,7 +245,9 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		PersistenceManager pm = getPersistenceManager();
 		try{
 			List<BikeRackData> removedDatas = getAllData();
+			
 			if(!removedDatas.isEmpty()){
+		
 				pm.deletePersistentAll(removedDatas);
 			}
 			

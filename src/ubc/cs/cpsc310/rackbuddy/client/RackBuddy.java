@@ -202,10 +202,12 @@ public class RackBuddy implements EntryPoint {
 			      }
 		      public void onSuccess(Void ignore) {
 		    	    Window.alert(DATA_LOADED);
-		    	    mapDisplay.displayAllMarkers();		    		
+		    	    mapDisplay.displayAllMarkers();
+		    	  	
 		      }	
 
 		    });
+		
 	}
 	
 	private void removeAllData(){
@@ -217,9 +219,9 @@ public class RackBuddy implements EntryPoint {
 			}
 
 			@Override
-			public void onSuccess(Void result) {
+			public void onSuccess(Void result) {				
 				Window.alert(ALL_DATA_SUCCESSFULLY_REMOVED_FROM_DATASTORE);
-				mapDisplay.displayAllMarkers();
+				  mapDisplay.displayAllMarkers();
 			}
 			
 		});

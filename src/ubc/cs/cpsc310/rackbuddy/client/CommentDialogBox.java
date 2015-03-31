@@ -25,11 +25,11 @@ public class CommentDialogBox extends DialogBox {
               CommentDialogBox.this.hide();
            }
         });
-
         VerticalPanel panel = new VerticalPanel();
         CommentTable comments = new CommentTable(object, loginInfo);
         panel.add(close);
         panel.add(comments);
+        setWidth("45em");
         setWidget(panel);
      }
 }

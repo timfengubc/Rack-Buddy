@@ -7,10 +7,14 @@ import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -35,13 +39,19 @@ public class CommentTable implements IsWidget {
 		this.data = data;
 		this.loginInfo = loginInfo;
 	}
-	
+
 	private final CellTable<Comment> table = new CellTable<Comment>();
-	
+
 	@Override
 	public Widget asWidget() {
 
-		table.setPageSize(BikeRackTable.NUM_DATA_PER_PAGE);
+		table.setPageSize(NUM_COM_PER_PAGE);
+		table.setWidth("45em");
+		
+		SimplePager pager = new SimplePager(TextLocation.CENTER, true, true);
+
+		pager.setPageSize(NUM_COM_PER_PAGE);
+		pager.setDisplay(table);
 
 		TextColumn<Comment> email = new TextColumn<Comment>() {
 
@@ -51,6 +61,7 @@ public class CommentTable implements IsWidget {
 			}
 		};
 
+		table.setColumnWidth(email, "10em");
 		table.addColumn(email, "Email");
 
 		TextColumn<Comment> message = new TextColumn<Comment>() {
@@ -62,6 +73,7 @@ public class CommentTable implements IsWidget {
 
 		};
 
+		table.setColumnWidth(message, "30em");
 		table.addColumn(message, "Comment");
 
 		Column<Comment, String> removeComment = new Column<Comment, String>(
@@ -73,6 +85,7 @@ public class CommentTable implements IsWidget {
 			}
 		};
 
+		table.setColumnWidth(removeComment, "5em");
 		table.addColumn(removeComment, "Delete Comment?");
 
 		removeComment.setFieldUpdater(new FieldUpdater<Comment, String>() {
@@ -90,7 +103,6 @@ public class CommentTable implements IsWidget {
 		dataProvider = new ListDataProvider<Comment>();
 		dataProvider.addDataDisplay(table);
 
-		final SimplePager pager = new SimplePager();
 		pager.setDisplay(table);
 
 		jdoService.getRackComments(data, new AsyncCallback<List<Comment>>() {
@@ -115,6 +127,7 @@ public class CommentTable implements IsWidget {
 		initAddPanel();
 		vp.add(table);
 		vp.add(addPanel);
+		vp.add(pager);
 		return vp;
 
 	}
@@ -146,43 +159,28 @@ public class CommentTable implements IsWidget {
 		addPanel = new HorizontalPanel();
 		postButton = new Button("Post");
 		postButton.setHeight("2em");
+		postButton.setWidth("4em");
 		postButton.addClickHandler(new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (isTextValid(textbox.getValue()) == true) {
-
-					final Comment newComment = new Comment();
-					newComment.setBikeRackID(data.getId());
-					newComment.setEmail(loginInfo.getEmailAddress());
-					newComment.setMessage(textbox.getValue());
-
-					jdoService.addRackComment(data, loginInfo, newComment,
-							new AsyncCallback<Void>() {
-
-								@Override
-								public void onFailure(Throwable caught) {
-									Window.alert(caught.getMessage());
-								}
-
-								@Override
-								public void onSuccess(Void result) {
-									dataProvider.getList().add(newComment);
-									dataProvider.flush();
-									dataProvider.refresh();
-									table.redraw();
-								}
-
-							});
-				} else {
-				}
-
+				addComment();
 			}
 		});
+				
 
 		textbox = new TextBox();
 		textbox.setWidth("40em");
 		textbox.setHeight("1em");
+		textbox.addKeyPressHandler(new KeyPressHandler(){
+
+			@Override
+			public void onKeyPress(KeyPressEvent event) {
+				if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+			        addComment();
+			      }
+			}
+		});
 
 		addPanel.add(textbox);
 		addPanel.add(postButton);
@@ -204,5 +202,37 @@ public class CommentTable implements IsWidget {
 		}
 
 		return true;
+	}
+	
+	public void addComment(){
+		if (isTextValid(textbox.getValue()) == true) {
+
+			final Comment newComment = new Comment();
+			newComment.setBikeRackID(data.getId());
+			newComment.setEmail(loginInfo.getEmailAddress());
+			newComment.setMessage(textbox.getValue());
+
+			jdoService.addRackComment(data, loginInfo, newComment,
+					new AsyncCallback<Void>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							Window.alert(caught.getMessage());
+						}
+
+						@Override
+						public void onSuccess(Void result) {
+							textbox.setText("");
+							dataProvider.getList().add(newComment);
+							dataProvider.flush();
+							dataProvider.refresh();
+							table.redraw();
+						}
+
+					});
+		} else {
+			//do nothing
+		}
+
 	}
 }

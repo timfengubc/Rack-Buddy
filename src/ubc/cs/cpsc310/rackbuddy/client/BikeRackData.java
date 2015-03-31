@@ -1,8 +1,6 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
 import java.io.Serializable;
-import java.util.List;
-
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -100,7 +98,6 @@ public class BikeRackData implements Serializable {
 
 	}
 
-	//Don't need user variable yet...
 	public BikeRackData(String streetNumber,
 						String bia,
 						String streetName,
@@ -110,8 +107,7 @@ public class BikeRackData implements Serializable {
 						String yearInstalled,
 						double lat,
 						double lng,
-						boolean isFave,
-						Long commentID
+						boolean isFave
 						){
 		
 		this.streetNumber = streetNumber;

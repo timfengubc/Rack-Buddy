@@ -22,14 +22,13 @@ public class FavRackTable implements IsWidget {
 	LoginInfo loginInfo;
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	private ListDataProvider<BikeRackData> dataProvider;
+	final CellTable<BikeRackData> table = new CellTable<BikeRackData>();
 	public FavRackTable(LoginInfo loginInfo) {
 		this.loginInfo = loginInfo;
 	}
 
 	@Override
 	public Widget asWidget() {
-				// Create a CellTable.
-				final CellTable<BikeRackData> table = new CellTable<BikeRackData>();
 				
 				table.setPageSize(BikeRackTable.NUM_DATA_PER_PAGE);
 

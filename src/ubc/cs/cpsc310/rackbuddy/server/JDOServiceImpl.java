@@ -53,59 +53,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 			addBikeRackData(r);
 		}
 	}
-	
 
-//	@Override
-//	/**
-//	 * downloads rack data from server and parses into BikeRackData objects, then stores in database
-//	 */
-//	public void loadRacks(String url) {
-//		//clear current data set so that multiple loads dont create duplicate data
-//		//removeAll();
-//		
-//		InputStream input;
-//		ArrayList<BikeRackData> racks = new ArrayList<BikeRackData>();
-//		try {
-//			//open inputstream from url
-//			input = new URL(url).openStream();
-//				try {
-//					// feed inputstream to reader
-//					Reader reader = new InputStreamReader(input, "UTF-8");
-//					//initiate csv reader, skip one line
-//					CSVReader csvReader = new CSVReader(reader, ',', '"', 2);
-//					String[] row = null;
-//					//parse csv into objects row by row
-//					while((row = csvReader.readNext()) != null) {
-//					   BikeRackData rack = new BikeRackData();
-//					   rack.setStreetNumber(row[0]);
-//					   rack.setStreetName(row[1]);
-//					   rack.setStreetSide(row[2]);
-//					   rack.setSkytrainStation(row[3]);
-//					   rack.setBia(row[4]);
-//					  // 
-//					   rack.setNumRacks( Integer.parseInt(row[5]));
-//					   rack.setYearInstalled(row[6]);
-//					   
-//						String address = rack.getStreetNumber() + " " + rack.getStreetName() + ", Vancouver, BC";
-//						double lat = myGeoParser.getLatitude(address);
-//						double lng = myGeoParser.getLongitude(address);
-//						
-//						rack.setLat(lat);
-//						rack.setLng(lng);
-//					   racks.add(rack);
-//					}
-//					addBikeRackData(racks);
-//					//fin
-//					csvReader.close();
-//					
-//					} catch (UnsupportedEncodingException e) {
-//						e.printStackTrace();
-//					}
-//			
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
 	
 	@Override
 	/**

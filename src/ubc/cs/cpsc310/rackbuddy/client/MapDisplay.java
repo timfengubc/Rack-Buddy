@@ -215,7 +215,7 @@ public class MapDisplay   {
 				if(event.getValue() == true){
 					displayFaveMarkers();
 				}else{
-					map.clearOverlays();
+					displayAllMarkers();
 				}
 				
 			}

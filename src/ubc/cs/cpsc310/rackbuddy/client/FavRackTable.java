@@ -22,14 +22,13 @@ public class FavRackTable implements IsWidget {
 	LoginInfo loginInfo;
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	private ListDataProvider<BikeRackData> dataProvider;
+	final CellTable<BikeRackData> table = new CellTable<BikeRackData>();
 	public FavRackTable(LoginInfo loginInfo) {
 		this.loginInfo = loginInfo;
 	}
 
 	@Override
 	public Widget asWidget() {
-				// Create a CellTable.
-				final CellTable<BikeRackData> table = new CellTable<BikeRackData>();
 				
 				table.setPageSize(BikeRackTable.NUM_DATA_PER_PAGE);
 
@@ -116,47 +115,14 @@ public class FavRackTable implements IsWidget {
 		        
 				final SimplePager pager = new SimplePager();
 				pager.setDisplay(table);
-				
-				jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
 
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert(caught.getMessage());
-					}
-
-					@Override
-					public void onSuccess(List<BikeRackData> result) {
-						dataProvider.getList().clear();
-						dataProvider.getList().addAll(result);
-					    dataProvider.flush();
-					    dataProvider.refresh();
-					    table.redraw();	
-					}
-					
-				});
+				displayListOfFavorites();
 				
 				AppUtils.EVENT_BUS.addHandler(AddFaveEvent.TYPE, new AddFaveEventHandler(){
 
 					@Override
 					public void onFaveAdded(AddFaveEvent event) {
-						jdoService.findDataById(event.getLoginInfo().getBikeRackID(), new AsyncCallback<BikeRackData>(){
-
-							@Override
-							public void onFailure(Throwable caught) {
-								Window.alert(caught.getMessage());
-								
-							}
-
-							@Override
-							public void onSuccess(BikeRackData result) {
-								dataProvider.getList().add(result);
-								dataProvider.flush();
-								dataProvider.refresh();
-								table.redraw();
-								
-							}
-							
-						});
+						handleAddEvent(event);
 						
 					}
 					
@@ -166,26 +132,7 @@ public class FavRackTable implements IsWidget {
 
 					@Override
 					public void onFaveRemoved(RemoveFaveEvent event) {
-						jdoService.findDataById(event.getLoginInfo().getBikeRackID(), new AsyncCallback<BikeRackData>(){
-
-							@Override
-							public void onFailure(Throwable caught) {
-								Window.alert(caught.getMessage());
-								
-							}
-
-							@Override
-							public void onSuccess(BikeRackData result) {
-								if(dataProvider.getList().contains(result)){
-									dataProvider.getList().remove(result);
-									dataProvider.flush();
-									dataProvider.refresh();
-									table.redraw();
-								}
-								
-							}
-							
-						});
+						handleRemoveEvent(event);
 						
 					}
 					
@@ -195,6 +142,26 @@ public class FavRackTable implements IsWidget {
 				vp.add(table);
 				vp.add(pager);
 				return vp;
+	}
+
+	private void displayListOfFavorites() {
+		jdoService.getListofFaves(loginInfo, new AsyncCallback<List<BikeRackData>>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(List<BikeRackData> result) {
+				dataProvider.getList().clear();
+				dataProvider.getList().addAll(result);
+			    dataProvider.flush();
+			    dataProvider.refresh();
+			    table.redraw();	
+			}
+			
+		});
 	}
 
 	private void deleteFavBikeRack(final LoginInfo loginInfo) {
@@ -217,5 +184,49 @@ public class FavRackTable implements IsWidget {
 			
 		});
 		
+	}
+
+	private void handleAddEvent(AddFaveEvent event) {
+		jdoService.findDataById(event.getLoginInfo().getBikeRackID(), new AsyncCallback<BikeRackData>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());
+				
+			}
+
+			@Override
+			public void onSuccess(BikeRackData result) {
+				dataProvider.getList().add(result);
+				dataProvider.flush();
+				dataProvider.refresh();
+				table.redraw();
+				
+			}
+			
+		});
+	}
+
+	private void handleRemoveEvent(RemoveFaveEvent event) {
+		jdoService.findDataById(event.getLoginInfo().getBikeRackID(), new AsyncCallback<BikeRackData>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());
+				
+			}
+
+			@Override
+			public void onSuccess(BikeRackData result) {
+				if(dataProvider.getList().contains(result)){
+					dataProvider.getList().remove(result);
+					dataProvider.flush();
+					dataProvider.refresh();
+					table.redraw();
+				}
+				
+			}
+			
+		});
 	}
 }

@@ -62,7 +62,7 @@ public class MapDisplay   {
 	
 	private LoginInfo loginInfo;
 	private BikeRackTable brt;
-	private FavRackTable favRackTable;
+	private Table favRackTable;
 	private CheckBox showFaves;
 
 	
@@ -117,7 +117,7 @@ public class MapDisplay   {
 		final TabPanel p = new TabPanel();
 		
 	    p.add(brt, BikeRackTable.BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER, false);
-	    p.add(favRackTable, FavRackTable.USER_S_FAVORITE_BIKE_RACK_LOCATION, false);
+	    p.add(favRackTable, Table.USER_S_FAVORITE_BIKE_RACK_LOCATION, false);
 
 	    p.selectTab(0);
 

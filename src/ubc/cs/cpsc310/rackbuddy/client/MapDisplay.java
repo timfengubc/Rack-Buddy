@@ -1,5 +1,6 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -23,10 +24,12 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class MapDisplay {
+
+public class MapDisplay   {
 
 	private static final String NO_FAVORITE_BIKE_RACK_MARKERS_TO_DISPLAY = "No favorite bike rack markers to display...";
 	private static final String TOGGLE_TO_DISPLAY_FAVORITE_MARKERS_ON_MAP = "Toggle to display favorite markers on map: ";
@@ -46,28 +49,38 @@ public class MapDisplay {
 	private static final String FAVE_MARKER = "http://www.google.com/mapfiles/markerF.png";
 
 	private VerticalPanel searchPanel;
+
 	private Button searchButton;
 	private TextBox address;
 	private ListBox searchRadius;
-	private GeoParserServiceAsync geoParserService = GWT
-			.create(GeoParserService.class);
+	private GeoParserServiceAsync geoParserService = GWT.create(GeoParserService.class);
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	private LayoutPanel rackMapPanel = new LayoutPanel();
+
+	private  List<BikeRackData> tempList = new ArrayList<BikeRackData>();	
+	private VerticalPanel bigTable = new VerticalPanel();
 	
 	private LoginInfo loginInfo;
-	
+	private BikeRackTable brt;
+	private FavRackTable favRackTable;
 	private CheckBox showFaves;
 	
 	public MapDisplay(LoginInfo loginInfo) {
 		this.loginInfo = loginInfo;
+		brt = new BikeRackTable(loginInfo);
+		favRackTable = new FavRackTable(loginInfo);
 		Maps.loadMapsApi("", "2", false, new Runnable() {
 			public void run() {
-				buildUi();
-
+				buildUi();		
+			
 			}
 		});
+		
 	}
 
+
+	
+	
 	private void buildUi() {
 		// Open a map centered on Vancouver, BC, Canada
 		LatLng vancouver = LatLng.newInstance(49.261226, -123.1139268);
@@ -77,6 +90,11 @@ public class MapDisplay {
 
 		// Add bike rack markers
 		displayAllMarkers();
+		
+		displayTable();
+		
+		
+	
 
 		// Add some controls for the zoom level
 		map.addControl(new LargeMapControl());
@@ -87,11 +105,28 @@ public class MapDisplay {
 		rackMapPanel.add(map);
 
 		initSearchPanel();
+		
+		
 	}
+	
+	private void displayTable() {	
+		bigTable.clear();
+		final TabPanel p = new TabPanel();
+	    p.add(brt, BikeRackTable.BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER, false);
+	    p.add(favRackTable, FavRackTable.USER_S_FAVORITE_BIKE_RACK_LOCATION, false);
 
+	    p.selectTab(0);
+
+	    bigTable.add(p);
+		
+	//	bigTable.add(brt);
+		RootPanel.get("bigTable").add(bigTable);
+	}
+	
+	
 	// displaying all bike rack data from the data store as markers on the map.
 	public void displayAllMarkers() {
-
+	
 		if (jdoService == null) {
 			jdoService = GWT.create(JDOService.class);
 		}
@@ -105,16 +140,29 @@ public class MapDisplay {
 
 			@Override
 			public void onSuccess(List<BikeRackData> result) {
-				map.clearOverlays();
+				map.clearOverlays();			
+				tempList.clear();
 				for (BikeRackData brd : result) {
 					LatLng latlng = LatLng.newInstance(brd.getLat(),
 							brd.getLng());
-					map.addOverlay(new Marker(latlng));
+					
+					map.addOverlay(new Marker(latlng));				
+					if (map.getBounds().containsLatLng(latlng)) {						
+						tempList.add(brd);		
+						
+					}
 				}
-				Window.alert(MARKERS_ARE_ADDED);
+				Window.alert(MARKERS_ARE_ADDED);	
+				brt.sortTable(tempList);	
+				brt.updateTable(tempList);
+				brt.saveList(tempList);						
+				
+				
 			}
-
+			
 		});
+	
+	
 	}
 
 	/**
@@ -169,12 +217,7 @@ public class MapDisplay {
 				
 			}
 
-
-			
 		});
-		
-		
-		
 		HorizontalPanel h1 = new HorizontalPanel();
 		h1.setStyleName("marginTop");
 
@@ -212,12 +255,12 @@ public class MapDisplay {
 
 			@Override
 			public void onSuccess(List<BikeRackData> result) {
-				map.clearOverlays();
-				
+
 				Icon icon = Icon.newInstance(FAVE_MARKER);
 				MarkerOptions ops = MarkerOptions.newInstance(icon);
 				
 				if(!result.isEmpty()){
+					map.clearOverlays();
 					for (BikeRackData brd : result) {
 						LatLng poi = LatLng.newInstance(brd.getLat(),
 								brd.getLng());
@@ -236,12 +279,14 @@ public class MapDisplay {
 		});
 	}
 
+	
+	
 	public VerticalPanel getSearchPanel() {
 		return searchPanel;
 	}
 
 	private void displayBikeRacks(final String seachRadius) {
-
+		
 		if (jdoService == null) {
 			jdoService = GWT.create(JDOService.class);
 		}
@@ -256,25 +301,36 @@ public class MapDisplay {
 			@Override
 			public void onSuccess(List<BikeRackData> result) {
 				double radius = getSearchRadius(seachRadius);
-
+					
 				LatLng center = map.getCenter();
-
+				tempList.clear();
+				
 				for (BikeRackData brd : result) {
 					LatLng latlng = LatLng.newInstance(brd.getLat(),
 							brd.getLng());
 
 					if (center.distanceFrom(latlng) <= radius) {
+						
 						Marker marker = new Marker(latlng);
+						
 						map.addOverlay(marker);
+						if (map.getBounds().containsLatLng(latlng)) {
+							
+							tempList.add(brd);		
+						}		
+						
 					}
-				}
-
+				}			
+				brt.updateTable(tempList);		
+				brt.saveList(tempList);
 			}
 
+		
+
 		});
-
+		
 	}
-
+	
 	/**
 	 * Displays all bike rack from a specified POI address with a given radius
 	 */
@@ -284,7 +340,7 @@ public class MapDisplay {
 		if (geoParserService == null) {
 			geoParserService = GWT.create(GeoParserService.class);
 		}
-
+	
 		geoParserService.getMarkerLocation(poiAddress,
 				new AsyncCallback<MarkerLocation>() {
 
@@ -304,7 +360,7 @@ public class MapDisplay {
 						MarkerOptions ops = MarkerOptions.newInstance(icon);
 						Marker marker = new Marker(poi, ops);
 						map.addOverlay(marker);
-
+						
 						map.setCenter(poi);
 
 						map.setZoomLevel(ZOOM_LEVEL);
@@ -364,5 +420,7 @@ public class MapDisplay {
 	public LayoutPanel getMapPanel() {
 		return this.rackMapPanel;
 	}
+	
+
 
 }

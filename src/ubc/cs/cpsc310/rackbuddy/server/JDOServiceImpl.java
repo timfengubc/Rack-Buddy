@@ -55,27 +55,81 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		}
 	}
 	
+
+//	@Override
+//	/**
+//	 * downloads rack data from server and parses into BikeRackData objects, then stores in database
+//	 */
+//	public void loadRacks(String url) {
+//		//clear current data set so that multiple loads dont create duplicate data
+//		//removeAll();
+//		
+//		InputStream input;
+//		ArrayList<BikeRackData> racks = new ArrayList<BikeRackData>();
+//		try {
+//			//open inputstream from url
+//			input = new URL(url).openStream();
+//				try {
+//					// feed inputstream to reader
+//					Reader reader = new InputStreamReader(input, "UTF-8");
+//					//initiate csv reader, skip one line
+//					CSVReader csvReader = new CSVReader(reader, ',', '"', 2);
+//					String[] row = null;
+//					//parse csv into objects row by row
+//					while((row = csvReader.readNext()) != null) {
+//					   BikeRackData rack = new BikeRackData();
+//					   rack.setStreetNumber(row[0]);
+//					   rack.setStreetName(row[1]);
+//					   rack.setStreetSide(row[2]);
+//					   rack.setSkytrainStation(row[3]);
+//					   rack.setBia(row[4]);
+//					  // 
+//					   rack.setNumRacks( Integer.parseInt(row[5]));
+//					   rack.setYearInstalled(row[6]);
+//					   
+//						String address = rack.getStreetNumber() + " " + rack.getStreetName() + ", Vancouver, BC";
+//						double lat = myGeoParser.getLatitude(address);
+//						double lng = myGeoParser.getLongitude(address);
+//						
+//						rack.setLat(lat);
+//						rack.setLng(lng);
+//					   racks.add(rack);
+//					}
+//					addBikeRackData(racks);
+//					//fin
+//					csvReader.close();
+//					
+//					} catch (UnsupportedEncodingException e) {
+//						e.printStackTrace();
+//					}
+//			
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//	}
+	
 	@Override
 	/**
 	 * downloads rack data from server and parses into BikeRackData objects, then stores in database
 	 */
-	public void loadRacks() {
-		//clear current data set so that multiple loads dont create duplicate data
-		//removeAll();
+	public void loadRacks(String url, String year) {
+		
 		
 		InputStream input;
 		ArrayList<BikeRackData> racks = new ArrayList<BikeRackData>();
 		try {
 			//open inputstream from url
-			input = new URL("http://m.uploadedit.com/ba3a/1426016101419.txt").openStream();
+			input = new URL(url).openStream();
 				try {
 					// feed inputstream to reader
 					Reader reader = new InputStreamReader(input, "UTF-8");
 					//initiate csv reader, skip one line
-					CSVReader csvReader = new CSVReader(reader, ',', '"', 900);
+					CSVReader csvReader = new CSVReader(reader, ',', '"', 2);
 					String[] row = null;
 					//parse csv into objects row by row
 					while((row = csvReader.readNext()) != null) {
+						
+						if (row[6].equals(year)) {
 					   BikeRackData rack = new BikeRackData();
 					   rack.setStreetNumber(row[0]);
 					   rack.setStreetName(row[1]);
@@ -94,6 +148,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 						rack.setLng(lng);
 						rack.setFave(false);
 					   racks.add(rack);
+					}
 					}
 					addBikeRackData(racks);
 					//fin
@@ -119,6 +174,8 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 			pm.close();
 		}
 	}
+	
+	
 	/**
 	 * Can't remove null data
 	 * http://stackoverflow.com/questions/8868449/how-to-check-the-text-is-null-or-not-using-jdo
@@ -414,15 +471,21 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		PersistenceManager pm = getPersistenceManager();
 	    List<BikeRackData> data = new ArrayList<BikeRackData>();
 	    try {
-	        Query q = pm.newQuery(LoginInfo.class);
-	        q.setFilter("emailAddress == emailAddressParam");
-	        q.declareParameters("String emailAddressParam");
-	        List<LoginInfo> ids = (List<LoginInfo>) q.execute(loginInfo.getEmailAddress());
-	        for (LoginInfo login : ids) {
-	          BikeRackData temp = this.findDataById(login.getBikeRackID());
-	          temp.setFave(true);
-	          data.add(temp);
-	        }
+	    	
+	    		 Query q = pm.newQuery(LoginInfo.class);
+	 	        q.setFilter("emailAddress == emailAddressParam");
+	 	        q.declareParameters("String emailAddressParam");
+	 	        List<LoginInfo> ids = (List<LoginInfo>) q.execute(loginInfo.getEmailAddress());
+	 	        for (LoginInfo login : ids) {
+	 	          BikeRackData temp = this.findDataById(login.getBikeRackID());
+	 	          if(temp!=null){
+	 	        	 temp.setFave(true);
+		 	          data.add(temp);
+	 	          }
+	 	         
+	 	        }
+	    	
+	       
 	      } finally {
 	        pm.close();
 	      }

@@ -1,0 +1,10 @@
+Like Button:
+
+1) Log out of facebook if you are already logged in.  The like button should have text in its vicinity showing how many people like this app, and it will be clickable allowing you to like it (and will prompt you to log into facebook)
+2) if you are logged into facebook and don't have the app liked, it will allow you to like it, and may prompt you to "Confirm" your like(this is part of the facebook api functionality and is probably used to prevent like-botting).  If you have the app liked, it will show something along the lines of "you and x others like this app"
+
+Share Button:
+1) A prompt will come up allowing you to make a comment about the app, then post it to your facebook feed.
+
+BikeRack Share Button:
+1) A prompt will come up allowing you to post information about the bike rack to your facebook feed.

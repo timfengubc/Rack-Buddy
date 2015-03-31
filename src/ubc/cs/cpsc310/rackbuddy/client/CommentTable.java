@@ -82,7 +82,7 @@ public class CommentTable implements IsWidget {
 			@Override
 			public void update(int index, Comment object, String value) {
 				if (object.email == loginInfo.getEmailAddress())	{
-						removeCommentByID(object.getCommentID());
+						removeCommentByID(object.getCommentID(), object);
 				}
 				else {
 					Window.alert("Not your Comment!");
@@ -122,23 +122,13 @@ public class CommentTable implements IsWidget {
 
 	}
 
-	private void removeCommentByID(final Long id) {
+	private void removeCommentByID(final Long id, final Comment comment) {
 		if (jdoService == null) {
 			jdoService = GWT.create(JDOService.class);
 		}
-
-		jdoService.findCommentByID(id, new AsyncCallback<Comment>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert("Error has occured: " + caught.getMessage());
-			}
-
-			@Override
-			public void onSuccess(Comment result) {
-				dataProvider.getList().remove(result);
 				
-				jdoService.removeCommentByID(id, new AsyncCallback<Void>() {
+				
+		jdoService.removeCommentByID(id, new AsyncCallback<Void>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -147,18 +137,14 @@ public class CommentTable implements IsWidget {
 
 					@Override
 					public void onSuccess(Void result) {
+						dataProvider.getList().remove(comment);
 						dataProvider.flush();
 						dataProvider.refresh();
 						table.redraw();
-						Window.alert("Removed Comment!");
 					}
 
 				});
-			}
-
-		});
-
-	}
+		}
 
 	private void initAddPanel() {
 		addPanel = new HorizontalPanel();
@@ -189,7 +175,6 @@ public class CommentTable implements IsWidget {
 									dataProvider.flush();
 									dataProvider.refresh();
 									table.redraw();
-									Window.alert("Comment Added!");
 								}
 
 							});

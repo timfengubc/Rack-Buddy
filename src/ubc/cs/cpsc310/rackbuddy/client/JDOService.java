@@ -31,8 +31,8 @@ public interface JDOService extends RemoteService {
 
 	public void addBikeRackData(ArrayList<BikeRackData> racks);
 
-	public void loadRacks();	
-	
+	public void loadRacks(String url, String year);
+
 	public void addNewFavRack(LoginInfo loginInfo) throws AlreadyFavoritedException;
 	
 	public void removeFavRack(LoginInfo loginInfo);

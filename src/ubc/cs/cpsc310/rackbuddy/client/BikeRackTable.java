@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import com.google.gwt.cell.client.CheckboxCell;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import ubc.cs.cpsc310.rackbuddy.shared.AlreadyFavoritedException;
 
 import com.google.gwt.cell.client.ButtonCell;
-import com.google.gwt.cell.client.ClickableTextCell;
+
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.ColumnSortList.ColumnSortInfo;
+
 import com.google.gwt.user.cellview.client.ColumnSortEvent.AsyncHandler;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.SimplePager;
@@ -30,9 +30,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.Window;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.IsWidget;
+
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
@@ -81,7 +81,6 @@ public class BikeRackTable implements IsWidget {
 	private PopupPanel popUp;
 	private TextBox textbox;
 	private ListBox filterby;
-	private List<BikeRackData> tableList = new ArrayList<BikeRackData>();
 	private List<BikeRackData> savedList = new ArrayList<BikeRackData>();
 	private List<BikeRackData> stNameList = new ArrayList<BikeRackData>();
 	private List<BikeRackData> stNumList = new ArrayList<BikeRackData>();
@@ -434,24 +433,13 @@ public class BikeRackTable implements IsWidget {
 	}
 
 	public void matchStName(List<BikeRackData> list, String stName) {
-		if (stNameList != null) {
 			stNameList.clear();
 			for (BikeRackData brd : list) {
-				if (brd.getStreetName().toLowerCase().contains(stName)) {
+				if (brd.getStreetName().toLowerCase().contains(stName.toLowerCase())) {
 
 					stNameList.add(brd);
 				}
 			}
-
-		} else {
-			for (BikeRackData brd : list) {
-				if (brd.getStreetName().toLowerCase().contains(stName)) {
-
-					stNameList.add(brd);
-				}
-			}
-
-		}
 
 	}
 

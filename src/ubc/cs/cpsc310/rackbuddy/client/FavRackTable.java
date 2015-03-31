@@ -9,6 +9,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -23,6 +24,7 @@ public class FavRackTable implements IsWidget {
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	private ListDataProvider<BikeRackData> dataProvider;
 	final CellTable<BikeRackData> table = new CellTable<BikeRackData>();
+	private SimplePager pager;
 	public FavRackTable(LoginInfo loginInfo) {
 		this.loginInfo = loginInfo;
 	}
@@ -113,7 +115,7 @@ public class FavRackTable implements IsWidget {
 		        dataProvider = new ListDataProvider<BikeRackData>();
 		        dataProvider.addDataDisplay(table);
 		        
-				final SimplePager pager = new SimplePager();
+				pager = new SimplePager(TextLocation.CENTER, true, true);
 				pager.setDisplay(table);
 
 				displayListOfFavorites();

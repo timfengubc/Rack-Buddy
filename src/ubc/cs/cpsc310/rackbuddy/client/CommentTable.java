@@ -23,8 +23,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ListDataProvider;
 
 public class CommentTable implements IsWidget {

@@ -137,6 +137,7 @@ public class BikeRackTable extends Table implements IsWidget {
 	}
 
 	// updates table according to the markers on the map
+	@Override
 	public void updateTable(final List<BikeRackData> list) {
 
 		AsyncDataProvider<BikeRackData> provider = new AsyncDataProvider<BikeRackData>() {
@@ -160,6 +161,7 @@ public class BikeRackTable extends Table implements IsWidget {
 	}
 
 	// saves list made from displayAllMarkers
+	@Override
 	public void saveList(List<BikeRackData> list) {
 		this.savedList.clear();
 		this.savedList.addAll(list);		
@@ -167,6 +169,7 @@ public class BikeRackTable extends Table implements IsWidget {
 	}
 
 	// sortTable function
+	@Override
 	public void sortTable(final List<BikeRackData> list) {
 		ListHandler<BikeRackData> sortHandler = new ListHandler<BikeRackData>(
 				list);

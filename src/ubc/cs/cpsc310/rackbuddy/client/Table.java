@@ -1,5 +1,8 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.SimplePager;
@@ -54,6 +57,8 @@ public abstract class Table implements IsWidget {
 	
 	protected TextColumn<BikeRackData> stNum;
 	protected TextColumn<BikeRackData> stName;
+	
+	//protected List<BikeRackData> savedList = new ArrayList<BikeRackData>();
 
 	public Table(LoginInfo loginInfo) {
 		this.loginInfo = loginInfo;
@@ -128,6 +133,18 @@ public abstract class Table implements IsWidget {
 		
 		dataProvider.addDataDisplay(table);
 		
+	}
+
+	public void updateTable(List<BikeRackData> tempList) {
+		//Do nothing. 
+	}
+
+	public void saveList(List<BikeRackData> tempList) {
+		//Do nothing
+	}
+
+	public void sortTable(List<BikeRackData> tempList) {
+		//Do nothing
 	}
 
 }

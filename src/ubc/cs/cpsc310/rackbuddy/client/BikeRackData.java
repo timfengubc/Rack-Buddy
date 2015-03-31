@@ -62,7 +62,6 @@ public class BikeRackData implements Serializable {
 	@Persistent
 	protected double lng;
 	
-	
 	public BikeRackData() {
 		this.streetNumber = "";
 		this.bia = "";

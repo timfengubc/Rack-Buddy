@@ -61,7 +61,7 @@ public class MapDisplay   {
 	private VerticalPanel bigTable = new VerticalPanel();
 	
 	private LoginInfo loginInfo;
-	private BikeRackTable brt;
+	private Table brt;
 	private Table favRackTable;
 	private CheckBox showFaves;
 

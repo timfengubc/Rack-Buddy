@@ -284,7 +284,7 @@ public class BikeRackTable implements IsWidget {
 	// saves list made from displayAllMarkers
 	public void saveList(List<BikeRackData> list) {
 		this.savedList.clear();
-		this.savedList.addAll(list);
+		this.savedList.addAll(list);		
 		
 	}
 
@@ -410,7 +410,7 @@ public class BikeRackTable implements IsWidget {
 			@Override
 			public void onClick(ClickEvent event) {
 				updateTable(savedList);
-				
+				sortTable(savedList);
 			}
 			
 		});

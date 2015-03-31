@@ -1,15 +1,5 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -27,10 +17,6 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.TextBox;
-
-import com.google.gwt.user.client.ui.TabPanel;
-
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class RackBuddy implements EntryPoint {
 

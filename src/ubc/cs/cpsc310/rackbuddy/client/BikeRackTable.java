@@ -41,11 +41,10 @@ public class BikeRackTable extends Table implements IsWidget {
 	private PopupPanel popUp;
 	private TextBox textbox;
 	private ListBox filterby;
-	private List<BikeRackData> savedList = new ArrayList<BikeRackData>();
+//	private List<BikeRackData> savedList = new ArrayList<BikeRackData>();
 	private List<BikeRackData> stNameList = new ArrayList<BikeRackData>();
 	private List<BikeRackData> stNumList = new ArrayList<BikeRackData>();
 	private VerticalPanel vp = new VerticalPanel();
-	private List<BikeRackData> racks;
 
 	public BikeRackTable(LoginInfo loginInfo) {
 		super(loginInfo);
@@ -53,8 +52,6 @@ public class BikeRackTable extends Table implements IsWidget {
 
 	@Override
 	public Widget asWidget() {
-		racks = new ArrayList<BikeRackData>();
-
 		stNum.setSortable(true);
 
 		stName.setSortable(true);
@@ -335,12 +332,6 @@ public class BikeRackTable extends Table implements IsWidget {
 
 	}
 
-	public List<BikeRackData> getList() {
-		return this.racks;
-	}
-
-	public void replaceData(List<BikeRackData> dataToReplaceWith) {
-		this.racks.clear();
-		this.racks.addAll(dataToReplaceWith);
-	}
+	
+	
 }

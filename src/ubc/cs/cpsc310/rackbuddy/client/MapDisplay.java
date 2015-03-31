@@ -6,6 +6,9 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.maps.client.MapWidget;
@@ -181,23 +184,37 @@ public class MapDisplay   {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				if (isTextValid(address.getValue()) == true) {
-
-					map.clearOverlays();
-
-					displayRacksFromPOI(address.getValue().trim(), searchRadius
-							.getValue(searchRadius.getSelectedIndex()));
-				} else {
-					Window.alert(INVALID_ADDRESS);
-				}
+				handleSearchButtonEvent();
 
 			}
 		});
+		
+		searchButton.addKeyPressHandler(new KeyPressHandler(){
 
+			@Override
+			public void onKeyPress(KeyPressEvent event) {
+				if(event.getCharCode() == KeyCodes.KEY_ENTER){
+					handleSearchButtonEvent();
+				}
+				
+			}
+			
+		});
+		
 		address = new TextBox();
 		address.addStyleName("paddedLeft");
 		address.setWidth("40em");
 		address.setHeight("10px");
+		
+		address.addKeyPressHandler(new KeyPressHandler(){
+			 
+             @Override
+             public void onKeyPress(KeyPressEvent event) {
+                     if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+                     searchButton.click();
+                   }
+             }
+     });
 
 		searchRadius = new ListBox();
 		searchRadius.setVisibleItemCount(1);
@@ -215,7 +232,7 @@ public class MapDisplay   {
 				if(event.getValue() == true){
 					displayFaveMarkers();
 				}else{
-					displayAllMarkers();
+					displayCurrentList();
 				}
 				
 			}
@@ -422,6 +439,36 @@ public class MapDisplay   {
 
 	public LayoutPanel getMapPanel() {
 		return this.rackMapPanel;
+	}
+
+
+
+
+	private void handleSearchButtonEvent() {
+		if (isTextValid(address.getValue()) == true) {
+
+			map.clearOverlays();
+
+			displayRacksFromPOI(address.getValue().trim(), searchRadius
+					.getValue(searchRadius.getSelectedIndex()));
+		} else {
+			Window.alert(INVALID_ADDRESS);
+		}
+	}
+
+
+
+
+	private void displayCurrentList() {
+		List<BikeRackData> data = brt.getSavedList();
+		map.clearOverlays();
+		
+		for(BikeRackData brd : data){
+			LatLng latlng = LatLng.newInstance(brd.getLat(),
+					brd.getLng());
+			
+			map.addOverlay(new Marker(latlng));
+		}
 	}
 	
 

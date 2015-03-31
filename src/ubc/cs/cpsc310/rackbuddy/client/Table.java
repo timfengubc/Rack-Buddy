@@ -58,7 +58,7 @@ public abstract class Table implements IsWidget {
 	protected TextColumn<BikeRackData> stNum;
 	protected TextColumn<BikeRackData> stName;
 	
-	//protected List<BikeRackData> savedList = new ArrayList<BikeRackData>();
+	protected List<BikeRackData> savedList = new ArrayList<BikeRackData>();
 
 	public Table(LoginInfo loginInfo) {
 		this.loginInfo = loginInfo;
@@ -145,6 +145,11 @@ public abstract class Table implements IsWidget {
 
 	public void sortTable(List<BikeRackData> tempList) {
 		//Do nothing
+	}
+	
+
+	public List<BikeRackData> getSavedList() {
+		return savedList;
 	}
 
 }

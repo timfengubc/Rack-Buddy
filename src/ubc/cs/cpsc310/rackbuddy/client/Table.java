@@ -43,6 +43,9 @@ public abstract class Table implements IsWidget {
 	public static final String INVAILD_ST_NUM = "Invalid St. Number";
 	
 	public static final String REMOVE_FILTER = "Clear filter";
+	public static final String COMMENTS = "Comments";
+	public static final String VIEW_COMMENTS = "View Comments";
+	
 	protected LoginInfo loginInfo;
 	protected JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	protected final CellTable<BikeRackData> table = new CellTable<BikeRackData>();

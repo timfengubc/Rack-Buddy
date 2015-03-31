@@ -186,26 +186,9 @@ public class CommentTable implements IsWidget {
                 addPanel.add(postButton);
  
         }
- 
-        public static boolean isTextValid(String text) {
- 
-                if (text == null) {
-                        return false;
-                }
- 
-                if (text.isEmpty()) {
-                        return false;
-                }
- 
-                if (text.matches("\\s+")) {
-                        return false;
-                }
- 
-                return true;
-        }
-       
+        
         public void addComment(){
-                if (isTextValid(textbox.getValue()) == true) {
+                if (MapDisplay.isTextValid(textbox.getValue()) == true) {
  
                         final Comment newComment = new Comment();
                         newComment.setBikeRackID(data.getId());

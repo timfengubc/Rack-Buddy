@@ -306,7 +306,7 @@ public class BikeRackTable extends Table implements IsWidget {
 		h5.add(filterButton);
 		h5.add(removeFilter);
 		
-		vp.add(h5);;
+		vp.add(h5);
 
 	}
 

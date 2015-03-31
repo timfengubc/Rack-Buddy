@@ -1,9 +1,6 @@
 package ubc.cs.cpsc310.rackbuddy.client;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.NotPersistent;
@@ -11,8 +8,6 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-
-import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 

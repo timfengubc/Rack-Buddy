@@ -19,8 +19,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.AsyncDataProvider;
-import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ListDataProvider;
 
 public class CommentTable implements IsWidget {
@@ -81,10 +79,9 @@ public class CommentTable implements IsWidget {
 
 			@Override
 			public void update(int index, Comment object, String value) {
-				if (object.email == loginInfo.getEmailAddress())	{
-						removeCommentByID(object.getCommentID(), object);
-				}
-				else {
+				if (object.email == loginInfo.getEmailAddress()) {
+					removeCommentByID(object.getCommentID(), object);
+				} else {
 					Window.alert("Not your Comment!");
 				}
 			}
@@ -126,25 +123,24 @@ public class CommentTable implements IsWidget {
 		if (jdoService == null) {
 			jdoService = GWT.create(JDOService.class);
 		}
-				
-				
+
 		jdoService.removeCommentByID(id, new AsyncCallback<Void>() {
 
-					@Override
-					public void onFailure(Throwable caught) {
-						Window.alert("Error has occured: " + caught.getMessage());
-					}
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Error has occured: " + caught.getMessage());
+			}
 
-					@Override
-					public void onSuccess(Void result) {
-						dataProvider.getList().remove(comment);
-						dataProvider.flush();
-						dataProvider.refresh();
-						table.redraw();
-					}
+			@Override
+			public void onSuccess(Void result) {
+				dataProvider.getList().remove(comment);
+				dataProvider.flush();
+				dataProvider.refresh();
+				table.redraw();
+			}
 
-				});
-		}
+		});
+	}
 
 	private void initAddPanel() {
 		addPanel = new HorizontalPanel();
@@ -160,7 +156,7 @@ public class CommentTable implements IsWidget {
 					newComment.setBikeRackID(data.getId());
 					newComment.setEmail(loginInfo.getEmailAddress());
 					newComment.setMessage(textbox.getValue());
-					
+
 					jdoService.addRackComment(data, loginInfo, newComment,
 							new AsyncCallback<Void>() {
 

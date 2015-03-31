@@ -37,11 +37,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
-import com.google.gwt.view.client.MultiSelectionModel;
 
 public class BikeRackTable implements IsWidget {
 
-	private static final String BIKE_RACK_NOT_MARKED_AS_FAVORITE_THIS_BIKE_RACK_HAS_ALREADY_BEEN_MARKED_AS_FAVORITE = "Bike rack not marked as favorite: This bike rack has already been marked as favorite.";
+	public static final String BIKE_RACK_NOT_MARKED_AS_FAVORITE_THIS_BIKE_RACK_HAS_ALREADY_BEEN_MARKED_AS_FAVORITE = "Bike rack not marked as favorite: This bike rack has already been marked as favorite.";
 	public static final String MARK_AS_FAVORITE = "Mark as favorite?";
 	public static final String UNMARK_AS_FAVORITE = "Unmark as favorite?";
 	public static final String YES = "Yes";
@@ -88,6 +87,9 @@ public class BikeRackTable implements IsWidget {
 			BikeRackData.KEY_PROVIDER);
 	private VerticalPanel vp = new VerticalPanel();
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
+	
+	private SimplePager pager;
+	
 	TextColumn<BikeRackData> stNum;
 	TextColumn<BikeRackData> stName;
 
@@ -101,18 +103,11 @@ public class BikeRackTable implements IsWidget {
 
 	@Override
 	public Widget asWidget() {
-
 		racks = new ArrayList<BikeRackData>();
-		// Create a CellTable.
-
-		MultiSelectionModel<BikeRackData> multi_selectionModel = new MultiSelectionModel<BikeRackData>(
-				BikeRackData.KEY_PROVIDER);
-
-		table.setSelectionModel(multi_selectionModel);
 
 		table.setPageSize(NUM_DATA_PER_PAGE);
 
-		SimplePager pager = new SimplePager(TextLocation.CENTER, true, true);
+		pager = new SimplePager(TextLocation.CENTER, true, true);
 
 		pager.setPageSize(NUM_DATA_PER_PAGE);
 		pager.setDisplay(table);

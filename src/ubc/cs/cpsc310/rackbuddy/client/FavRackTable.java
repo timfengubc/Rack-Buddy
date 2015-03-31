@@ -19,7 +19,7 @@ import com.google.gwt.view.client.ListDataProvider;
 public class FavRackTable implements IsWidget {
 	
 	public static final String USER_S_FAVORITE_BIKE_RACK_LOCATION = "Favorite Locations";
-	LoginInfo loginInfo;
+	private LoginInfo loginInfo;
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
 	private ListDataProvider<BikeRackData> dataProvider;
 	final CellTable<BikeRackData> table = new CellTable<BikeRackData>();

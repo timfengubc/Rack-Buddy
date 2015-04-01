@@ -25,6 +25,17 @@ public class CommentDialogBox extends DialogBox {
               CommentDialogBox.this.hide();
            }
         });
+        
+        //share button
+        Button share = new Button("Share");
+        share.addClickHandler(new ClickHandler() {
+		      public void onClick(ClickEvent event) {
+		        RackBuddy.shareFb();
+		      }
+		    });
+        share.setStyleName("TopRight");
+        
+        
         VerticalPanel panel = new VerticalPanel();
         CommentTable comments = new CommentTable(object, loginInfo);
         panel.add(close);

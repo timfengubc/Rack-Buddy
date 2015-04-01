@@ -47,7 +47,7 @@ public class RackBuddy implements EntryPoint {
 	private String _2013 = "2013";
 	private String _2014 = "2014";
 	
-	private String sharecode = "FB.ui({ method: 'share', href: 'https://developers.facebook.com/docs/',}, function(response){});";
+	
 	
 	/**
 	 * This is the entry point method.

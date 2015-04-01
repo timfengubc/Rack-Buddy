@@ -47,6 +47,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 			addBikeRackData(r);
 		}
 	}
+
 	
 	@Override
 	/**

@@ -4,6 +4,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+
 import ubc.cs.cpsc310.rackbuddy.client.JDOService;
 import ubc.cs.cpsc310.rackbuddy.client.JDOServiceAsync;
 
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class RackBuddy implements EntryPoint {
 
@@ -24,23 +26,21 @@ public class RackBuddy implements EntryPoint {
 	protected static final String DATA_LOADED = "Data loaded into database.";
 	private LoginInfo loginInfo = null;
 	private FlowPanel loginPanel = new FlowPanel();
-	private Button loadData = new Button("Load Data");
-	private Button removeData = new Button("Remove all Data");
-	private String url = "http://m.uploadedit.com/ba3a/1426016101419.txt";
-	private TextBox urlbox = new TextBox();
 	private Label loginLabel = new Label(
 			"Please sign in to your Google Account to access the RackBuddy application.");
 	private Anchor signInLink = new Anchor("Sign In");
 	private String signOutLink = new String();
 	private Button signOutButton = new Button("Sign Out");
 	private JDOServiceAsync jdoService = GWT.create(JDOService.class);
-
-	private String LOAD_FROM = "Load from: ";
-	private HorizontalPanel loadPanel = new HorizontalPanel();
-
 	private MapDisplay mapDisplay;
 	
+	private VerticalPanel adminPanel = new VerticalPanel();
+	private Button loadData = new Button("Load Data");
+	private Button removeData = new Button("Remove all Data");
+	private String url = "http://m.uploadedit.com/ba3a/1426016101419.txt";
+	private TextBox urlbox = new TextBox();
 	private ListBox yrListBox = new ListBox();
+	private String LOAD_FROM = "Load from: ";
 	private String p2010 = "Prior 2010";
 	private String _2011 = "2011";
 	private String _2012 = "2012";
@@ -109,66 +109,18 @@ public class RackBuddy implements EntryPoint {
 
 		// Associate the panels with the HTML host page.
 		RootPanel.get("signOut").add(signOutButton);
-
-		signOutButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				Window.Location.assign(signOutLink);
-			}
-		});
-	
-		//listen on Load Rack Data Button
-		  loadData.addClickHandler(new ClickHandler() {
-			  @Override
-		      public void onClick(ClickEvent event) {
-		        loadRacks();
-		      }
-		    });
-		  
-		  //listen on removealldatabutton
-		  removeData.addClickHandler(new ClickHandler(){
-
-			@Override
-			public void onClick(ClickEvent event) {
-				removeAllData();
-				
-			}
-
-			  
-		  }); 
-	
-
-		  
+  
+		//admin rights check
 			if (loginInfo.getAdmin() == false) {
-				loadPanel.setVisible(false);
-				removeData.setVisible(false);
+				adminPanel.setVisible(false);
 			} else {
-				loadPanel.setVisible(true);
-				removeData.setVisible(true);
+				adminPanel.setVisible(true);
 			}
 			
-		  //load data panel formatting
+		  
+		setHandlers();
+		initAdminPanel();
 
-			urlbox.addStyleName("paddedRight");
-			urlbox.setWidth("40em");
-			urlbox.setHeight("10px");
-			urlbox.setValue(url);
-			
-			yrListBox.setVisibleItemCount(1);
-			yrListBox.addItem(p2010);
-			yrListBox.addItem(_2011);
-			yrListBox.addItem(_2012);
-			yrListBox.addItem(_2013);
-			yrListBox.addItem(_2014);
-			
-			loadPanel.setStyleName("marginTop");
-			loadPanel.add(new Label(LOAD_FROM));
-			loadPanel.add(urlbox);
-			loadPanel.add(loadData);
-			loadPanel.add(yrListBox);
-			
-			RootPanel.get("loadData").add(loadPanel);
-			RootPanel.get("loadData").add(removeData);
 		
 		  
 		/*	refreshDispl.addClickHandler(new ClickHandler(){
@@ -219,6 +171,65 @@ public class RackBuddy implements EntryPoint {
 	    Window.alert(error.getMessage());
 	
 	    }
+	
+    private void initAdminPanel() {
+    	 //load data panel formatting
+		 HorizontalPanel loadPanel = new HorizontalPanel();
+		
+		urlbox.addStyleName("paddedRight");
+		urlbox.setWidth("20em");
+		urlbox.setHeight("10px");
+		urlbox.setValue(url);
+		
+		yrListBox.setVisibleItemCount(1);
+		yrListBox.addItem(p2010);
+		yrListBox.addItem(_2011);
+		yrListBox.addItem(_2012);
+		yrListBox.addItem(_2013);
+		yrListBox.addItem(_2014);
+		
+		loadPanel.setStyleName("marginTop");
+		loadPanel.add(yrListBox);
+		loadPanel.add(loadData);
+		
+		adminPanel.add(new Label(LOAD_FROM));
+		adminPanel.add(urlbox);
+		adminPanel.add(loadPanel);
+		adminPanel.add(removeData);
+	
+		
+		
+		RootPanel.get("loadData").add(adminPanel);
+		
+    }
+    
+	private void setHandlers() {
+		
+		signOutButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				Window.Location.assign(signOutLink);
+			}
+		});
+	
+		//listen on Load Rack Data Button
+		  loadData.addClickHandler(new ClickHandler() {
+			  @Override
+		      public void onClick(ClickEvent event) {
+		        loadRacks();
+		      }
+		    });
+		  
+		  //listen on removealldatabutton
+		  removeData.addClickHandler(new ClickHandler(){
+
+			@Override
+			public void onClick(ClickEvent event) {
+				removeAllData();
+				
+			}
+			});
+	}
 	
 	public static native void shareFb() /*-{ 
 		$wnd.FB.ui({

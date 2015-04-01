@@ -7,6 +7,7 @@ import java.util.List;
 
 
 
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
@@ -31,6 +32,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.ListDataProvider;
 
 public class BikeRackTable extends Table implements IsWidget {
 
@@ -147,27 +149,29 @@ public class BikeRackTable extends Table implements IsWidget {
 				end = end >= list.size() ? list.size() : end;
 				List<BikeRackData> sub = list.subList(start, end);
 				updateRowData(start, sub);
-
+				updateRowCount(list.size(),true);
 			}
 		};
+				
 		provider.addDataDisplay(table);
-		provider.updateRowCount(list.size(), true);
 		AsyncHandler columnSortHandler = new AsyncHandler(table);
 		table.addColumnSortHandler(columnSortHandler);
-
+		
+		
+		
 	}
 
 	// saves list made from displayAllMarkers
 	@Override
 	public void saveList(List<BikeRackData> list) {
-		this.savedList.clear();
-		this.savedList.addAll(list);		
+		savedList = list;
 		
 	}
 
 	// sortTable function
 	@Override
 	public void sortTable(final List<BikeRackData> list) {
+
 		ListHandler<BikeRackData> sortHandler = new ListHandler<BikeRackData>(
 				list);
 
@@ -175,9 +179,10 @@ public class BikeRackTable extends Table implements IsWidget {
 
 			@Override
 			public int compare(BikeRackData o1, BikeRackData o2) {
-
-				return Integer.valueOf(o1.getStreetNumber()).compareTo(
-						Integer.valueOf(o2.getStreetNumber()));
+			
+					return Integer.valueOf(o1.getStreetNumber()).compareTo(
+							Integer.valueOf(o2.getStreetNumber()));
+		      
 
 			}
 		});
@@ -191,8 +196,10 @@ public class BikeRackTable extends Table implements IsWidget {
 			}
 
 		});
-
+		
 		table.addColumnSortHandler(sortHandler);
+	
+		
 	}
 
 	// initializes filter function.
@@ -250,13 +257,13 @@ public class BikeRackTable extends Table implements IsWidget {
 				if (MapDisplay.isTextValid(textbox.getValue()) == true) {
 
 					if (filterby.getValue(filterby.getSelectedIndex()) == ST_NAME) {
-
 						matchStName(savedList, textbox.getValue());
 						sortTable(stNameList);
 						updateTable(stNameList);
 						popUp.hide();
 
 					}
+					
 					if (filterby.getValue(filterby.getSelectedIndex()) == ST_NUMBER) {
 						int inputint = 0;
 						try {
@@ -314,7 +321,6 @@ public class BikeRackTable extends Table implements IsWidget {
 			stNameList.clear();
 			for (BikeRackData brd : list) {
 				if (brd.getStreetName().toLowerCase().contains(stName.toLowerCase())) {
-
 					stNameList.add(brd);
 				}
 			}

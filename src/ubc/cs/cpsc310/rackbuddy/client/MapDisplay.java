@@ -93,7 +93,7 @@ public class MapDisplay   {
 		map = new MapWidget(vancouver, 2);
 		map.setSize("60%", "100%");
 		map.setZoomLevel(ZOOM_LEVEL);
-
+		
 		displayTable();
 
 		// Add some controls for the zoom level
@@ -152,8 +152,9 @@ public class MapDisplay   {
 						
 					}
 				}			
-				brt.sortTable(tempList);	
+				
 				brt.updateTable(tempList);
+				brt.sortTable(tempList);	
 				brt.saveList(tempList);						
 				
 				
@@ -333,6 +334,7 @@ public class MapDisplay   {
 						
 					}
 				}			
+				brt.sortTable(tempList);
 				brt.updateTable(tempList);		
 				brt.saveList(tempList);
 			}

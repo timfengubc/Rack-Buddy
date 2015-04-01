@@ -11,6 +11,11 @@ IMG.title {
 	top:2em;
 }
 
+#description{
+	position:absolute;
+	top:17em;
+	left:39em;
+}
 
 #signOut {
 	position:absolute;

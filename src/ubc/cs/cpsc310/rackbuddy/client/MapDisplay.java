@@ -94,13 +94,7 @@ public class MapDisplay   {
 		map.setSize("60%", "100%");
 		map.setZoomLevel(ZOOM_LEVEL);
 
-		// Add bike rack markers
-		
-		displayAllMarkers();
-	
 		displayTable();
-		
-	
 
 		// Add some controls for the zoom level
 		map.addControl(new LargeMapControl());
@@ -157,8 +151,7 @@ public class MapDisplay   {
 						tempList.add(brd);		
 						
 					}
-				}
-				Window.alert(MARKERS_ARE_ADDED);			
+				}			
 				brt.sortTable(tempList);	
 				brt.updateTable(tempList);
 				brt.saveList(tempList);						
@@ -289,7 +282,6 @@ public class MapDisplay   {
 						map.addOverlay(marker);
 					}
 					
-					Window.alert(MARKERS_ARE_ADDED);
 				}else{
 					Window.alert(NO_FAVORITE_BIKE_RACK_MARKERS_TO_DISPLAY);
 				}

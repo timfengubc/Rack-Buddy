@@ -35,7 +35,7 @@ public abstract class Table implements IsWidget {
 
 	public static final String ST_NUMBER = "St. Number";
 
-	public static final String BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER = "Official Locations";
+	public static final String BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER = "Bike Rack Locations";
 
 	public static final String FILTER_BY = "Filter by : ";
 

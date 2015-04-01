@@ -487,7 +487,7 @@ public class JDOServiceImpl extends RemoteServiceServlet implements JDOService{
 		}
 	}
 	
-	@Override
+	@Override 
 	public Comment findCommentByID(Long id) {
 		Comment detachedCopy=null;
 		Comment object=null;

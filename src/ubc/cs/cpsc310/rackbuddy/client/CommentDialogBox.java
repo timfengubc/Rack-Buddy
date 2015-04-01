@@ -4,6 +4,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class CommentDialogBox extends DialogBox {
@@ -28,17 +29,20 @@ public class CommentDialogBox extends DialogBox {
         
         //share button
         Button share = new Button("Share");
+        share.setStyleName("TopRight");
         share.addClickHandler(new ClickHandler() {
 		      public void onClick(ClickEvent event) {
 		        RackBuddy.shareFb();
 		      }
 		    });
-        share.setStyleName("TopRight");
+       
         
-        
+        HorizontalPanel top = new HorizontalPanel();
         VerticalPanel panel = new VerticalPanel();
         CommentTable comments = new CommentTable(object, loginInfo);
-        panel.add(close);
+        top.add(close);
+        top.add(share);
+        panel.add(top);
         panel.add(comments);
         setWidth("45em");
         setWidget(panel);

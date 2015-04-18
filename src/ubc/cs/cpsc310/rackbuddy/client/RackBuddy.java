@@ -86,23 +86,6 @@ public class RackBuddy implements EntryPoint {
 
 		mapDisplay = new MapDisplay(loginInfo);
 
-		// BikeRackTable bikeRackTable = new BikeRackTable(loginInfo);
-		// FavRackTable favRackTable = new FavRackTable(loginInfo);
-		//
-		// VerticalPanel bigTable = new VerticalPanel();
-		//
-		// final TabPanel p = new TabPanel();
-		// p.add(bikeRackTable,
-		// BikeRackTable.BIKE_RACK_LOCATIONS_IN_THE_CITY_OF_VANCOUVER, false);
-		// p.add(favRackTable, FavRackTable.USER_S_FAVORITE_BIKE_RACK_LOCATION,
-		// false);
-		//
-		// p.selectTab(0);
-		//
-		// bigTable.add(p);
-		//
-		// RootPanel.get("bigTable").add(bigTable);
-
 		RootPanel.get("rackMap").add(mapDisplay.getMapPanel());
 
 		signOutLink = loginInfo.getLogoutUrl();
@@ -120,13 +103,6 @@ public class RackBuddy implements EntryPoint {
 		setHandlers();
 		initAdminPanel();
 
-		/*
-		 * refreshDispl.addClickHandler(new ClickHandler(){
-		 * 
-		 * @Override public void onClick(ClickEvent event) {
-		 * mapDisplay.displayAllMarkers(); } });
-		 */
-
 	}
 
 	private void loadRacks() {
@@ -139,6 +115,7 @@ public class RackBuddy implements EntryPoint {
 
 					public void onSuccess(Void ignore) {
 						Window.alert(DATA_LOADED);
+						mapDisplay.displayAllMarkers();
 					}
 
 				});

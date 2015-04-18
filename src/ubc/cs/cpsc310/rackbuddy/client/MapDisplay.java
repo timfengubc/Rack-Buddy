@@ -39,7 +39,6 @@ public class MapDisplay   {
 	private MapWidget map;
 	private static final int ZOOM_LEVEL = 12;
 	private static final String UNABLE_TO_DISPLAY_BIKE_RACK_LOCATION_ON_MAP = "Unable to display bike rack location on map...";
-	private static final String MARKERS_ARE_ADDED = "Markers were added to the map...";
 	private static final String SEARCH_RADIUS = "Search radius: ";
 	private static final String POINT_OF_INTEREST = "Point of interest:";
 	private static final String _1_KM = "1 km";
@@ -106,7 +105,8 @@ public class MapDisplay   {
 
 		initSearchPanel();
 		
-		
+		displayAllMarkers();
+
 	}
 	
 	private void displayTable() {	

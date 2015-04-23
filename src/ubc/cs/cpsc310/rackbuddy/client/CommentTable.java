@@ -92,7 +92,7 @@ public class CommentTable implements IsWidget {
  
                         @Override
                         public void update(int index, Comment object, String value) {
-                                if (object.email == loginInfo.getEmailAddress()) {
+                                if (object.email == loginInfo.getEmailAddress()||loginInfo.getAdmin() == true) {
                                         removeCommentByID(object.getCommentID(), object);
                                 } else {
                                         Window.alert("Not your Comment!");
